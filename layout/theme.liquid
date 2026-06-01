@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }}</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{{ 'styles.css' | asset_url }}">
+  <script type="module" src="https://cdn.shopify.com/storefront/web-components.js"></script>
+  
+  {{ content_for_header }}
+</head>
+<body>
+  
+  <shopify-store store-domain="qannqy-a0.myshopify.com" public-access-token="f3438dab625b9043724c6eb2339bb792">
+    <!-- Cart Component -->
+    <shopify-cart id="cart"></shopify-cart>
+
+  <!-- Ambient effects -->
+  <div id="cursor-dot"   aria-hidden="true"></div>
+  <div id="cursor-ring"  aria-hidden="true"></div>
+  <div class="film-grain" aria-hidden="true"></div>
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+  <!-- Skip Link -->
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar" role="marquee" aria-label="Site-wide promotion">
+    <div class="announcement-bar__track">
+      <span class="announcement-bar__item">🎉 50% OFF SITE WIDE &nbsp;·&nbsp; USE CODE: <strong>HALF50</strong> AT CHECKOUT &nbsp;·&nbsp; <a href="/sale">SHOP THE SALE →</a></span>
+      <span class="announcement-bar__item">🎉 50% OFF SITE WIDE &nbsp;·&nbsp; USE CODE: <strong>HALF50</strong> AT CHECKOUT &nbsp;·&nbsp; <a href="/sale">SHOP THE SALE →</a></span>
+      <span class="announcement-bar__item">🎉 50% OFF SITE WIDE &nbsp;·&nbsp; USE CODE: <strong>HALF50</strong> AT CHECKOUT &nbsp;·&nbsp; <a href="/sale">SHOP THE SALE →</a></span>
+      <span class="announcement-bar__item">🎉 50% OFF SITE WIDE &nbsp;·&nbsp; USE CODE: <strong>HALF50</strong> AT CHECKOUT &nbsp;·&nbsp; <a href="/sale">SHOP THE SALE →</a></span>
+    </div>
+  </div>
+
+  <!-- Header & Navigation -->
+  <header class="site-header" id="siteHeader">
+    <nav class="main-nav">
+      <button class="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+      
+      <a href="/" class="site-logo"><img src="{{ 'Logo Transparent.png' | asset_url }}" alt="Just Adulting Club" class="site-logo__img"></a>
+      
+      <ul class="nav-links" id="navLinks">
+        <li class="nav-item has-dropdown">
+          <a href="/collections/discover" class="nav-link" aria-haspopup="true" aria-expanded="false">Discover</a>
+          <ul class="nav-dropdown" role="menu" aria-label="Discover">
+            <li role="none"><a role="menuitem" href="/collections/new-arrivals" class="nav-dropdown__link">New Arrivals</a></li>
+            <li role="none"><a role="menuitem" href="/collections/the-explorers-club" class="nav-dropdown__link">The Explorers Club</a></li>
+            <li role="none"><a role="menuitem" href="/collections/the-linen-edit" class="nav-dropdown__link">The Linen Edit</a></li>
+            <li role="none"><a role="menuitem" href="/collections/winter-fall" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Winter Fall <span class="nav-dropdown__tag">Coming soon</span></a></li>
+            <li role="none"><a role="menuitem" href="/collections/the-getaway-edit" class="nav-dropdown__link">The Getaway Edit</a></li>
+            <li role="none"><a role="menuitem" href="/collections/the-origin-series" class="nav-dropdown__link">The Origin Series <span class="nav-dropdown__sub">Signature Collection</span></a></li>
+            <li role="none"><a role="menuitem" href="/collections/the-workwear-edit" class="nav-dropdown__link">The Workwear Edit</a></li>
+            <li role="none"><a role="menuitem" href="/collections/archive-reissue-upcycled" class="nav-dropdown__link">Archive Reissue <span class="nav-dropdown__divider">|</span> Upcycled</a></li>
+            <li role="none"><a role="menuitem" href="/collections/just-adulting-x-lemax" class="nav-dropdown__link">Just Adulting <span class="nav-dropdown__divider">×</span> Lemax</a></li>
+            <li role="none"><a role="menuitem" href="/collections/just-adulting-x-mof" class="nav-dropdown__link">Just Adulting <span class="nav-dropdown__divider">×</span> MOF</a></li>
+          </ul>
+        </li>
+        <li class="nav-item has-dropdown has-megamenu">
+          <a href="/collections/men" class="nav-link" aria-haspopup="true" aria-expanded="false">Men</a>
+          <div class="nav-megamenu" role="menu" aria-label="Men">
+            <ul class="nav-megamenu__col">
+              <li role="none"><a role="menuitem" href="/collections/men" class="nav-dropdown__link nav-dropdown__link--featured">Shop All</a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-best-sellers" class="nav-dropdown__link">Best Sellers</a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-casual-shirts" class="nav-dropdown__link">Casual Shirts</a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-tshirts" class="nav-dropdown__link">T-Shirts</a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-chinos-joggers-pants" class="nav-dropdown__link">Chinos, Joggers &amp; Casual Pants</a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-jeans" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Jeans <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-polos" class="nav-dropdown__link">Polos</a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-sweaters" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Sweaters <span class="nav-dropdown__tag">Coming soon</span></a></li>
+            </ul>
+            <ul class="nav-megamenu__col">
+              <li role="none"><a role="menuitem" href="/collections/mens-coats-jackets" class="nav-dropdown__link">Coats &amp; Jackets</a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-blazers-suits" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Blazers &amp; Suits <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-dress-shirts" class="nav-dropdown__link">Dress Shirts</a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-dress-pants" class="nav-dropdown__link">Dress Pants</a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-sweatshirts-hoodies" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Sweatshirts &amp; Hoodies <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-shorts" class="nav-dropdown__link">Shorts</a></li>
+              <li role="none"><a role="menuitem" href="/collections/mens-swimwear" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Swimwear <span class="nav-dropdown__tag">Coming soon</span></a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item has-dropdown has-megamenu">
+          <a href="/collections/women" class="nav-link" aria-haspopup="true" aria-expanded="false">Women</a>
+          <div class="nav-megamenu" role="menu" aria-label="Women">
+            <ul class="nav-megamenu__col">
+              <li role="none"><a role="menuitem" href="/collections/women" class="nav-dropdown__link nav-dropdown__link--featured">Shop All</a></li>
+              <li role="none"><a role="menuitem" href="/collections/womens-best-sellers" class="nav-dropdown__link">Best Sellers</a></li>
+              <li role="none"><a role="menuitem" href="/collections/womens-dresses-jumpsuits-tops-shirts" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Dresses, Jumpsuits, Tops &amp; Shirts <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              <li role="none"><a role="menuitem" href="/collections/womens-pants" class="nav-dropdown__link">Pants</a></li>
+              <li role="none"><a role="menuitem" href="/collections/womens-denims" class="nav-dropdown__link">Denims</a></li>
+              <li role="none"><a role="menuitem" href="/collections/womens-tshirts-tanks" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">T-Shirts &amp; Tanks <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              <li role="none"><a role="menuitem" href="/collections/womens-sweaters" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Sweaters <span class="nav-dropdown__tag">Coming soon</span></a></li>
+            </ul>
+            <ul class="nav-megamenu__col">
+              <li role="none"><a role="menuitem" href="/collections/womens-skirts" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Skirts <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              <li role="none"><a role="menuitem" href="/collections/womens-shorts" class="nav-dropdown__link">Shorts</a></li>
+              <li role="none"><a role="menuitem" href="/collections/womens-coats-jackets" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Coats &amp; Jackets <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              <li role="none"><a role="menuitem" href="/collections/womens-blazers-suits" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Blazers &amp; Suits <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              <li role="none"><a role="menuitem" href="/collections/womens-swimwear" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Swimwear <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              <li role="none"><a role="menuitem" href="/pages/customized-outfits" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Customized Outfits <span class="nav-dropdown__tag">Coming soon</span></a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item has-dropdown">
+          <a href="/collections/linen" class="nav-link" aria-haspopup="true" aria-expanded="false">Linen</a>
+          <ul class="nav-dropdown" role="menu" aria-label="Linen">
+            <li role="none"><a role="menuitem" href="/collections/womens-linen" class="nav-dropdown__link">The Women's Linen Shop</a></li>
+            <li role="none"><a role="menuitem" href="/collections/mens-linen" class="nav-dropdown__link">The Men's Linen Shop</a></li>
+            <li role="none"><a role="menuitem" href="/collections/home-linen" class="nav-dropdown__link">The Home Linen Shop</a></li>
+          </ul>
+        </li>
+        <li><a href="/collections/limited-drops" class="nav-link">Limited Drops</a></li>
+        <li><a href="/collections/pre-order" class="nav-link">Pre Order</a></li>
+        <li class="nav-item has-dropdown">
+          <a href="/collections/shoes-accessories" class="nav-link" aria-haspopup="true" aria-expanded="false">Shoes &amp; Accessories</a>
+          <ul class="nav-dropdown" role="menu" aria-label="Shoes and Accessories">
+            <li role="none"><a role="menuitem" href="/collections/shoes-accessories" class="nav-dropdown__link nav-dropdown__link--featured">Shop All</a></li>
+            <li role="none"><a role="menuitem" href="/collections/jewellery" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Jewelry <span class="nav-dropdown__tag">Coming soon</span></a></li>
+            <li role="none"><a role="menuitem" href="/collections/shoes" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Shoes <span class="nav-dropdown__tag">Coming soon</span></a></li>
+            <li role="none"><a role="menuitem" href="/collections/belts" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Belts <span class="nav-dropdown__tag">Coming soon</span></a></li>
+            <li role="none"><a role="menuitem" href="/collections/hats-hair-accessories" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Hats &amp; Hair Accessories <span class="nav-dropdown__tag">Coming soon</span></a></li>
+            <li role="none"><a role="menuitem" href="/collections/sunglasses" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Sunglasses <span class="nav-dropdown__tag">Coming soon</span></a></li>
+            <li role="none"><a role="menuitem" href="/collections/perfumes" class="nav-dropdown__link">Perfumes</a></li>
+            <li role="none"><a role="menuitem" href="/collections/scarves" class="nav-dropdown__link">Scarves</a></li>
+            <li role="none"><a role="menuitem" href="/collections/socks" class="nav-dropdown__link">Socks</a></li>
+          </ul>
+        </li>
+        <li><a href="/pages/sustainability" class="nav-link nav-link--sustainability">Sustainability</a></li>
+      </ul>
+      
+      <div class="nav-actions">
+        <div class="search-wrapper">
+          <input type="search" class="search-input" placeholder="Search...">
+          <button class="search-btn" aria-label="Search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+        <a href="/account" class="nav-icon" aria-label="Account">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+        <a href="#" onclick="event.preventDefault(); document.getElementById('cart').showModal()" class="nav-icon" aria-label="Shopping bag">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </a>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+    <div class="mobile-menu">
+      <button class="mobile-menu-close" aria-label="Close menu">&times;</button>
+      <ul class="mobile-nav-links">
+        <li class="mobile-nav__group">
+          <details class="mobile-nav__details">
+            <summary class="mobile-nav__summary">Discover</summary>
+            <ul class="mobile-nav__sub">
+              <li><a href="/collections/new-arrivals">New Arrivals</a></li>
+              <li><a href="/collections/the-explorers-club">The Explorers Club</a></li>
+              <li><a href="/collections/the-linen-edit">The Linen Edit</a></li>
+              <li><a href="/collections/winter-fall" class="mobile-nav__soon">Winter Fall — Coming soon</a></li>
+              <li><a href="/collections/the-getaway-edit">The Getaway Edit</a></li>
+              <li><a href="/collections/the-origin-series">The Origin Series — Signature Collection</a></li>
+              <li><a href="/collections/the-workwear-edit">The Workwear Edit</a></li>
+              <li><a href="/collections/archive-reissue-upcycled">Archive Reissue | Upcycled</a></li>
+              <li><a href="/collections/just-adulting-x-lemax">Just Adulting × Lemax</a></li>
+              <li><a href="/collections/just-adulting-x-mof">Just Adulting × MOF</a></li>
+            </ul>
+          </details>
+        </li>
+        <li class="mobile-nav__group">
+          <details class="mobile-nav__details">
+            <summary class="mobile-nav__summary">Men</summary>
+            <ul class="mobile-nav__sub">
+              <li><a href="/collections/men">Shop All</a></li>
+              <li><a href="/collections/mens-best-sellers">Best Sellers</a></li>
+              <li><a href="/collections/mens-casual-shirts">Casual Shirts</a></li>
+              <li><a href="/collections/mens-tshirts">T-Shirts</a></li>
+              <li><a href="/collections/mens-chinos-joggers-pants">Chinos, Joggers &amp; Casual Pants</a></li>
+              <li><a href="/collections/mens-jeans" class="mobile-nav__soon">Jeans — Coming soon</a></li>
+              <li><a href="/collections/mens-polos">Polos</a></li>
+              <li><a href="/collections/mens-sweaters" class="mobile-nav__soon">Sweaters — Coming soon</a></li>
+              <li><a href="/collections/mens-coats-jackets">Coats &amp; Jackets</a></li>
+              <li><a href="/collections/mens-blazers-suits" class="mobile-nav__soon">Blazers &amp; Suits — Coming soon</a></li>
+              <li><a href="/collections/mens-dress-shirts">Dress Shirts</a></li>
+              <li><a href="/collections/mens-dress-pants">Dress Pants</a></li>
+              <li><a href="/collections/mens-sweatshirts-hoodies" class="mobile-nav__soon">Sweatshirts &amp; Hoodies — Coming soon</a></li>
+              <li><a href="/collections/mens-shorts">Shorts</a></li>
+              <li><a href="/collections/mens-swimwear" class="mobile-nav__soon">Swimwear — Coming soon</a></li>
+            </ul>
+          </details>
+        </li>
+        <li class="mobile-nav__group">
+          <details class="mobile-nav__details">
+            <summary class="mobile-nav__summary">Women</summary>
+            <ul class="mobile-nav__sub">
+              <li><a href="/collections/women">Shop All</a></li>
+              <li><a href="/collections/womens-best-sellers">Best Sellers</a></li>
+              <li><a href="/collections/womens-dresses-jumpsuits-tops-shirts" class="mobile-nav__soon">Dresses, Jumpsuits, Tops &amp; Shirts — Coming soon</a></li>
+              <li><a href="/collections/womens-pants">Pants</a></li>
+              <li><a href="/collections/womens-denims">Denims</a></li>
+              <li><a href="/collections/womens-tshirts-tanks" class="mobile-nav__soon">T-Shirts &amp; Tanks — Coming soon</a></li>
+              <li><a href="/collections/womens-sweaters" class="mobile-nav__soon">Sweaters — Coming soon</a></li>
+              <li><a href="/collections/womens-skirts" class="mobile-nav__soon">Skirts — Coming soon</a></li>
+              <li><a href="/collections/womens-shorts">Shorts</a></li>
+              <li><a href="/collections/womens-coats-jackets" class="mobile-nav__soon">Coats &amp; Jackets — Coming soon</a></li>
+              <li><a href="/collections/womens-blazers-suits" class="mobile-nav__soon">Blazers &amp; Suits — Coming soon</a></li>
+              <li><a href="/collections/womens-swimwear" class="mobile-nav__soon">Swimwear — Coming soon</a></li>
+              <li><a href="/pages/customized-outfits" class="mobile-nav__soon">Customized Outfits — Coming soon</a></li>
+            </ul>
+          </details>
+        </li>
+        <li class="mobile-nav__group">
+          <details class="mobile-nav__details">
+            <summary class="mobile-nav__summary">Linen</summary>
+            <ul class="mobile-nav__sub">
+              <li><a href="/collections/womens-linen">The Women's Linen Shop</a></li>
+              <li><a href="/collections/mens-linen">The Men's Linen Shop</a></li>
+              <li><a href="/collections/home-linen">The Home Linen Shop</a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href="/collections/limited-drops">Limited Drops</a></li>
+        <li><a href="/collections/pre-order">Pre Order</a></li>
+        <li class="mobile-nav__group">
+          <details class="mobile-nav__details">
+            <summary class="mobile-nav__summary">Shoes &amp; Accessories</summary>
+            <ul class="mobile-nav__sub">
+              <li><a href="/collections/shoes-accessories">Shop All</a></li>
+              <li><a href="/collections/jewellery" class="mobile-nav__soon">Jewelry — Coming soon</a></li>
+              <li><a href="/collections/shoes" class="mobile-nav__soon">Shoes — Coming soon</a></li>
+              <li><a href="/collections/belts" class="mobile-nav__soon">Belts — Coming soon</a></li>
+              <li><a href="/collections/hats-hair-accessories" class="mobile-nav__soon">Hats &amp; Hair Accessories — Coming soon</a></li>
+              <li><a href="/collections/sunglasses" class="mobile-nav__soon">Sunglasses — Coming soon</a></li>
+              <li><a href="/collections/perfumes">Perfumes</a></li>
+              <li><a href="/collections/scarves">Scarves</a></li>
+              <li><a href="/collections/socks">Socks</a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href="/pages/sustainability">Sustainability</a></li>
+      </ul>
+      <div class="mobile-nav-footer">
+        <a href="/account">Sign In</a>
+        <a href="/stores">Find a Store</a>
+      </div>
+    </div>
+  </div>
+  
+  
+  <main id="main">
+    {{ content_for_layout }}
+  </main>
+  
+  
+  <!-- Newsletter / Signup Strip -->
+  <section class="signup-strip">
+    <div class="signup-strip__inner">
+      
+      <!-- Column 1: Email -->
+      <div class="signup-column">
+        <h4 class="signup-column__heading">Join Our Email List</h4>
+        <p class="signup-column__subtext">
+          Be the first to know about new arrivals, exclusive events and online offers.
+        </p>
+        <div class="signup-column__input-row">
+          <input type="email" class="signup-input" placeholder="Enter your email address" aria-label="Email address">
+          <button class="signup-btn">Sign Up</button>
+        </div>
+        <p class="signup-column__legal">
+          By signing up, you agree to receive email marketing. 
+          <a href="/privacy">View our Privacy Policy</a>.
+        </p>
+      </div>
+  
+      <!-- Column 2: SMS -->
+      <div class="signup-column">
+        <h4 class="signup-column__heading">Sign Up for Texts</h4>
+        <p class="signup-column__subtext">
+          Enter your phone number and get updates on the latest promotions and new drops.
+        </p>
+        <div class="signup-column__input-row">
+          <input type="tel" class="signup-input" placeholder="Enter your phone number" aria-label="Phone number">
+          <button class="signup-btn">Sign Up</button>
+        </div>
+        <p class="signup-column__legal">
+          By signing up via text, you consent to receiving recurring marketing messages. Msg &amp; data rates may apply.
+          <a href="/terms">View Terms</a>.
+        </p>
+      </div>
+  
+
+
+    </div>
+  </section>
+
+  <!-- Complete Expanded Footer -->
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="footer-columns">
+  
+        <!-- Column 1 -->
+        <div class="footer-column">
+          <h4 class="footer-column__heading">
+            <button class="footer-column__toggle" aria-expanded="false">
+              Customer Support
+              <svg class="footer-toggle-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+          </h4>
+          <ul class="footer-column__links">
+            <li><a href="/shipping">Shipping &amp; Handling</a></li>
+            <li><a href="/returns">Return &amp; Exchange</a></li>
+            <li><a href="/track-order">Track Your Order</a></li>
+            <li><a href="/faq">FAQ</a></li>
+            <li><a href="/gift-cards">Gift Cards</a></li>
+            <li><a href="/click-zip">Click &amp; Zip Denim</a></li>
+            <li><a href="/bopis">Buy Online, Pick Up in Store</a></li>
+          </ul>
+        </div>
+  
+        <!-- Column 2 -->
+        <div class="footer-column">
+          <h4 class="footer-column__heading">
+            <button class="footer-column__toggle" aria-expanded="false">
+              Our Services
+              <svg class="footer-toggle-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+          </h4>
+          <ul class="footer-column__links">
+            <li><a href="/customized-blazer-services">Customized Blazer Services</a></li>
+            <li><a href="/customized-ethnic-wear-services">Customized Ethnic Wear Services</a></li>
+          </ul>
+        </div>
+  
+        <!-- Column 3 -->
+  
+        <!-- Column 4 -->
+        <div class="footer-column">
+          <h4 class="footer-column__heading">
+            <button class="footer-column__toggle" aria-expanded="false">
+              About Us
+              <svg class="footer-toggle-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+          </h4>
+          <ul class="footer-column__links">
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/our-values">Our Values</a></li>
+            <li><a href="/sustainability">Sustainability Store</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 5 -->
+        <div class="footer-column">
+          <h4 class="footer-column__heading">
+            <button class="footer-column__toggle" aria-expanded="false">
+              Find Us
+              <svg class="footer-toggle-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+          </h4>
+          <ul class="footer-column__links">
+            <li><a href="/contact">Contact Us</a></li>
+            <li><a href="/stores">Store Locator</a></li>
+          </ul>
+          <div class="footer-social">
+            <a href="#" aria-label="Instagram" class="footer-social__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <circle cx="12" cy="12" r="5"></circle>
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
+              </svg>
+            </a>
+            <a href="#" aria-label="Pinterest" class="footer-social__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2C6.48 2 2 6.48 2 12c0 4.25 2.67 7.9 6.44 9.34-.09-.78-.17-1.99.04-2.85.18-.78 1.17-4.97 1.17-4.97s-.3-.6-.3-1.48c0-1.38.8-2.42 1.8-2.42.85 0 1.26.64 1.26 1.4 0 .85-.54 2.13-.82 3.31-.24.99.5 1.8 1.47 1.8 1.77 0 3.13-1.87 3.13-4.56 0-2.39-1.71-4.06-4.16-4.06-2.83 0-4.5 2.13-4.5 4.33 0 .86.33 1.78.74 2.28.08.1.09.19.07.29l-.28 1.12c-.04.18-.15.22-.34.13-1.25-.58-2.03-2.41-2.03-3.88 0-3.16 2.3-6.06 6.63-6.06 3.48 0 6.18 2.48 6.18 5.79 0 3.46-2.18 6.24-5.2 6.24-1.02 0-1.97-.53-2.3-1.15l-.62 2.38c-.23.87-.84 1.96-1.25 2.62.94.29 1.94.45 2.97.45 5.52 0 10-4.48 10-10S17.52 2 12 2z"></path>
+              </svg>
+            </a>
+            <a href="#" aria-label="LinkedIn" class="footer-social__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Club Membership -->
+        <div class="footer-column">
+          <p style="color: var(--color-text-muted); font-family: var(--font-body); font-size: 14px; line-height: 1.5; letter-spacing: var(--tracking-utility);">*The Club Membership Program — Coming Soon</p>
+        </div>
+  
+      </div>
+  
+      <!-- Legal Bar -->
+      <div class="footer-legal">
+        <p class="footer-legal__text">
+          &copy; 2026 Just Adulting Club LLC
+          <span class="footer-legal__sep">|</span>
+          <a href="/privacy">Privacy Policy</a>
+          <span class="footer-legal__sep">|</span>
+          <a href="/privacy-choices">Your Privacy Choices</a>
+          <span class="footer-legal__sep">|</span>
+          <a href="/data-rights">Data Collection Privacy Rights</a>
+          <span class="footer-legal__sep">|</span>
+          <a href="/terms">Terms of Use</a>
+          <span class="footer-legal__sep">|</span>
+          <a href="/sustainability">Sustainability</a>
+          <span class="footer-legal__sep">|</span>
+          <a href="/california">California Residents</a>
+        </p>
+        <p class="footer-legal__secondary">
+          In accordance with Credit Plan &sect; 1.2 Terms requirement: Subject to credit approval.
+        </p>
+      </div>
+  
+    </div>
+  </footer>
+  
+  <!-- Product Modal -->
+  <dialog id="product-modal" class="product-modal">
+    <shopify-context id="product-modal-context" type="product" wait-for-update>
+      <template>
+        <div class="product-modal__container">
+          <div class="product-modal__close-container">
+            <button class="product-modal__close" onclick="document.getElementById('product-modal').close();">&#10005;</button>
+          </div>
+          <div class="product-modal__content">
+            <div class="product-modal__layout">
+              <div class="product-modal__media">
+                <shopify-media query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
+              </div>
+              <div class="product-modal__details">
+                <div class="product-modal__header">
+                  <span class="product-modal__vendor">
+                    <shopify-data query="product.vendor"></shopify-data>
+                  </span>
+                  <h1 class="product-modal__title">
+                    <shopify-data query="product.title"></shopify-data>
+                  </h1>
+                  <div class="product-modal__price-container">
+                    <shopify-money query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
+                  </div>
+                </div>
+                <shopify-variant-selector></shopify-variant-selector>
+                <div class="product-modal__buttons">
+                  <button
+                    class="btn btn--hero"
+                    style="width: 100%; border: 2px solid var(--color-warm-brown); background: var(--color-warm-brown); color: white;"
+                    onclick="document.getElementById('cart').addLine(event); document.getElementById('product-modal').close(); document.getElementById('cart').showModal();"
+                    shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale"
+                  >
+                    Add to cart
+                  </button>
+                </div>
+                <div class="product-modal__description">
+                  <span class="product-modal__description-text">
+                    <shopify-data query="product.descriptionHtml"></shopify-data>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </shopify-context>
+  </dialog>
+
+  </shopify-store>
+
+  <!-- Floating Promo Badge -->
+  <div class="floating-promo" id="floatingPromo">
+    <button class="floating-promo__close" aria-label="Dismiss promotion" id="floatingPromoClose">&times;</button>
+    <div class="floating-promo__content">
+      <span class="floating-promo__label">Extra 25% Off</span>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script defer src="{{ 'main.js' | asset_url }}"></script>
+
+  
+  {% if template contains 'collection' %}
+  <script defer src="{{ 'category.js' | asset_url }}"></script>
+  {% endif %}
+</body>
+</html>

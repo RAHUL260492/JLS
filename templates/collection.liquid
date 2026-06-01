@@ -1,0 +1,135 @@
+{% comment %}
+  Collection template — Just Adulting Club
+  Renders for any URL like /collections/pants, /collections/shirts, etc.
+  - Title and product list are driven dynamically by the collection in the URL.
+  - Subcategory tabs are the 5 fixed categories: Pants, Shirts, Shorts, Socks, T-shirts.
+{% endcomment %}
+
+    <!-- CATEGORY TITLE & TABS -->
+    <header class="category-header">
+      <h1 class="category-title">{{ collection.title | default: 'SHOP ALL APPAREL' | upcase }}</h1>
+      <div class="subcategory-tabs">
+        <a href="/collections/pants"    class="subcategory-tab{% if collection.handle == 'pants'    %} is-active{% endif %}">PANTS</a>
+        <a href="/collections/shirts"   class="subcategory-tab{% if collection.handle == 'shirts'   %} is-active{% endif %}">SHIRTS</a>
+        <a href="/collections/shorts"   class="subcategory-tab{% if collection.handle == 'shorts'   %} is-active{% endif %}">SHORTS</a>
+        <a href="/collections/socks"    class="subcategory-tab{% if collection.handle == 'socks'    %} is-active{% endif %}">SOCKS</a>
+        <a href="/collections/tshirts"  class="subcategory-tab{% if collection.handle == 'tshirts'  %} is-active{% endif %}">T-SHIRTS</a>
+      </div>
+    </header>
+
+    <!-- FILTER & SORT CONTROLS -->
+    <section class="filter-bar">
+      <div class="filter-group">
+        <div class="filter-dropdown">Filter +</div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-dropdown">Sort By: Recommended <span style="font-size:8px; margin-left:4px;">&#9660;</span></div>
+      </div>
+    </section>
+
+    <!-- PRODUCT GRID (Shopify Storefront Web Components, scoped to current collection) -->
+    <section class="product-grid-section">
+      <div class="product-grid" id="categoryProductGrid">
+        <shopify-context type="collection" handle="{{ collection.handle }}">
+          <template>
+            <shopify-list-context id="productGridContext" type="product" query="collection.products" first="18" style="display: contents;">
+              <template>
+                <article class="product-card" style="position:relative;">
+                  <a shopify-attr--href="product.onlineStoreUrl" class="product-card__image-link">
+                    <div class="product-card__image-wrapper">
+                      <shopify-media query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
+                    </div>
+                  </a>
+                  <div class="product-card__info">
+                    <a shopify-attr--href="product.onlineStoreUrl" class="product-card__name">
+                      <shopify-data query="product.title"></shopify-data>
+                    </a>
+                    <p class="product-card__price">
+                      <shopify-money format="money_without_currency" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
+                    </p>
+                    <p class="product-card__promo">
+                      <shopify-data query="product.vendor"></shopify-data>
+                    </p>
+                  </div>
+                </article>
+              </template>
+            </shopify-list-context>
+          </template>
+        </shopify-context>
+      </div>
+    </section>
+
+    <!-- PAGINATION BAR -->
+    <section class="pagination-section">
+      <div class="pagination-section__inner">
+        <button class="pagination-load-btn" id="loadMoreBtn">Load more items</button>
+        <p class="pagination-range">Showing first 18 items</p>
+      </div>
+    </section>
+
+    <!-- RELATED LINKS ROW -->
+    <section class="related-links-section">
+      <div class="related-links-section__inner">
+        <h4 class="related-links__heading">Also Explore</h4>
+        <div class="related-links__list">
+          <a href="/collections/pants"   class="related-link">Pants</a>
+          <span class="related-link-separator">|</span>
+          <a href="/collections/shirts"  class="related-link">Shirts</a>
+          <span class="related-link-separator">|</span>
+          <a href="/collections/shorts"  class="related-link">Shorts</a>
+          <span class="related-link-separator">|</span>
+          <a href="/collections/socks"   class="related-link">Socks</a>
+          <span class="related-link-separator">|</span>
+          <a href="/collections/tshirts" class="related-link">T-Shirts</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO CONTENT BLOCK — driven by collection.description if set in Shopify admin -->
+    <section class="seo-content-section">
+      <div class="seo-content-section__inner">
+        {% if collection.description != blank %}
+          {{ collection.description }}
+        {% else %}
+          {% case collection.handle %}
+            {% when 'pants' %}
+              <p class="seo-content__intro">From tailored trousers to relaxed-fit chinos, our pants are cut from premium fabrics and designed to move with you. Refined silhouettes, considered details, built for every day.</p>
+              <h3 class="seo-content__heading">Tailored Trousers</h3>
+              <p class="seo-content__body">Italian wool and crisp wool blends in classic and slim fits. Built to hold a sharp line for the office, weddings, and evenings out.</p>
+              <h3 class="seo-content__heading">Everyday Chinos</h3>
+              <p class="seo-content__body">Stretch-cotton chinos in seasonless tones — sand, olive, navy, charcoal. Tapered through the leg, structured at the waist.</p>
+
+            {% when 'shirts' %}
+              <p class="seo-content__intro">Considered shirting for every part of the week. Long-staple cotton, breathable linen, and Italian-milled twill, finished with mother-of-pearl buttons and clean, contemporary cuts.</p>
+              <h3 class="seo-content__heading">The Linen Shirt</h3>
+              <p class="seo-content__body">Cool, lightweight, garment-washed for an instantly broken-in feel. The defining warm-weather essential.</p>
+              <h3 class="seo-content__heading">The Dress Shirt</h3>
+              <p class="seo-content__body">Crisp poplin and oxford weaves cut for a clean line through the body. Versatile enough for the boardroom, refined enough for a dinner jacket.</p>
+
+            {% when 'shorts' %}
+              <p class="seo-content__intro">From tailored linen to easy drawstring fits, shorts engineered for warmer days. Cut above the knee, fully lined where it matters.</p>
+              <h3 class="seo-content__heading">Tailored Shorts</h3>
+              <p class="seo-content__body">Pleated, knee-length and finished with a clean hem — the warm-weather alternative to a suit trouser.</p>
+              <h3 class="seo-content__heading">Casual &amp; Swim</h3>
+              <p class="seo-content__body">Quick-drying swim shorts and drawstring linen styles in a refined palette. Built for the beach, finished well enough for the bar afterwards.</p>
+
+            {% when 'socks' %}
+              <p class="seo-content__intro">Long-staple cotton, seamless toes, and odour-eliminating fibres. Engineered for long days on your feet.</p>
+              <h3 class="seo-content__heading">Sentinel — Advanced No-Smell Tech</h3>
+              <p class="seo-content__body">Precision-built to act instantly — eradicating odour-causing bacteria in seconds, while you carry on. Seamless toe, extra cushioning, breathable fabric.</p>
+              <h3 class="seo-content__heading">3x Softer Than Cotton</h3>
+              <p class="seo-content__body">Our long-staple cotton makes our socks softer and longer-lasting than the regular cotton equivalent.</p>
+
+            {% when 'tshirts' %}
+              <p class="seo-content__intro">Heavyweight cotton, considered cuts and a quiet palette. Crew-necks, V-necks, and relaxed pocket tees built to layer and built to last.</p>
+              <h3 class="seo-content__heading">The Heavyweight Crew</h3>
+              <p class="seo-content__body">Dense, dropped-shoulder jersey in a clean, modern silhouette. Holds its shape in the wash, gets better with wear.</p>
+              <h3 class="seo-content__heading">Refined Basics</h3>
+              <p class="seo-content__body">Slim-fit cotton tees in a palette of cream, sand, navy and charcoal.</p>
+
+            {% else %}
+              <p class="seo-content__intro">Discover our signature collection of premium apparel, thoughtfully designed for modern versatility. Every piece is crafted to elevate your daily wardrobe with effortless confidence and enduring quality.</p>
+          {% endcase %}
+        {% endif %}
+      </div>
+    </section>

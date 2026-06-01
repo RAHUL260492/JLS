@@ -1,0 +1,168 @@
+
+
+    <!-- ===================== HERO BANNER (PLACEHOLDER) ===================== -->
+    <style>
+      .hero-placeholder {
+        position: relative;
+        width: 100%;
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f5f1ea 0%, #e8e1d4 100%);
+        border-top: 1px solid var(--color-border-light);
+        border-bottom: 1px solid var(--color-border-light);
+        overflow: hidden;
+      }
+      .hero-placeholder::before {
+        content: '';
+        position: absolute;
+        inset: 24px;
+        border: 1px dashed rgba(74, 44, 42, 0.25);
+        pointer-events: none;
+      }
+      .hero-placeholder__inner {
+        text-align: center;
+        padding: 60px 24px;
+        max-width: 720px;
+      }
+      .hero-placeholder__eyebrow {
+        font-family: var(--font-body);
+        font-size: 11px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--color-accent-gold);
+        margin: 0 0 18px;
+      }
+      .hero-placeholder__title {
+        font-family: var(--font-heading);
+        font-style: italic;
+        font-weight: 400;
+        font-size: clamp(36px, 5vw, 56px);
+        line-height: 1.1;
+        color: var(--color-warm-brown);
+        margin: 0 0 14px;
+      }
+      .hero-placeholder__note {
+        font-family: var(--font-body);
+        font-size: 14px;
+        color: var(--color-text-caption);
+        margin: 0;
+      }
+      .hero-placeholder__dims {
+        display: inline-block;
+        margin-top: 22px;
+        padding: 6px 14px;
+        font-family: var(--font-body);
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+        background: rgba(255,255,255,0.6);
+        border: 1px solid var(--color-border-light);
+      }
+    </style>
+
+    <section class="hero-placeholder" aria-label="Hero banner placeholder">
+      <div class="hero-placeholder__inner">
+        <p class="hero-placeholder__eyebrow">Hero Banner</p>
+        <h1 class="hero-placeholder__title">Add your campaign imagery here</h1>
+        <p class="hero-placeholder__note">Replace this placeholder with your hero banner — image, video, or slider.</p>
+        <span class="hero-placeholder__dims">Recommended: 1920 &times; 900</span>
+      </div>
+    </section>
+    <!-- =================== END HERO BANNER (PLACEHOLDER) =================== -->
+    
+    <!-- Category Grid (editable section — manage in Shopify Theme Customizer) -->
+    {% section 'featured-categories' %}
+
+    <!-- Banner Placeholder 1 (replaces former Banner 4) -->
+    <section class="banner-placeholder" aria-label="Banner placeholder">
+      <div class="banner-placeholder__inner">
+        <p class="banner-placeholder__eyebrow">Banner Slot</p>
+        <h2 class="banner-placeholder__title">Add your campaign banner here</h2>
+        <p class="banner-placeholder__note">Replace with hero image, video, or editorial split.</p>
+        <span class="banner-placeholder__dims">Recommended: 1920 &times; 720</span>
+      </div>
+    </section>
+
+    <!-- Banner Placeholder 2 (replaces former Banner 5) -->
+    <section class="banner-placeholder" aria-label="Banner placeholder">
+      <div class="banner-placeholder__inner">
+        <p class="banner-placeholder__eyebrow">Banner Slot</p>
+        <h2 class="banner-placeholder__title">Add your campaign banner here</h2>
+        <p class="banner-placeholder__note">Replace with hero image, video, or editorial split.</p>
+        <span class="banner-placeholder__dims">Recommended: 1920 &times; 720</span>
+      </div>
+    </section>
+
+    <!-- Editorial Split Placeholder (replaces former editorial-split) -->
+    <section class="banner-split-placeholder" aria-label="Editorial split placeholder">
+      <div class="banner-split-placeholder__tile">
+        <div class="banner-placeholder__inner">
+          <p class="banner-placeholder__eyebrow">Banner Slot</p>
+          <h2 class="banner-placeholder__title">Add banner here</h2>
+          <p class="banner-placeholder__note">Editorial image with optional headline &amp; CTA.</p>
+          <span class="banner-placeholder__dims">Recommended: 960 &times; 720</span>
+        </div>
+      </div>
+      <div class="banner-split-placeholder__tile">
+        <div class="banner-placeholder__inner">
+          <p class="banner-placeholder__eyebrow">Banner Slot</p>
+          <h2 class="banner-placeholder__title">Add banner here</h2>
+          <p class="banner-placeholder__note">Product flatlay or lifestyle image.</p>
+          <span class="banner-placeholder__dims">Recommended: 960 &times; 720</span>
+        </div>
+      </div>
+    </section>
+    
+    <!-- New Arrivals -->
+    <section class="new-arrivals">
+      <div class="new-arrivals__header">
+        <h2 class="new-arrivals__title scroll-reveal" data-split>Your New Arrivals</h2>
+        <p class="new-arrivals__subtitle scroll-reveal">
+          A personal curation of new pieces we think you'll love.
+        </p>
+      </div>
+      
+      <div class="new-arrivals__carousel-wrapper">
+        <button class="carousel-arrow carousel-arrow--left" aria-label="Scroll left">&lsaquo;</button>
+        
+        <div class="new-arrivals__carousel" id="arrivalsCarousel">
+          <shopify-list-context id="arrivalsGridContext" type="product" query="products" first="10" style="display: contents;">
+            <template>
+              <article class="product-card" style="position:relative;">
+                <a href="#" onclick="event.preventDefault(); document.getElementById('product-modal-context').update(event); document.getElementById('product-modal').showModal();" class="product-card__image-link">
+                  <div class="product-card__image-wrapper">
+                    <shopify-media query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
+                  </div>
+                </a>
+                <div class="product-card__info">
+                  <a href="#" onclick="event.preventDefault(); document.getElementById('product-modal-context').update(event); document.getElementById('product-modal').showModal();" class="product-card__name">
+                    <shopify-data query="product.title"></shopify-data>
+                  </a>
+                  <p class="product-card__price">
+                    <shopify-money format="money_without_currency" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
+                  </p>
+                  <p class="product-card__promo">
+                    <shopify-data query="product.vendor"></shopify-data>
+                  </p>
+                </div>
+              </article>
+            </template>
+          </shopify-list-context>
+        </div>
+        
+        <button class="carousel-arrow carousel-arrow--right" aria-label="Scroll right">&rsaquo;</button>
+      </div>
+    </section>
+    
+    <!-- Atmospheric Image -->
+    <section class="atmospheric-image">
+      <img 
+        src="{{ 'heritage-expedition.png' | asset_url }}" 
+        alt="The Heritage Expedition" 
+        loading="lazy"
+      >
+    </section>
+  
