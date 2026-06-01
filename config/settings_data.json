@@ -1,0 +1,72 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "sections": {
+      "featured-categories": {
+        "type": "featured-categories",
+        "blocks": {
+          "category_aVdULq": {
+            "type": "category",
+            "settings": {
+              "product": "",
+              "collection": "",
+              "link": "",
+              "label": "The Linen Shop",
+              "cta_text": "Shop Now"
+            }
+          },
+          "category_6eWepE": {
+            "type": "category",
+            "settings": {
+              "product": "",
+              "collection": "",
+              "link": "",
+              "label": "",
+              "cta_text": "Shop Now"
+            }
+          },
+          "category_MgAPVP": {
+            "type": "category",
+            "settings": {
+              "product": "",
+              "collection": "",
+              "link": "",
+              "label": "",
+              "cta_text": "Shop Now"
+            }
+          },
+          "category_WFELx4": {
+            "type": "category",
+            "settings": {
+              "product": "",
+              "collection": "",
+              "link": "",
+              "label": "",
+              "cta_text": "Shop Now"
+            }
+          }
+        },
+        "block_order": [
+          "category_aVdULq",
+          "category_6eWepE",
+          "category_MgAPVP",
+          "category_WFELx4"
+        ],
+        "settings": {
+          "eyebrow": "",
+          "heading": "",
+          "section_id": "explore"
+        }
+      }
+    },
+    "content_for_index": []
+  }
+}
