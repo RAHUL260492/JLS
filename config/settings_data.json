@@ -19,6 +19,7 @@
               "product": "",
               "collection": "",
               "link": "",
+              "image": "shopify://shop_images/WARM_SAND_DUSTY_ROSE_PINK_LINEN_SHIRT.png",
               "label": "The Linen Shop",
               "cta_text": "Shop Now"
             }
@@ -29,6 +30,7 @@
               "product": "",
               "collection": "",
               "link": "",
+              "image": "shopify://shop_images/TEQUILA_POSTCARD.png",
               "label": "The GETAWAT EDiT",
               "cta_text": "Shop Now"
             }
@@ -39,7 +41,7 @@
               "product": "",
               "collection": "",
               "link": "",
-              "label": "DRESSES",
+              "label": "Dresses",
               "cta_text": "Shop Now"
             }
           },
