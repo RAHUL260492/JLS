@@ -1,0 +1,249 @@
+<style>
+  .campaign-banner {
+    position: relative;
+    width: 100%;
+    min-height: 44vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin: 32px 0;
+    border-top: 1px solid var(--color-border-light);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+  .campaign-banner--placeholder {
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, #f5f1ea 0%, #e8e1d4 100%);
+  }
+  .campaign-banner--placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border: 1px dashed rgba(74, 44, 42, 0.25);
+    pointer-events: none;
+  }
+  .campaign-banner__media { position: absolute; inset: 0; z-index: 0; }
+  .campaign-banner__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .campaign-banner__media--mobile { display: none; }
+  .campaign-banner__overlay { position: absolute; inset: 0; z-index: 1; background: #000; pointer-events: none; }
+  .campaign-banner__inner {
+    position: relative;
+    z-index: 2;
+    padding: clamp(36px, 6vw, 72px) 24px;
+    max-width: 640px;
+  }
+  .campaign-banner--left   { justify-content: flex-start; text-align: left; }
+  .campaign-banner--left   .campaign-banner__inner { margin-left: clamp(24px, 6vw, 80px); }
+  .campaign-banner--center { justify-content: center; text-align: center; }
+  .campaign-banner--right  { justify-content: flex-end; text-align: right; }
+  .campaign-banner--right  .campaign-banner__inner { margin-right: clamp(24px, 6vw, 80px); }
+  .campaign-banner__eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+    color: var(--color-accent-gold);
+  }
+  .campaign-banner__title {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.15;
+    margin: 0 0 10px;
+    color: var(--color-warm-brown);
+  }
+  .campaign-banner__note {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    color: var(--color-text-caption);
+  }
+  .campaign-banner__cta {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 12px 32px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .campaign-banner__cta:hover { opacity: 0.88; transform: translateY(-1px); }
+  .campaign-banner__dims {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 5px 12px;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    background: rgba(255,255,255,0.6);
+    border: 1px solid var(--color-border-light);
+  }
+</style>
+
+{% for block in section.blocks %}
+  {%- liquid
+    assign has_image = false
+    if block.settings.image != blank
+      assign has_image = true
+    endif
+
+    case block.settings.height
+      when 'small'
+        assign min_h = '36vh'
+      when 'medium'
+        assign min_h = '44vh'
+      when 'large'
+        assign min_h = '60vh'
+      else
+        assign min_h = '44vh'
+    endcase
+
+    assign align = block.settings.text_alignment | default: 'center'
+  -%}
+
+  <section
+    class="campaign-banner campaign-banner--{{ align }}{% unless has_image %} campaign-banner--placeholder{% endunless %}"
+    style="min-height: {{ min_h }};{% if has_image %} text-align: {{ align }};{% endif %}"
+    {{ block.shopify_attributes }}
+  >
+    {%- if has_image -%}
+      <div class="campaign-banner__media campaign-banner__media--desktop">
+        <img
+          src="{{ block.settings.image | image_url: width: 1920 }}"
+          srcset="{{ block.settings.image | image_url: width: 800 }} 800w, {{ block.settings.image | image_url: width: 1280 }} 1280w, {{ block.settings.image | image_url: width: 1920 }} 1920w"
+          sizes="100vw"
+          alt="{{ block.settings.image.alt | default: block.settings.heading | escape }}"
+          width="1920" height="720" loading="lazy"
+        >
+      </div>
+      {%- if block.settings.image_mobile != blank -%}
+        <div class="campaign-banner__media campaign-banner__media--mobile">
+          <img src="{{ block.settings.image_mobile | image_url: width: 900 }}" alt="{{ block.settings.heading | escape }}" loading="lazy">
+        </div>
+      {%- endif -%}
+      {%- if block.settings.overlay_opacity > 0 -%}
+        <div class="campaign-banner__overlay" style="opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+      {%- endif -%}
+    {%- endif -%}
+
+    <div class="campaign-banner__inner">
+      {%- if block.settings.eyebrow != blank -%}
+        <p class="campaign-banner__eyebrow"{% if has_image %} style="color: {{ block.settings.eyebrow_color }};"{% endif %}>{{ block.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if block.settings.heading != blank -%}
+        <h2 class="campaign-banner__title"{% if has_image %} style="color: {{ block.settings.text_color }};"{% endif %}>{{ block.settings.heading }}</h2>
+      {%- elsif has_image == false -%}
+        <h2 class="campaign-banner__title">Add your campaign banner here</h2>
+      {%- endif -%}
+
+      {%- if block.settings.subheading != blank -%}
+        <p class="campaign-banner__note"{% if has_image %} style="color: {{ block.settings.text_color }};"{% endif %}>{{ block.settings.subheading }}</p>
+      {%- elsif has_image == false -%}
+        <p class="campaign-banner__note">Pick an image in the theme editor, then add a headline and button.</p>
+      {%- endif -%}
+
+      {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+        <a class="campaign-banner__cta" href="{{ block.settings.button_link }}" style="color: {{ block.settings.button_text_color }}; background: {{ block.settings.button_bg_color }}; border: 1px solid {{ block.settings.button_bg_color }};">{{ block.settings.button_label }}</a>
+      {%- endif -%}
+
+      {%- unless has_image -%}
+        <span class="campaign-banner__dims">Recommended: 1920 &times; 720</span>
+      {%- endunless -%}
+    </div>
+  </section>
+{% else %}
+  <section class="campaign-banner campaign-banner--placeholder" style="min-height: 44vh;">
+    <div class="campaign-banner__inner">
+      <h2 class="campaign-banner__title">Add a banner</h2>
+      <p class="campaign-banner__note">Use “Add banner” in the theme editor.</p>
+    </div>
+  </section>
+{% endfor %}
+
+{% schema %}
+{
+  "name": "Campaign Banners",
+  "tag": "section",
+  "class": "section-campaign-banners",
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        { "type": "header", "content": "Image" },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended 1920 × 720. Leave blank to show the placeholder."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile image (optional)"
+        },
+        {
+          "type": "select",
+          "id": "height",
+          "label": "Height",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Image overlay darkness",
+          "min": 0, "max": 80, "step": 5, "unit": "%", "default": 0,
+          "info": "Darkens the image so text stays readable"
+        },
+        { "type": "header", "content": "Text" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "subheading", "label": "Subheading" },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "default": "center",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ]
+        },
+        { "type": "header", "content": "Button" },
+        { "type": "text", "id": "button_label", "label": "Button label" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        { "type": "header", "content": "Colors (used when an image is set)" },
+        { "type": "color", "id": "text_color", "label": "Heading & text", "default": "#ffffff" },
+        { "type": "color", "id": "eyebrow_color", "label": "Eyebrow", "default": "#f0e6d2" },
+        { "type": "color", "id": "button_bg_color", "label": "Button background", "default": "#ffffff" },
+        { "type": "color", "id": "button_text_color", "label": "Button text", "default": "#4a2c2a" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Campaign Banners",
+      "category": "Image",
+      "blocks": [
+        { "type": "banner" },
+        { "type": "banner" }
+      ]
+    }
+  ]
+}
+{% endschema %}

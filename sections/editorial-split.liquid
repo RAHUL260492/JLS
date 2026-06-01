@@ -1,0 +1,160 @@
+<style>
+  #split-{{ section.id }} {
+    display: grid;
+    grid-template-columns: repeat({{ section.blocks.size | at_least: 1 }}, 1fr);
+    gap: 0;
+    margin: 32px 0;
+  }
+  #split-{{ section.id }} .split-tile {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    border: 1px solid var(--color-border-light);
+  }
+  #split-{{ section.id }} .split-tile + .split-tile { border-left: none; }
+  #split-{{ section.id }} .split-tile--placeholder {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, #f5f1ea 0%, #e8e1d4 100%);
+  }
+  #split-{{ section.id }} .split-tile--placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 18px;
+    border: 1px dashed rgba(74, 44, 42, 0.25);
+    pointer-events: none;
+  }
+  #split-{{ section.id }} .split-tile__media { position: absolute; inset: 0; z-index: 0; }
+  #split-{{ section.id }} .split-tile__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #split-{{ section.id }} .split-tile__overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0) 60%); pointer-events: none; }
+  #split-{{ section.id }} .split-tile__inner { position: relative; z-index: 2; padding: clamp(28px, 4vw, 48px); max-width: 90%; }
+  #split-{{ section.id }} .split-tile__eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+    margin: 0 0 12px; color: var(--color-accent-gold);
+  }
+  #split-{{ section.id }} .split-tile--image .split-tile__eyebrow { color: #f0e6d2; }
+  #split-{{ section.id }} .split-tile__title {
+    font-family: var(--font-heading); font-style: italic; font-weight: 400;
+    font-size: clamp(24px, 2.4vw, 34px); line-height: 1.15; margin: 0 0 8px;
+    color: var(--color-warm-brown);
+  }
+  #split-{{ section.id }} .split-tile--image .split-tile__title { color: #fff; }
+  #split-{{ section.id }} .split-tile__note { font-family: var(--font-body); font-size: 13px; margin: 0; color: var(--color-text-caption); }
+  #split-{{ section.id }} .split-tile--image .split-tile__note { color: rgba(255,255,255,0.9); }
+  #split-{{ section.id }} .split-tile__cta {
+    display: inline-block; margin-top: 16px; font-family: var(--font-body);
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 3px;
+    color: var(--color-warm-brown);
+  }
+  #split-{{ section.id }} .split-tile--image .split-tile__cta { color: #fff; }
+  #split-{{ section.id }} .split-tile__dims {
+    display: inline-block; margin-top: 16px; padding: 5px 12px; font-family: var(--font-body);
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--color-text-muted); background: rgba(255,255,255,0.6); border: 1px solid var(--color-border-light);
+  }
+  @media (max-width: 768px) {
+    #split-{{ section.id }} { grid-template-columns: 1fr; }
+    #split-{{ section.id }} .split-tile { min-height: 46vh; }
+    #split-{{ section.id }} .split-tile + .split-tile { border-left: 1px solid var(--color-border-light); border-top: none; }
+  }
+</style>
+
+<section id="split-{{ section.id }}" aria-label="{{ section.settings.heading | default: 'Editorial banners' | escape }}">
+  {% for block in section.blocks %}
+    {%- liquid
+      assign has_image = false
+      if block.settings.image != blank
+        assign has_image = true
+      endif
+      assign tile_url = block.settings.link | default: '#'
+    -%}
+
+    {%- capture tile_body -%}
+      {%- if has_image -%}
+        <div class="split-tile__media">
+          <img
+            src="{{ block.settings.image | image_url: width: 960 }}"
+            srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 960 }} 960w, {{ block.settings.image | image_url: width: 1280 }} 1280w"
+            sizes="(min-width: 769px) 50vw, 100vw"
+            alt="{{ block.settings.image.alt | default: block.settings.heading | escape }}"
+            width="960" height="720" loading="lazy"
+          >
+        </div>
+        <div class="split-tile__overlay"></div>
+      {%- endif -%}
+      <div class="split-tile__inner">
+        {%- if block.settings.eyebrow != blank -%}<p class="split-tile__eyebrow">{{ block.settings.eyebrow }}</p>{%- endif -%}
+        {%- if block.settings.heading != blank -%}
+          <h2 class="split-tile__title">{{ block.settings.heading }}</h2>
+        {%- elsif has_image == false -%}
+          <h2 class="split-tile__title">Add banner here</h2>
+        {%- endif -%}
+        {%- if block.settings.subheading != blank -%}
+          <p class="split-tile__note">{{ block.settings.subheading }}</p>
+        {%- elsif has_image == false -%}
+          <p class="split-tile__note">Editorial image with optional headline & link.</p>
+        {%- endif -%}
+        {%- if block.settings.cta_text != blank and block.settings.link != blank -%}
+          <span class="split-tile__cta">{{ block.settings.cta_text }}</span>
+        {%- endif -%}
+        {%- unless has_image -%}<span class="split-tile__dims">Recommended: 960 &times; 720</span>{%- endunless -%}
+      </div>
+    {%- endcapture -%}
+
+    {%- if block.settings.link != blank -%}
+      <a href="{{ tile_url }}" class="split-tile{% if has_image %} split-tile--image{% else %} split-tile--placeholder{% endif %}" {{ block.shopify_attributes }}>{{ tile_body }}</a>
+    {%- else -%}
+      <div class="split-tile{% if has_image %} split-tile--image{% else %} split-tile--placeholder{% endif %}" {{ block.shopify_attributes }}>{{ tile_body }}</div>
+    {%- endif -%}
+  {% else %}
+    <div class="split-tile split-tile--placeholder">
+      <div class="split-tile__inner">
+        <h2 class="split-tile__title">Add a banner</h2>
+        <p class="split-tile__note">Use “Add banner” in the theme editor.</p>
+      </div>
+    </div>
+  {% endfor %}
+</section>
+
+{% schema %}
+{
+  "name": "Editorial Split",
+  "tag": "section",
+  "class": "section-editorial-split",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended 960 × 720. Leave blank to show the placeholder."
+        },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "subheading", "label": "Subheading" },
+        { "type": "text", "id": "cta_text", "label": "Link label", "info": "Shows when a link is set", "default": "Shop Now" },
+        { "type": "url", "id": "link", "label": "Link (makes the whole tile clickable)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial Split",
+      "category": "Image",
+      "blocks": [
+        { "type": "banner" },
+        { "type": "banner" }
+      ]
+    }
+  ]
+}
+{% endschema %}
