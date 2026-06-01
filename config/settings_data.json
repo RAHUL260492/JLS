@@ -52,6 +52,7 @@
               "product": "",
               "collection": "",
               "link": "",
+              "image": "shopify://shop_images/WhatsApp_Image_2026-06-01_at_14.47.39.jpg",
               "label": "ACCESSORIES",
               "cta_text": "Shop Now"
             }
@@ -68,6 +69,101 @@
           "heading": "",
           "section_id": "explore"
         }
+      },
+      "hero-banner": {
+        "type": "hero-banner",
+        "settings": {
+          "focal_point": "center center",
+          "height": "medium",
+          "overlay_opacity": 0,
+          "eyebrow": "Hero Banner",
+          "heading": "",
+          "subheading": "",
+          "text_alignment": "center",
+          "button_label": "",
+          "button_link": "",
+          "text_color": "#4a2c2a",
+          "eyebrow_color": "#a78a5e",
+          "button_bg_color": "#4a2c2a",
+          "button_text_color": "#ffffff"
+        }
+      },
+      "campaign-banners": {
+        "type": "campaign-banners",
+        "blocks": {
+          "banner_8agzKm": {
+            "type": "banner",
+            "settings": {
+              "image": "shopify://shop_images/wmremove-transformed.png",
+              "height": "large",
+              "overlay_opacity": 10,
+              "eyebrow": "",
+              "heading": "",
+              "subheading": "",
+              "text_alignment": "center",
+              "button_label": "",
+              "button_link": "",
+              "text_color": "#ffffff",
+              "eyebrow_color": "#f0e6d2",
+              "button_bg_color": "#ffffff",
+              "button_text_color": "#4a2c2a"
+            }
+          },
+          "banner_fzNjXg": {
+            "type": "banner",
+            "settings": {
+              "image": "shopify://shop_images/LOST_KNITS_COMING_SOON.png",
+              "height": "medium",
+              "overlay_opacity": 0,
+              "eyebrow": "",
+              "heading": "",
+              "subheading": "",
+              "text_alignment": "center",
+              "button_label": "",
+              "button_link": "",
+              "text_color": "#ffffff",
+              "eyebrow_color": "#f0e6d2",
+              "button_bg_color": "#ffffff",
+              "button_text_color": "#4a2c2a"
+            }
+          }
+        },
+        "block_order": [
+          "banner_8agzKm",
+          "banner_fzNjXg"
+        ],
+        "settings": {}
+      },
+      "editorial-split": {
+        "type": "editorial-split",
+        "blocks": {
+          "banner_gfgA8y": {
+            "type": "banner",
+            "settings": {
+              "image": "shopify://shop_images/WhatsApp_Image_2026-06-01_at_14.47.03.jpg",
+              "eyebrow": "",
+              "heading": "",
+              "subheading": "",
+              "cta_text": "Shop Now",
+              "link": ""
+            }
+          },
+          "banner_drJgzh": {
+            "type": "banner",
+            "settings": {
+              "eyebrow": "",
+              "heading": "",
+              "subheading": "",
+              "cta_text": "Shop Now",
+              "link": ""
+            }
+          }
+        },
+        "block_order": [
+          "banner_gfgA8y",
+          "banner_drJgzh"
+        ],
+        "settings": {}
       }
     },
     "content_for_index": []
