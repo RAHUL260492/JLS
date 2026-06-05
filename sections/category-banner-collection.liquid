@@ -1,0 +1,43 @@
+{% render 'category-banner', s: section.settings, uid: section.id %}
+
+{% schema %}
+{
+  "name": "Collection Banner",
+  "tag": "section",
+  "class": "section-category-banner",
+  "settings": [
+    { "type": "header", "content": "Image" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Recommended 1920 × 600. Leave blank to hide on the live store." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image (optional)" },
+    {
+      "type": "select", "id": "height", "label": "Height", "default": "medium",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ]
+    },
+    { "type": "range", "id": "overlay_opacity", "label": "Image overlay darkness", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 0, "info": "Darkens the image so text stays readable" },
+    { "type": "header", "content": "Text" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading" },
+    {
+      "type": "select", "id": "text_alignment", "label": "Text alignment", "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    { "type": "header", "content": "Button" },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "header", "content": "Colors (used when an image is set)" },
+    { "type": "color", "id": "text_color", "label": "Heading & text", "default": "#ffffff" },
+    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow", "default": "#f0e6d2" },
+    { "type": "color", "id": "button_bg_color", "label": "Button background", "default": "#ffffff" },
+    { "type": "color", "id": "button_text_color", "label": "Button text", "default": "#4a2c2a" }
+  ]
+}
+{% endschema %}

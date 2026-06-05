@@ -5,6 +5,9 @@
   - Subcategory tabs are the 5 fixed categories: Pants, Shirts, Shorts, Socks, T-shirts.
 {% endcomment %}
 
+    <!-- Category Banner (editable section — image + text + button, manage in Shopify Theme Customizer) -->
+    {% section 'category-banner-collection' %}
+
     <!-- CATEGORY TITLE & TABS -->
     <header class="category-header">
       <h1 class="category-title">{{ collection.title | default: 'SHOP ALL APPAREL' | upcase }}</h1>

@@ -1,0 +1,172 @@
+{%- comment -%}
+  Editable category banner (image + overlaid text + button) for category/collection pages.
+  Accepts:
+    s   - settings object (section.settings)
+    uid - unique id for scoping styles (section.id)
+  Renders nothing on the live storefront until an image or heading is set;
+  the placeholder shows only inside the Theme Customizer (request.design_mode).
+{%- endcomment -%}
+{%- liquid
+  assign has_image = false
+  if s.image != blank
+    assign has_image = true
+  endif
+
+  assign has_content = false
+  if has_image or s.heading != blank
+    assign has_content = true
+  endif
+
+  case s.height
+    when 'small'
+      assign min_h = '32vh'
+    when 'large'
+      assign min_h = '56vh'
+    else
+      assign min_h = '42vh'
+  endcase
+
+  assign align = s.text_alignment | default: 'center'
+-%}
+
+{%- if has_content or request.design_mode -%}
+<style>
+  #category-banner-{{ uid }}.category-banner {
+    position: relative;
+    width: 100%;
+    min-height: {{ min_h }};
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin: 0 0 24px;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+  #category-banner-{{ uid }}.category-banner--placeholder {
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, #f5f1ea 0%, #e8e1d4 100%);
+  }
+  #category-banner-{{ uid }}.category-banner--placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border: 1px dashed rgba(74, 44, 42, 0.25);
+    pointer-events: none;
+  }
+  #category-banner-{{ uid }} .category-banner__media { position: absolute; inset: 0; z-index: 0; }
+  #category-banner-{{ uid }} .category-banner__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #category-banner-{{ uid }} .category-banner__media--mobile { display: none; }
+  #category-banner-{{ uid }} .category-banner__overlay { position: absolute; inset: 0; z-index: 1; background: #000; pointer-events: none; }
+  #category-banner-{{ uid }} .category-banner__inner {
+    position: relative;
+    z-index: 2;
+    padding: clamp(32px, 5vw, 64px) 24px;
+    max-width: 640px;
+  }
+  #category-banner-{{ uid }}.category-banner--left   { justify-content: flex-start; text-align: left; }
+  #category-banner-{{ uid }}.category-banner--left   .category-banner__inner { margin-left: clamp(24px, 6vw, 80px); }
+  #category-banner-{{ uid }}.category-banner--center { justify-content: center; text-align: center; }
+  #category-banner-{{ uid }}.category-banner--right  { justify-content: flex-end; text-align: right; }
+  #category-banner-{{ uid }}.category-banner--right  .category-banner__inner { margin-right: clamp(24px, 6vw, 80px); }
+  #category-banner-{{ uid }} .category-banner__eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+    color: var(--color-accent-gold);
+  }
+  #category-banner-{{ uid }} .category-banner__title {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.15;
+    margin: 0 0 10px;
+    color: var(--color-warm-brown);
+  }
+  #category-banner-{{ uid }} .category-banner__note {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    color: var(--color-text-caption);
+  }
+  #category-banner-{{ uid }} .category-banner__cta {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 12px 32px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  #category-banner-{{ uid }} .category-banner__cta:hover { opacity: 0.88; transform: translateY(-1px); }
+  #category-banner-{{ uid }} .category-banner__dims {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 5px 12px;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    background: rgba(255,255,255,0.6);
+    border: 1px solid var(--color-border-light);
+  }
+</style>
+
+<section
+  id="category-banner-{{ uid }}"
+  class="category-banner category-banner--{{ align }}{% unless has_image %} category-banner--placeholder{% endunless %}"
+  style="min-height: {{ min_h }};{% if has_image %} text-align: {{ align }};{% endif %}"
+>
+  {%- if has_image -%}
+    <div class="category-banner__media category-banner__media--desktop">
+      <img
+        src="{{ s.image | image_url: width: 1920 }}"
+        srcset="{{ s.image | image_url: width: 800 }} 800w, {{ s.image | image_url: width: 1280 }} 1280w, {{ s.image | image_url: width: 1920 }} 1920w"
+        sizes="100vw"
+        alt="{{ s.image.alt | default: s.heading | escape }}"
+        width="1920" height="720" loading="lazy"
+      >
+    </div>
+    {%- if s.image_mobile != blank -%}
+      <div class="category-banner__media category-banner__media--mobile">
+        <img src="{{ s.image_mobile | image_url: width: 900 }}" alt="{{ s.heading | escape }}" loading="lazy">
+      </div>
+    {%- endif -%}
+    {%- if s.overlay_opacity > 0 -%}
+      <div class="category-banner__overlay" style="opacity: {{ s.overlay_opacity | divided_by: 100.0 }};"></div>
+    {%- endif -%}
+  {%- endif -%}
+
+  <div class="category-banner__inner">
+    {%- if s.eyebrow != blank -%}
+      <p class="category-banner__eyebrow"{% if has_image %} style="color: {{ s.eyebrow_color }};"{% endif %}>{{ s.eyebrow }}</p>
+    {%- endif -%}
+
+    {%- if s.heading != blank -%}
+      <h2 class="category-banner__title"{% if has_image %} style="color: {{ s.text_color }};"{% endif %}>{{ s.heading }}</h2>
+    {%- elsif has_image == false -%}
+      <h2 class="category-banner__title">Add a category banner</h2>
+    {%- endif -%}
+
+    {%- if s.subheading != blank -%}
+      <p class="category-banner__note"{% if has_image %} style="color: {{ s.text_color }};"{% endif %}>{{ s.subheading }}</p>
+    {%- elsif has_image == false -%}
+      <p class="category-banner__note">Pick an image in the theme editor, then add a headline and button.</p>
+    {%- endif -%}
+
+    {%- if s.button_label != blank and s.button_link != blank -%}
+      <a class="category-banner__cta" href="{{ s.button_link }}" style="color: {{ s.button_text_color }}; background: {{ s.button_bg_color }}; border: 1px solid {{ s.button_bg_color }};">{{ s.button_label }}</a>
+    {%- endif -%}
+
+    {%- unless has_image -%}
+      <span class="category-banner__dims">Recommended: 1920 &times; 600</span>
+    {%- endunless -%}
+  </div>
+</section>
+{%- endif -%}
