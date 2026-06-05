@@ -29,46 +29,32 @@
     <!-- PRODUCT GRID (Shopify List Context) -->
     <section class="product-grid-section">
       <div class="product-grid" id="categoryProductGrid">
-        
-        <article class="product-card" style="position:relative;">
-          <a href="#" class="product-card__image-link">
-            <div class="product-card__image-wrapper">
-              <img src="https://images.unsplash.com/photo-1620799139507-2a76f79a2f4d?w=600&auto=format&fit=crop&q=80" alt="Cashmere Sweater" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
-          </a>
-          <div class="product-card__info">
-            <a href="#" class="product-card__name">Cashmere Sweater</a>
-            <p class="product-card__price">$185.00</p>
-            <p class="product-card__promo">Just Adulting Club</p>
-          </div>
-        </article>
-  
-        <article class="product-card" style="position:relative;">
-          <a href="#" class="product-card__image-link">
-            <div class="product-card__image-wrapper">
-              <img src="https://images.unsplash.com/photo-1592878940526-0214b0f374f6?w=600&auto=format&fit=crop&q=80" alt="Structured Blazer" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
-          </a>
-          <div class="product-card__info">
-            <a href="#" class="product-card__name">Structured Blazer</a>
-            <p class="product-card__price">$250.00</p>
-            <p class="product-card__promo">Just Adulting Club</p>
-          </div>
-        </article>
-  
-        <article class="product-card" style="position:relative;">
-          <a href="#" class="product-card__image-link">
-            <div class="product-card__image-wrapper">
-              <img src="https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&auto=format&fit=crop&q=80" alt="Classic Chinos" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
-          </a>
-          <div class="product-card__info">
-            <a href="#" class="product-card__name">Classic Chinos</a>
-            <p class="product-card__price">$85.00</p>
-            <p class="product-card__promo">Just Adulting Club</p>
-          </div>
-        </article>
-  
+        <shopify-context type="collection" handle="men">
+          <template>
+            <shopify-list-context id="productGridContext" type="product" query="collection.products" first="18" style="display: contents;">
+              <template>
+                <article class="product-card" style="position:relative;">
+                  <a shopify-attr--href="product.onlineStoreUrl" class="product-card__image-link">
+                    <div class="product-card__image-wrapper">
+                      <shopify-media query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
+                    </div>
+                  </a>
+                  <div class="product-card__info">
+                    <a shopify-attr--href="product.onlineStoreUrl" class="product-card__name">
+                      <shopify-data query="product.title"></shopify-data>
+                    </a>
+                    <p class="product-card__price">
+                      <shopify-money format="money_without_currency" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
+                    </p>
+                    <p class="product-card__promo">
+                      <shopify-data query="product.vendor"></shopify-data>
+                    </p>
+                  </div>
+                </article>
+              </template>
+            </shopify-list-context>
+          </template>
+        </shopify-context>
       </div>
     </section>
 
