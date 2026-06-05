@@ -1,0 +1,4 @@
+node_modules/
+.pre-jls-sync-backup/
+.DS_Store
+*.zip
