@@ -73,9 +73,13 @@
       "hero-banner": {
         "type": "hero-banner",
         "settings": {
+          "autoplay": true,
+          "autoplay_speed": 6,
+          "show_arrows": true,
+          "show_dots": true,
+          "height": "medium",
           "image": "shopify://shop_images/WhatsApp_Image_2026-06-06_at_15.40.06.jpg",
           "focal_point": "center center",
-          "height": "medium",
           "overlay_opacity": 0,
           "eyebrow": "",
           "heading": "",
@@ -90,6 +94,7 @@
           "subheading_size": 15,
           "button_label": "Live Now",
           "button_link": "shopify://collections",
+          "button_alignment": "inherit",
           "text_color": "#4a2c2a",
           "eyebrow_color": "#a78a5e",
           "button_bg_color": "#4a2c2a",
