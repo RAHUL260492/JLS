@@ -22,6 +22,7 @@
   assign txt_align = section.settings.text_alignment | default: pos_h
   assign off_x = section.settings.offset_x | default: 0
   assign off_y = section.settings.offset_y | default: 0
+  assign btn_align = section.settings.button_alignment | default: 'inherit'
 
   case pos_h
     when 'left'
@@ -114,7 +115,7 @@
     opacity: 0.92;
   }
   #hero-{{ section.id }} .hero__cta {
-    display: inline-block;
+    {% if btn_align == 'inherit' %}display: inline-block;{% else %}display: block; width: -moz-fit-content; width: fit-content; {% if btn_align == 'left' %}margin-right: auto;{% elsif btn_align == 'right' %}margin-left: auto;{% else %}margin-left: auto; margin-right: auto;{% endif %}{% endif %}
     margin-top: 26px;
     padding: 13px 34px;
     font-family: var(--font-body);
@@ -404,6 +405,19 @@
       "type": "url",
       "id": "button_link",
       "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_alignment",
+      "label": "Button placement",
+      "info": "Where the button sits — independent of the text",
+      "default": "inherit",
+      "options": [
+        { "value": "inherit", "label": "Same as text" },
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
     },
     {
       "type": "header",
