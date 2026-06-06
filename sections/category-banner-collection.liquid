@@ -3,21 +3,25 @@
   if section.settings.image != blank or section.settings.heading != blank or request.design_mode
     assign show = true
   endif
+  assign natural = false
   case section.settings.height
     when 'small'
       assign mh = '32vh'
     when 'large'
       assign mh = '56vh'
+    when 'natural'
+      assign mh = '0'
+      assign natural = true
     else
       assign mh = '44vh'
   endcase
 -%}
 {%- if show -%}
   <style>
-    .cat-banner-{{ section.id }} { position: relative; min-height: {{ mh }}; margin: 0 0 24px; border-bottom: 1px solid var(--color-border-light); overflow: hidden; }
+    .cat-banner-{{ section.id }} { position: relative;{% unless natural %} min-height: {{ mh }};{% endunless %} margin: 0 0 24px; border-bottom: 1px solid var(--color-border-light); overflow: hidden; }
   </style>
   <div class="cat-banner-{{ section.id }}">
-    {% render 'hero-slide', s: section.settings, prefix: '', uid: section.id, eager: false, active: true, rec: '1920 × 760 px' %}
+    {% render 'hero-slide', s: section.settings, prefix: '', uid: section.id, eager: false, active: true, natural: natural, rec: '1920 × 760 px' %}
   </div>
 {%- endif -%}
 
@@ -115,6 +119,10 @@
         {
           "value": "large",
           "label": "Large"
+        },
+        {
+          "value": "natural",
+          "label": "Match image (no crop)"
         }
       ]
     },

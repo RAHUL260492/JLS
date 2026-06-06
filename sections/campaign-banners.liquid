@@ -16,14 +16,16 @@
   {%- if render_this -%}
     {%- assign hkey = p | append: 'height' -%}
     {%- assign h = section.settings[hkey] | default: 'medium' -%}
+    {%- assign natural = false -%}
     {%- case h -%}
       {%- when 'small' -%}{%- assign mh = '36vh' -%}
       {%- when 'large' -%}{%- assign mh = '60vh' -%}
+      {%- when 'natural' -%}{%- assign mh = '0' -%}{%- assign natural = true -%}
       {%- else -%}{%- assign mh = '44vh' -%}
     {%- endcase -%}
     {%- assign uid = section.id | append: '-' | append: forloop.index -%}
-    <div class="cb-banner" style="min-height: {{ mh }};">
-      {% render 'hero-slide', s: section.settings, prefix: p, uid: uid, eager: false, active: true, rec: '1920 × 860 px' %}
+    <div class="cb-banner" style="{% if natural %}min-height: 0;{% else %}min-height: {{ mh }};{% endif %}">
+      {% render 'hero-slide', s: section.settings, prefix: p, uid: uid, eager: false, active: true, natural: natural, rec: '1920 × 860 px' %}
     </div>
   {%- endif -%}
 {%- endfor -%}
@@ -130,6 +132,10 @@
         {
           "value": "large",
           "label": "Large"
+        },
+        {
+          "value": "natural",
+          "label": "Match image (no crop)"
         }
       ]
     },
@@ -446,6 +452,10 @@
         {
           "value": "large",
           "label": "Large"
+        },
+        {
+          "value": "natural",
+          "label": "Match image (no crop)"
         }
       ]
     },
@@ -762,6 +772,10 @@
         {
           "value": "large",
           "label": "Large"
+        },
+        {
+          "value": "natural",
+          "label": "Match image (no crop)"
         }
       ]
     },
@@ -1078,6 +1092,10 @@
         {
           "value": "large",
           "label": "Large"
+        },
+        {
+          "value": "natural",
+          "label": "Match image (no crop)"
         }
       ]
     },

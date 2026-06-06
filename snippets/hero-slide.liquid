@@ -85,7 +85,8 @@
 
 <style>
   #hero-slide-{{ uid }} {
-    position: relative; width: 100%; min-height: inherit;
+    position: relative; width: 100%;
+    {% if natural and has_image %}aspect-ratio: {{ image.aspect_ratio }}; min-height: 0;{% else %}min-height: inherit;{% endif %}
     display: flex; align-items: {{ align }}; justify-content: {{ justify }};
     text-align: {{ txt_align }}; overflow: hidden;
     {% unless has_image %}background: linear-gradient(135deg, #f5f1ea 0%, #e8e1d4 100%);{% endunless %}
