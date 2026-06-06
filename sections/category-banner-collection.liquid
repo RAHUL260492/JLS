@@ -1,4 +1,25 @@
-{% render 'category-banner', s: section.settings, uid: section.id %}
+{%- liquid
+  assign show = false
+  if section.settings.image != blank or section.settings.heading != blank or request.design_mode
+    assign show = true
+  endif
+  case section.settings.height
+    when 'small'
+      assign mh = '32vh'
+    when 'large'
+      assign mh = '56vh'
+    else
+      assign mh = '44vh'
+  endcase
+-%}
+{%- if show -%}
+  <style>
+    .cat-banner-{{ section.id }} { position: relative; min-height: {{ mh }}; margin: 0 0 24px; border-bottom: 1px solid var(--color-border-light); overflow: hidden; }
+  </style>
+  <div class="cat-banner-{{ section.id }}">
+    {% render 'hero-slide', s: section.settings, prefix: '', uid: section.id, eager: false, active: true %}
+  </div>
+{%- endif -%}
 
 {% schema %}
 {
@@ -6,38 +27,304 @@
   "tag": "section",
   "class": "section-category-banner",
   "settings": [
-    { "type": "header", "content": "Image" },
-    { "type": "image_picker", "id": "image", "label": "Image", "info": "Recommended 1920 × 600. Leave blank to hide on the live store." },
-    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image (optional)" },
     {
-      "type": "select", "id": "height", "label": "Height", "default": "medium",
+      "type": "header",
+      "content": "Banner \u00b7 Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Desktop image",
+      "info": "Recommended 1920 \u00d7 720"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image (optional)"
+    },
+    {
+      "type": "select",
+      "id": "focal_point",
+      "label": "Image focal point",
+      "default": "center center",
       "options": [
-        { "value": "small", "label": "Small" },
-        { "value": "medium", "label": "Medium" },
-        { "value": "large", "label": "Large" }
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "center top",
+          "label": "Top"
+        },
+        {
+          "value": "center bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left center",
+          "label": "Left"
+        },
+        {
+          "value": "right center",
+          "label": "Right"
+        }
       ]
     },
-    { "type": "range", "id": "overlay_opacity", "label": "Image overlay darkness", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 0, "info": "Darkens the image so text stays readable" },
-    { "type": "header", "content": "Text" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
-    { "type": "text", "id": "heading", "label": "Heading" },
-    { "type": "textarea", "id": "subheading", "label": "Subheading" },
     {
-      "type": "select", "id": "text_alignment", "label": "Text alignment", "default": "center",
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image overlay darkness",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Height",
+      "default": "medium",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
       ]
     },
-    { "type": "header", "content": "Button" },
-    { "type": "text", "id": "button_label", "label": "Button label" },
-    { "type": "url", "id": "button_link", "label": "Button link" },
-    { "type": "header", "content": "Colors (used when an image is set)" },
-    { "type": "color", "id": "text_color", "label": "Heading & text", "default": "#ffffff" },
-    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow", "default": "#f0e6d2" },
-    { "type": "color", "id": "button_bg_color", "label": "Button background", "default": "#ffffff" },
-    { "type": "color", "id": "button_text_color", "label": "Button text", "default": "#4a2c2a" }
+    {
+      "type": "header",
+      "content": "Banner \u00b7 Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "header",
+      "content": "Banner \u00b7 Text placement"
+    },
+    {
+      "type": "select",
+      "id": "position_v",
+      "label": "Vertical position",
+      "default": "middle",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "position_h",
+      "label": "Horizontal position",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "offset_x",
+      "label": "Nudge horizontally",
+      "min": -100,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "offset_y",
+      "label": "Nudge vertically",
+      "min": -100,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Banner \u00b7 Text size"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "Eyebrow size",
+      "min": 9,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 44,
+      "info": "Max desktop size; scales down on small screens"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Subheading size",
+      "min": 12,
+      "max": 26,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Banner \u00b7 Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "info": "Add both a label and a link to show the button"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_alignment",
+      "label": "Button placement",
+      "default": "inherit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Same as text"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "button_offset_x",
+      "label": "Button nudge horizontally",
+      "min": -200,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "button_offset_y",
+      "label": "Button nudge vertically",
+      "min": -200,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Banner \u00b7 Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Heading & text color",
+      "default": "#4a2c2a"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow color",
+      "default": "#a78a5e"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background",
+      "default": "#4a2c2a"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#ffffff"
+    }
   ]
 }
 {% endschema %}
