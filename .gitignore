@@ -1,4 +1,8 @@
-node_modules/
-.pre-jls-sync-backup/
-.DS_Store
 *.zip
+.DS_Store
+.pre-jls-sync-backup/
+build-theme.js
+generate-theme-pages.js
+node_modules/
+package-lock.json
+package.json
