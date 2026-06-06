@@ -1,0 +1,114 @@
+{%- comment -%}
+  Renders one hero slide. Used by sections/hero-banner.liquid for both the
+  main slide (section.settings) and each block slide.
+  Params:
+    s      - settings object (section.settings or block.settings)
+    uid    - unique id for scoping styles
+    eager  - true to prioritise image loading (first slide)
+    active - true to mark this slide active on load
+    attrs  - shopify_attributes (for block slides; blank for main)
+{%- endcomment -%}
+{%- liquid
+  assign has_image = false
+  if s.image != blank
+    assign has_image = true
+  endif
+  assign pos_h = s.position_h | default: s.text_alignment | default: 'center'
+  assign pos_v = s.position_v | default: 'middle'
+  assign txt_align = s.text_alignment | default: pos_h
+  assign off_x = s.offset_x | default: 0
+  assign off_y = s.offset_y | default: 0
+  assign btn_align = s.button_alignment | default: 'inherit'
+
+  case pos_h
+    when 'left'
+      assign justify = 'flex-start'
+    when 'right'
+      assign justify = 'flex-end'
+    else
+      assign justify = 'center'
+  endcase
+  case pos_v
+    when 'top'
+      assign align = 'flex-start'
+    when 'bottom'
+      assign align = 'flex-end'
+    else
+      assign align = 'center'
+  endcase
+-%}
+
+<style>
+  #hero-slide-{{ uid }} {
+    position: relative;
+    width: 100%;
+    min-height: inherit;
+    display: flex;
+    align-items: {{ align }};
+    justify-content: {{ justify }};
+    text-align: {{ txt_align }};
+    overflow: hidden;
+    {% unless has_image %}background: linear-gradient(135deg, #f5f1ea 0%, #e8e1d4 100%);{% endunless %}
+  }
+  #hero-slide-{{ uid }} .hero__media { position: absolute; inset: 0; z-index: 0; }
+  #hero-slide-{{ uid }} .hero__media img { width: 100%; height: 100%; object-fit: cover; object-position: {{ s.focal_point | default: 'center center' }}; display: block; }
+  #hero-slide-{{ uid }} .hero__media--mobile { display: none; }
+  #hero-slide-{{ uid }} .hero__overlay { position: absolute; inset: 0; z-index: 1; background: #000; opacity: {{ s.overlay_opacity | default: 0 | divided_by: 100.0 }}; pointer-events: none; }
+  #hero-slide-{{ uid }} .hero__inner {
+    position: relative; z-index: 2;
+    padding: clamp(48px, 8vw, 96px) 24px;
+    max-width: 720px;
+    {% if pos_h == 'left' %}margin-left: clamp(24px, 6vw, 96px);{% elsif pos_h == 'right' %}margin-right: clamp(24px, 6vw, 96px);{% endif %}
+    {% if pos_v == 'top' %}margin-top: clamp(24px, 6vw, 80px);{% elsif pos_v == 'bottom' %}margin-bottom: clamp(24px, 6vw, 80px);{% endif %}
+    {% if off_x != 0 or off_y != 0 %}transform: translate({{ off_x }}%, {{ off_y }}%);{% endif %}
+    color: {{ s.text_color | default: '#4a2c2a' }};
+  }
+  #hero-slide-{{ uid }} .hero__eyebrow { font-family: var(--font-body); font-size: {{ s.eyebrow_size | default: 11 }}px; letter-spacing: 0.28em; text-transform: uppercase; margin: 0 0 18px; color: {{ s.eyebrow_color | default: s.text_color | default: '#a78a5e' }}; }
+  #hero-slide-{{ uid }} .hero__title { font-family: var(--font-heading); font-style: italic; font-weight: 400; font-size: clamp(28px, 5vw, {{ s.heading_size | default: 56 }}px); line-height: 1.1; margin: 0 0 14px; color: inherit; }
+  #hero-slide-{{ uid }} .hero__subtitle { font-family: var(--font-body); font-size: {{ s.subheading_size | default: 15 }}px; line-height: 1.5; {% if txt_align == 'center' %}margin: 0 auto;{% elsif txt_align == 'right' %}margin: 0 0 0 auto;{% else %}margin: 0;{% endif %} max-width: 540px; color: inherit; opacity: 0.92; }
+  #hero-slide-{{ uid }} .hero__cta {
+    {% if btn_align == 'inherit' %}display: inline-block;{% else %}display: block; width: -moz-fit-content; width: fit-content; {% if btn_align == 'left' %}margin-right: auto;{% elsif btn_align == 'right' %}margin-left: auto;{% else %}margin-left: auto; margin-right: auto;{% endif %}{% endif %}
+    margin-top: 26px; padding: 13px 34px; font-family: var(--font-body); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none;
+    color: {{ s.button_text_color | default: '#ffffff' }}; background: {{ s.button_bg_color | default: '#4a2c2a' }}; border: 1px solid {{ s.button_bg_color | default: '#4a2c2a' }};
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  #hero-slide-{{ uid }} .hero__cta:hover { opacity: 0.88; transform: translateY(-1px); }
+  #hero-slide-{{ uid }} .hero__dims { display: inline-block; margin-top: 22px; padding: 6px 14px; font-family: var(--font-body); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-text-muted); background: rgba(255,255,255,0.6); border: 1px solid var(--color-border-light); }
+  @media (max-width: 749px) {
+    {% if s.image_mobile != blank %}
+    #hero-slide-{{ uid }} .hero__media--desktop { display: none; }
+    #hero-slide-{{ uid }} .hero__media--mobile { display: block; }
+    {% endif %}
+  }
+</style>
+
+<div id="hero-slide-{{ uid }}" class="hero-slide{% if active %} is-active{% endif %}{% unless has_image %} hero--placeholder{% endunless %}" {{ attrs }}>
+  {%- if has_image -%}
+    <div class="hero__media hero__media--desktop">
+      <img
+        src="{{ s.image | image_url: width: 1920 }}"
+        srcset="{{ s.image | image_url: width: 800 }} 800w, {{ s.image | image_url: width: 1280 }} 1280w, {{ s.image | image_url: width: 1920 }} 1920w, {{ s.image | image_url: width: 2400 }} 2400w"
+        sizes="100vw"
+        alt="{{ s.image.alt | default: s.heading | escape }}"
+        width="1920" height="900"
+        {% if eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+      >
+    </div>
+    {%- if s.image_mobile != blank -%}
+      <div class="hero__media hero__media--mobile">
+        <img src="{{ s.image_mobile | image_url: width: 900 }}" srcset="{{ s.image_mobile | image_url: width: 600 }} 600w, {{ s.image_mobile | image_url: width: 900 }} 900w, {{ s.image_mobile | image_url: width: 1200 }} 1200w" sizes="100vw" alt="{{ s.image_mobile.alt | default: s.heading | escape }}" width="900" height="1100" loading="lazy">
+      </div>
+    {%- endif -%}
+    {%- if s.overlay_opacity > 0 -%}<div class="hero__overlay"></div>{%- endif -%}
+  {%- endif -%}
+
+  <div class="hero__inner">
+    {%- if s.eyebrow != blank -%}<p class="hero__eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+    {%- if s.heading != blank -%}<h2 class="hero__title">{{ s.heading }}</h2>
+    {%- elsif has_image == false -%}<h2 class="hero__title">Add your campaign imagery here</h2>{%- endif -%}
+    {%- if s.subheading != blank -%}<p class="hero__subtitle">{{ s.subheading }}</p>
+    {%- elsif has_image == false -%}<p class="hero__subtitle">Choose an image and add a headline, then add a button below.</p>{%- endif -%}
+    {%- if s.button_label != blank and s.button_link != blank -%}<a class="hero__cta" href="{{ s.button_link }}">{{ s.button_label }}</a>{%- endif -%}
+    {%- unless has_image -%}<span class="hero__dims">Recommended: 1920 &times; 900</span>{%- endunless -%}
+  </div>
+</div>
