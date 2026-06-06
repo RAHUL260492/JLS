@@ -295,6 +295,7 @@
           "tile1_eyebrow_color": "#a78a5e",
           "tile1_button_bg_color": "#4a2c2a",
           "tile1_button_text_color": "#ffffff",
+          "tile2_image": "shopify://shop_images/C6_2.png",
           "tile2_focal_point": "center center",
           "tile2_overlay_opacity": 0,
           "tile2_eyebrow": "",
