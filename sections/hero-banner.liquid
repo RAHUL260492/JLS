@@ -89,7 +89,7 @@
   }
   #hero-{{ section.id }} .hero__eyebrow {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: {{ section.settings.eyebrow_size | default: 11 }}px;
     letter-spacing: 0.28em;
     text-transform: uppercase;
     margin: 0 0 18px;
@@ -99,14 +99,14 @@
     font-family: var(--font-heading);
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(36px, 5vw, 56px);
+    font-size: clamp(28px, 5vw, {{ section.settings.heading_size | default: 56 }}px);
     line-height: 1.1;
     margin: 0 0 14px;
     color: inherit;
   }
   #hero-{{ section.id }} .hero__subtitle {
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: {{ section.settings.subheading_size | default: 15 }}px;
     line-height: 1.5;
     {% if txt_align == 'center' %}margin: 0 auto;{% elsif txt_align == 'right' %}margin: 0 0 0 auto;{% else %}margin: 0;{% endif %}
     max-width: 540px;
@@ -354,6 +354,41 @@
       "step": 5,
       "unit": "%",
       "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Text size"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "Eyebrow size",
+      "min": 9,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "info": "Max desktop size; scales down responsively on smaller screens",
+      "min": 28,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Subheading size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 15
     },
     {
       "type": "header",
