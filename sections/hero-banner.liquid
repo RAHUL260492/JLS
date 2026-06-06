@@ -16,6 +16,30 @@
     else
       assign min_h = '60vh'
   endcase
+
+  assign pos_h = section.settings.position_h | default: section.settings.text_alignment | default: 'center'
+  assign pos_v = section.settings.position_v | default: 'middle'
+  assign txt_align = section.settings.text_alignment | default: pos_h
+  assign off_x = section.settings.offset_x | default: 0
+  assign off_y = section.settings.offset_y | default: 0
+
+  case pos_h
+    when 'left'
+      assign justify = 'flex-start'
+    when 'right'
+      assign justify = 'flex-end'
+    else
+      assign justify = 'center'
+  endcase
+
+  case pos_v
+    when 'top'
+      assign align = 'flex-start'
+    when 'bottom'
+      assign align = 'flex-end'
+    else
+      assign align = 'center'
+  endcase
 -%}
 
 <style>
@@ -24,9 +48,9 @@
     width: 100%;
     min-height: {{ min_h }};
     display: flex;
-    align-items: center;
-    justify-content: {% if section.settings.text_alignment == 'left' %}flex-start{% elsif section.settings.text_alignment == 'right' %}flex-end{% else %}center{% endif %};
-    text-align: {{ section.settings.text_alignment | default: 'center' }};
+    align-items: {{ align }};
+    justify-content: {{ justify }};
+    text-align: {{ txt_align }};
     overflow: hidden;
     border-top: 1px solid var(--color-border-light);
     border-bottom: 1px solid var(--color-border-light);
@@ -58,7 +82,9 @@
     z-index: 2;
     padding: clamp(48px, 8vw, 96px) 24px;
     max-width: 720px;
-    {% if section.settings.text_alignment == 'left' %}margin-left: clamp(24px, 6vw, 96px);{% elsif section.settings.text_alignment == 'right' %}margin-right: clamp(24px, 6vw, 96px);{% endif %}
+    {% if pos_h == 'left' %}margin-left: clamp(24px, 6vw, 96px);{% elsif pos_h == 'right' %}margin-right: clamp(24px, 6vw, 96px);{% endif %}
+    {% if pos_v == 'top' %}margin-top: clamp(24px, 6vw, 80px);{% elsif pos_v == 'bottom' %}margin-bottom: clamp(24px, 6vw, 80px);{% endif %}
+    {% if off_x != 0 or off_y != 0 %}transform: translate({{ off_x }}%, {{ off_y }}%);{% endif %}
     color: {{ section.settings.text_color | default: '#4a2c2a' }};
   }
   #hero-{{ section.id }} .hero__eyebrow {
@@ -82,7 +108,7 @@
     font-family: var(--font-body);
     font-size: 15px;
     line-height: 1.5;
-    margin: 0 auto;
+    {% if txt_align == 'center' %}margin: 0 auto;{% elsif txt_align == 'right' %}margin: 0 0 0 auto;{% else %}margin: 0;{% endif %}
     max-width: 540px;
     color: inherit;
     opacity: 0.92;
@@ -271,15 +297,63 @@
       "label": "Subheading"
     },
     {
+      "type": "header",
+      "content": "Text placement",
+      "info": "Place the text block anywhere using the 9-point grid, then nudge for precise positioning"
+    },
+    {
       "type": "select",
-      "id": "text_alignment",
-      "label": "Text alignment",
+      "id": "position_v",
+      "label": "Vertical position",
+      "default": "middle",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "middle", "label": "Middle" },
+        { "value": "bottom", "label": "Bottom" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "position_h",
+      "label": "Horizontal position",
       "default": "center",
       "options": [
         { "value": "left", "label": "Left" },
         { "value": "center", "label": "Center" },
         { "value": "right", "label": "Right" }
       ]
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "info": "How the text reads — independent of where the block sits",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "offset_x",
+      "label": "Nudge horizontally",
+      "min": -100,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "offset_y",
+      "label": "Nudge vertically",
+      "min": -100,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
     },
     {
       "type": "header",
