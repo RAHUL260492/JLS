@@ -79,6 +79,7 @@
           "show_dots": true,
           "height": "medium",
           "image": "shopify://shop_images/WhatsApp_Image_2026-06-06_at_15.40.06.jpg",
+          "image_mobile": "shopify://shop_images/Gemini_Generated_Image_k07p6dk07p6dk07p.png",
           "focal_point": "center center",
           "overlay_opacity": 0,
           "image_fit": "cover",
