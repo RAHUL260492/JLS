@@ -17,7 +17,7 @@
     .cat-banner-{{ section.id }} { position: relative; min-height: {{ mh }}; margin: 0 0 24px; border-bottom: 1px solid var(--color-border-light); overflow: hidden; }
   </style>
   <div class="cat-banner-{{ section.id }}">
-    {% render 'hero-slide', s: section.settings, prefix: '', uid: section.id, eager: false, active: true %}
+    {% render 'hero-slide', s: section.settings, prefix: '', uid: section.id, eager: false, active: true, rec: '1920 × 760 px' %}
   </div>
 {%- endif -%}
 
@@ -35,12 +35,13 @@
       "type": "image_picker",
       "id": "image",
       "label": "Desktop image",
-      "info": "Recommended 1920 \u00d7 720"
+      "info": "Recommended 1920 \u00d7 760 px (\u22485:2) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 760 px"
     },
     {
       "type": "select",

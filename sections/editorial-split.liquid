@@ -41,7 +41,7 @@
     {%- endif -%}
     {%- if show -%}
       {%- assign uid = section.id | append: '-' | append: forloop.index -%}
-      <div class="es-tile">{% render 'hero-slide', s: section.settings, prefix: p, uid: uid, eager: false, active: true %}</div>
+      <div class="es-tile">{% render 'hero-slide', s: section.settings, prefix: p, uid: uid, eager: false, active: true, rec: '1080 × 1320 px' %}</div>
     {%- endif -%}
   {%- endfor -%}
 </section>
@@ -88,12 +88,13 @@
       "type": "image_picker",
       "id": "tile1_image",
       "label": "Desktop image",
-      "info": "Recommended 1920 \u00d7 720"
+      "info": "Recommended 1080 \u00d7 1320 px (4:5 portrait) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "tile1_image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1080 px (square)"
     },
     {
       "type": "select",
@@ -383,12 +384,13 @@
       "type": "image_picker",
       "id": "tile2_image",
       "label": "Desktop image",
-      "info": "Recommended 1920 \u00d7 720"
+      "info": "Recommended 1080 \u00d7 1320 px (4:5 portrait) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "tile2_image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1080 px (square)"
     },
     {
       "type": "select",
@@ -678,12 +680,13 @@
       "type": "image_picker",
       "id": "tile3_image",
       "label": "Desktop image",
-      "info": "Add an image to show this banner"
+      "info": "Recommended 1080 \u00d7 1320 px (4:5 portrait) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "tile3_image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1080 px (square)"
     },
     {
       "type": "select",
@@ -973,12 +976,13 @@
       "type": "image_picker",
       "id": "tile4_image",
       "label": "Desktop image",
-      "info": "Add an image to show this banner"
+      "info": "Recommended 1080 \u00d7 1320 px (4:5 portrait) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "tile4_image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1080 px (square)"
     },
     {
       "type": "select",

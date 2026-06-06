@@ -23,7 +23,7 @@
     {%- endcase -%}
     {%- assign uid = section.id | append: '-' | append: forloop.index -%}
     <div class="cb-banner" style="min-height: {{ mh }};">
-      {% render 'hero-slide', s: section.settings, prefix: p, uid: uid, eager: false, active: true %}
+      {% render 'hero-slide', s: section.settings, prefix: p, uid: uid, eager: false, active: true, rec: '1920 × 860 px' %}
     </div>
   {%- endif -%}
 {%- endfor -%}
@@ -50,12 +50,13 @@
       "type": "image_picker",
       "id": "banner1_image",
       "label": "Desktop image",
-      "info": "Recommended 1920 \u00d7 720"
+      "info": "Recommended 1920 \u00d7 860 px (\u224821:9) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "banner1_image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1080 px (square)"
     },
     {
       "type": "select",
@@ -365,12 +366,13 @@
       "type": "image_picker",
       "id": "banner2_image",
       "label": "Desktop image",
-      "info": "Add an image to show this banner"
+      "info": "Recommended 1920 \u00d7 860 px (\u224821:9) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "banner2_image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1080 px (square)"
     },
     {
       "type": "select",
@@ -680,12 +682,13 @@
       "type": "image_picker",
       "id": "banner3_image",
       "label": "Desktop image",
-      "info": "Add an image to show this banner"
+      "info": "Recommended 1920 \u00d7 860 px (\u224821:9) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "banner3_image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1080 px (square)"
     },
     {
       "type": "select",
@@ -995,12 +998,13 @@
       "type": "image_picker",
       "id": "banner4_image",
       "label": "Desktop image",
-      "info": "Add an image to show this banner"
+      "info": "Recommended 1920 \u00d7 860 px (\u224821:9) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "banner4_image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1080 px (square)"
     },
     {
       "type": "select",

@@ -60,7 +60,7 @@
         {%- assign is_active = false -%}
         {%- if shown == 1 -%}{%- assign is_active = true -%}{%- endif -%}
         {%- assign uid = section.id | append: '-' | append: forloop.index -%}
-        {% render 'hero-slide', s: section.settings, prefix: p, uid: uid, eager: is_active, active: is_active %}
+        {% render 'hero-slide', s: section.settings, prefix: p, uid: uid, eager: is_active, active: is_active, rec: '1920 × 1080 px' %}
       {%- endif -%}
     {%- endfor -%}
   </div>
@@ -182,12 +182,13 @@
       "type": "image_picker",
       "id": "image",
       "label": "Desktop image",
-      "info": "Recommended 1920 \u00d7 900"
+      "info": "Recommended 1920 \u00d7 1080 px (16:9) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1350 px (4:5 portrait)"
     },
     {
       "type": "select",
@@ -478,12 +479,13 @@
       "type": "image_picker",
       "id": "slide2_image",
       "label": "Desktop image",
-      "info": "Add an image to show this slide"
+      "info": "Recommended 1920 \u00d7 1080 px (16:9) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "slide2_image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1350 px (4:5 portrait)"
     },
     {
       "type": "select",
@@ -773,12 +775,13 @@
       "type": "image_picker",
       "id": "slide3_image",
       "label": "Desktop image",
-      "info": "Add an image to show this slide"
+      "info": "Recommended 1920 \u00d7 1080 px (16:9) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "slide3_image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1350 px (4:5 portrait)"
     },
     {
       "type": "select",
@@ -1068,12 +1071,13 @@
       "type": "image_picker",
       "id": "slide4_image",
       "label": "Desktop image",
-      "info": "Add an image to show this slide"
+      "info": "Recommended 1920 \u00d7 1080 px (16:9) \u00b7 JPG or PNG, ideally under ~500 KB"
     },
     {
       "type": "image_picker",
       "id": "slide4_image_mobile",
-      "label": "Mobile image (optional)"
+      "label": "Mobile image (optional)",
+      "info": "Optional \u00b7 recommended 1080 \u00d7 1350 px (4:5 portrait)"
     },
     {
       "type": "select",

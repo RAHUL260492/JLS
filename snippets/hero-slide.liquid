@@ -145,6 +145,6 @@
     {%- if subheading != blank -%}<p class="hero__subtitle">{{ subheading }}</p>
     {%- elsif has_image == false -%}<p class="hero__subtitle">Choose an image and add a headline, then add a button below.</p>{%- endif -%}
     {%- if button_label != blank and button_link != blank -%}<a class="hero__cta" href="{{ button_link }}">{{ button_label }}</a>{%- endif -%}
-    {%- unless has_image -%}<span class="hero__dims">Recommended: 1920 &times; 900</span>{%- endunless -%}
+    {%- unless has_image -%}<span class="hero__dims">Recommended: {{ rec | default: '1920 × 900 px' }}</span>{%- endunless -%}
   </div>
 </div>
