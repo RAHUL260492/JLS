@@ -24,6 +24,20 @@
       assign present_count = present_count | plus: 1
     endif
   endfor
+
+  assign natural = false
+  if section.settings.height == 'natural'
+    assign natural = true
+  endif
+  assign hero_ratio = '16 / 9'
+  for p in prefixes
+    assign ik = p | append: 'image'
+    assign img = section.settings[ik]
+    if img != blank
+      assign hero_ratio = img.aspect_ratio
+      break
+    endif
+  endfor
 -%}
 
 <style>
@@ -41,6 +55,13 @@
   #hero-slideshow-{{ section.id }} .hero-dot { width: 9px; height: 9px; border-radius: 50%; border: 1px solid #4a2c2a; background: transparent; padding: 0; cursor: pointer; transition: background 0.2s ease; }
   #hero-slideshow-{{ section.id }} .hero-dot.is-active { background: #4a2c2a; }
   @media (max-width: 749px) { #hero-slideshow-{{ section.id }} .hero-arrow { width: 36px; height: 36px; font-size: 18px; } }
+  {% if natural %}
+  #hero-slideshow-{{ section.id }}, #hero-slideshow-{{ section.id }} .hero-slides { min-height: 0; }
+  #hero-slideshow-{{ section.id }} .hero-slides { aspect-ratio: {{ hero_ratio }}; }
+  #hero-slideshow-{{ section.id }} .hero-slide,
+  #hero-slideshow-{{ section.id }}.is-single .hero-slide { position: absolute; inset: 0; }
+  #hero-slideshow-{{ section.id }}.is-single .hero-slide { opacity: 1; visibility: visible; }
+  {% endif %}
 </style>
 
 <section id="hero-slideshow-{{ section.id }}" class="hero-slideshow{% if present_count <= 1 %} is-single{% endif %}" aria-label="Hero banner" aria-roledescription="carousel">
@@ -154,7 +175,7 @@
       "type": "select",
       "id": "height",
       "label": "Slideshow height",
-      "default": "medium",
+      "default": "natural",
       "options": [
         {
           "value": "small",
@@ -171,6 +192,10 @@
         {
           "value": "full",
           "label": "Full screen"
+        },
+        {
+          "value": "natural",
+          "label": "Match image (no crop) — best for responsive"
         }
       ]
     },
