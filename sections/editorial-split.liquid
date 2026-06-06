@@ -10,22 +10,25 @@
       assign present = present | plus: 1
     endif
   endfor
+  assign natural = false
   case section.settings.height
     when 'small'
       assign mh = '46vh'
     when 'large'
       assign mh = '72vh'
+    when 'natural'
+      assign natural = true
     else
       assign mh = '60vh'
   endcase
 -%}
 <style>
-  #split-{{ section.id }} { display: grid; grid-template-columns: repeat({{ present }}, 1fr); gap: 0; margin: 32px 0; }
-  #split-{{ section.id }} .es-tile { position: relative; min-height: {{ mh }}; border: 1px solid var(--color-border-light); overflow: hidden; }
+  #split-{{ section.id }} { display: grid; grid-template-columns: repeat({{ present }}, 1fr); gap: 0; margin: 32px 0;{% if natural %} align-items: start;{% endif %} }
+  #split-{{ section.id }} .es-tile { position: relative;{% unless natural %} min-height: {{ mh }};{% endunless %} border: 1px solid var(--color-border-light); overflow: hidden; }
   #split-{{ section.id }} .es-tile + .es-tile { border-left: none; }
   @media (max-width: 768px) {
     #split-{{ section.id }} { grid-template-columns: 1fr; }
-    #split-{{ section.id }} .es-tile { min-height: 46vh; }
+    {% unless natural %}#split-{{ section.id }} .es-tile { min-height: 46vh; }{% endunless %}
     #split-{{ section.id }} .es-tile + .es-tile { border-left: 1px solid var(--color-border-light); border-top: none; }
   }
 </style>
@@ -41,7 +44,7 @@
     {%- endif -%}
     {%- if show -%}
       {%- assign uid = section.id | append: '-' | append: forloop.index -%}
-      <div class="es-tile">{% render 'hero-slide', s: section.settings, prefix: p, uid: uid, eager: false, active: true, rec: '1080 × 1320 px' %}</div>
+      <div class="es-tile">{% render 'hero-slide', s: section.settings, prefix: p, uid: uid, eager: false, active: true, natural: natural, rec: '1080 × 1320 px' %}</div>
     {%- endif -%}
   {%- endfor -%}
 </section>
@@ -77,6 +80,10 @@
         {
           "value": "large",
           "label": "Large"
+        },
+        {
+          "value": "natural",
+          "label": "Match image (no crop)"
         }
       ]
     },
