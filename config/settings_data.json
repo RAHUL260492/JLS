@@ -307,7 +307,7 @@
           "tile2_image": "shopify://shop_images/C6_2.png",
           "tile2_focal_point": "center center",
           "tile2_overlay_opacity": 0,
-          "tile2_image_fit": "cover",
+          "tile2_image_fit": "contain",
           "tile2_eyebrow": "",
           "tile2_heading": "",
           "tile2_subheading": "",
