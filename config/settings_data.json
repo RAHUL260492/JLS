@@ -73,10 +73,11 @@
       "hero-banner": {
         "type": "hero-banner",
         "settings": {
+          "image": "shopify://shop_images/WhatsApp_Image_2026-06-06_at_14.52.43.jpg",
           "focal_point": "center center",
           "height": "medium",
           "overlay_opacity": 0,
-          "eyebrow": "Hero Banner",
+          "eyebrow": "",
           "heading": "",
           "subheading": "",
           "text_alignment": "center",
