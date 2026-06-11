@@ -2509,3 +2509,9 @@ shopify-media img, shopify-media video {
 .price-range__input::-moz-range-thumb { pointer-events: auto; width: 16px; height: 16px; border-radius: 50%; background: var(--color-warm-brown); border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.3); cursor: pointer; }
 .price-range__labels { display: flex; justify-content: space-between; font-size: 12px; margin: 8px 2px 0; color: var(--color-text-body); }
 .filter-price--slider .filter-apply { margin-top: 12px; width: 100%; }
+
+/* Product card color swatches */
+.product-card__swatches { display: flex; align-items: center; gap: 6px; margin: 10px 0 0; flex-wrap: wrap; }
+.product-card__swatches .swatch { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--color-border-light); background-size: cover; background-position: center; display: inline-block; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.product-card__swatches .swatch:hover { transform: scale(1.15); box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--color-warm-brown); }
+.product-card__swatches .swatch-more { font-size: 11px; color: var(--color-text-muted); }

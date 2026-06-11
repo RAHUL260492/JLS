@@ -125,6 +125,19 @@
                 {%- endif -%}
               </div>
             </a>
+            {%- assign color_option = null -%}
+            {%- for opt in product.options_with_values -%}
+              {%- assign opt_name = opt.name | downcase -%}
+              {%- if opt_name contains 'color' or opt_name contains 'colour' -%}{%- assign color_option = opt -%}{%- endif -%}
+            {%- endfor -%}
+            {%- if color_option -%}
+              <div class="product-card__swatches">
+                {%- for value in color_option.values limit: 5 -%}
+                  <a href="{{ value.variant.url | default: product.url }}" class="swatch" title="{{ value.name | escape }}" aria-label="{{ value.name | escape }}" style="{% if value.swatch.image %}background-image:url('{{ value.swatch.image | image_url: width: 48 }}');{% elsif value.swatch.color %}background-color:{{ value.swatch.color }};{% elsif value.variant.image %}background-image:url('{{ value.variant.image | image_url: width: 48 }}');{% else %}background-color:{{ value.name | downcase | replace: ' ', '' }};{% endif %}"></a>
+                {%- endfor -%}
+                {%- if color_option.values.size > 5 -%}<span class="swatch-more">+{{ color_option.values.size | minus: 5 }}</span>{%- endif -%}
+              </div>
+            {%- endif -%}
             <div class="product-card__info">
               <a href="{{ product.url }}" class="product-card__name">{{ product.title }}</a>
               <p class="product-card__price">
