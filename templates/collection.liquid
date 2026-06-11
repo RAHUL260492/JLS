@@ -48,9 +48,19 @@
               <div class="filter-panel" hidden>
                 {%- case filter.type -%}
                   {%- when 'price_range' -%}
-                    <div class="filter-price">
-                      <label>Min <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" inputmode="decimal"></label>
-                      <label>Max <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" inputmode="decimal"></label>
+                    {%- assign price_ceil = filter.range_max | ceil -%}
+                    {%- assign cur_min = filter.min_value.value | default: 0 -%}
+                    {%- assign cur_max = filter.max_value.value | default: price_ceil -%}
+                    <div class="filter-price filter-price--slider" data-price-slider data-floor="0" data-ceil="{{ price_ceil }}" data-symbol="{{ 0 | money | replace: '0.00', '' | replace: '0', '' | strip }}">
+                      <div class="price-range">
+                        <span class="price-range__track"></span>
+                        <span class="price-range__fill" data-price-fill></span>
+                        <input type="range" class="price-range__input price-range__input--min" min="0" max="{{ price_ceil }}" value="{{ cur_min | ceil }}" step="1" data-price-range-min aria-label="Minimum price">
+                        <input type="range" class="price-range__input price-range__input--max" min="0" max="{{ price_ceil }}" value="{{ cur_max | ceil }}" step="1" data-price-range-max aria-label="Maximum price">
+                      </div>
+                      <div class="price-range__labels"><span data-price-label-min></span><span data-price-label-max></span></div>
+                      <input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" data-price-input-min>
+                      <input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" data-price-input-max>
                       <button type="submit" class="filter-apply">Apply</button>
                     </div>
                   {%- else -%}

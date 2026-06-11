@@ -386,3 +386,38 @@ if (floatingPromoClose && floatingPromo) {
     if (!e.target.closest('[data-filter-group]')) closePanels(null);
   });
 })();
+
+/* Collection price dual-range slider */
+(function () {
+  document.querySelectorAll('[data-price-slider]').forEach(function (slider) {
+    var floor = parseInt(slider.dataset.floor, 10) || 0;
+    var ceil = parseInt(slider.dataset.ceil, 10) || 100;
+    var symbol = slider.dataset.symbol || '';
+    var rMin = slider.querySelector('[data-price-range-min]');
+    var rMax = slider.querySelector('[data-price-range-max]');
+    var fill = slider.querySelector('[data-price-fill]');
+    var lMin = slider.querySelector('[data-price-label-min]');
+    var lMax = slider.querySelector('[data-price-label-max]');
+    var hMin = slider.querySelector('[data-price-input-min]');
+    var hMax = slider.querySelector('[data-price-input-max]');
+    if (!rMin || !rMax) return;
+    function fmt(v) { return symbol + Number(v).toLocaleString(); }
+    function update(e) {
+      var mn = parseInt(rMin.value, 10), mx = parseInt(rMax.value, 10);
+      if (mn > mx - 1) {
+        if (e && e.target === rMin) { mn = Math.max(floor, mx - 1); rMin.value = mn; }
+        else { mx = Math.min(ceil, mn + 1); rMax.value = mx; }
+      }
+      var span = (ceil - floor) || 1;
+      var pMin = (mn - floor) / span * 100, pMax = (mx - floor) / span * 100;
+      if (fill) { fill.style.left = pMin + '%'; fill.style.width = (pMax - pMin) + '%'; }
+      if (lMin) lMin.textContent = fmt(mn);
+      if (lMax) lMax.textContent = fmt(mx);
+      if (hMin) hMin.value = (mn <= floor) ? '' : mn;
+      if (hMax) hMax.value = (mx >= ceil) ? '' : mx;
+    }
+    rMin.addEventListener('input', update);
+    rMax.addEventListener('input', update);
+    update();
+  });
+})();
