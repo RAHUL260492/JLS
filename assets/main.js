@@ -325,3 +325,34 @@ if (floatingPromoClose && floatingPromo) {
     }
   }, { passive: true });
 }
+
+/* Header nav: top-level dropdown triggers (Men/Women/Linen) open the menu on click/tap instead of navigating */
+(function () {
+  var triggers = document.querySelectorAll('.nav-links .nav-item.has-dropdown > .nav-link--trigger');
+  if (!triggers.length) return;
+  function closeAll(except) {
+    document.querySelectorAll('.nav-links .nav-item.has-dropdown.is-open').forEach(function (li) {
+      if (li === except) return;
+      li.classList.remove('is-open');
+      var a = li.querySelector('.nav-link--trigger');
+      if (a) a.setAttribute('aria-expanded', 'false');
+    });
+  }
+  triggers.forEach(function (t) {
+    var li = t.parentElement;
+    function toggle(e) {
+      e.preventDefault();
+      var willOpen = !li.classList.contains('is-open');
+      closeAll(li);
+      li.classList.toggle('is-open', willOpen);
+      t.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    }
+    t.addEventListener('click', toggle);
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') toggle(e);
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.nav-links .nav-item.has-dropdown')) closeAll(null);
+  });
+})();
