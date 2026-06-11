@@ -8,33 +8,30 @@
     <!-- Category Banner (editable section — image + text + button, manage in Shopify Theme Customizer) -->
     {% section 'category-banner-collection' %}
 
-    <!-- CATEGORY TITLE & TABS (context-aware: men's / women's / generic) -->
+    <!-- CATEGORY TITLE & TABS (shown only on the Men / Women shop-all pages) -->
     {%- liquid
       assign h = collection.handle
-      assign tabset = 'default'
-      if h == 'men' or h contains 'mens-'
-        assign tabset = 'men'
-      elsif h == 'women' or h contains 'womens-'
-        assign tabset = 'women'
+      assign show_tabs = false
+      assign tabs = ''
+      if h == 'men'
+        assign show_tabs = true
+        assign tabs = 'mens-casual-shirts|Casual Shirts,mens-tshirts|T-Shirts,mens-polos|Polos,mens-chinos-joggers-pants|Pants,mens-jeans|Jeans,mens-shorts|Shorts,mens-sweaters|Sweaters,mens-coats-jackets|Outerwear,mens-dress-shirts|Dress Shirts,mens-blazers-suits|Blazers,mens-blazers-suits|Suits'
+      elsif h == 'women'
+        assign show_tabs = true
+        assign tabs = 'womens-dresses-jumpsuits|Dresses & Jumpsuits,womens-tops|Tops,womens-bottoms|Bottoms,womens-coats-jackets|Coats & Jackets,shoes-accessories|Shoes & Accessories'
       endif
-      case tabset
-        when 'men'
-          assign tabs = 'mens-casual-shirts|Casual Shirts,mens-tshirts|T-Shirts,mens-polos|Polos,mens-chinos-joggers-pants|Pants,mens-jeans|Jeans,mens-shorts|Shorts,mens-sweaters|Sweaters,mens-coats-jackets|Outerwear,mens-dress-shirts|Dress Shirts,mens-blazers-suits|Blazers,mens-blazers-suits|Suits'
-        when 'women'
-          assign tabs = 'womens-dresses-jumpsuits|Dresses & Jumpsuits,womens-tops|Tops,womens-bottoms|Bottoms,womens-coats-jackets|Coats & Jackets,shoes-accessories|Shoes & Accessories'
-        else
-          assign tabs = 'pants|Pants,shirts|Shirts,shorts|Shorts,socks|Socks,tshirts|T-Shirts'
-      endcase
     -%}
     <header class="category-header">
       <h1 class="category-title">{{ collection.title | default: 'SHOP ALL APPAREL' | upcase }}</h1>
-      <div class="subcategory-tabs">
-        {%- assign tab_list = tabs | split: ',' -%}
-        {%- for tab in tab_list -%}
-          {%- assign parts = tab | split: '|' -%}
-          <a href="/collections/{{ parts[0] }}" class="subcategory-tab{% if collection.handle == parts[0] %} is-active{% endif %}">{{ parts[1] }}</a>
-        {%- endfor -%}
-      </div>
+      {%- if show_tabs -%}
+        <div class="subcategory-tabs">
+          {%- assign tab_list = tabs | split: ',' -%}
+          {%- for tab in tab_list -%}
+            {%- assign parts = tab | split: '|' -%}
+            <a href="/collections/{{ parts[0] }}" class="subcategory-tab">{{ parts[1] }}</a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
     </header>
 
     {%- paginate collection.products by 24 -%}
