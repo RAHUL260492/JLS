@@ -30,11 +30,17 @@
     assign natural = true
   endif
   assign hero_ratio = '16 / 9'
+  assign hero_ratio_mobile = '4 / 5'
   for p in prefixes
     assign ik = p | append: 'image'
     assign img = section.settings[ik]
     if img != blank
       assign hero_ratio = img.aspect_ratio
+      assign mk = p | append: 'image_mobile'
+      assign imgm = section.settings[mk]
+      if imgm != blank
+        assign hero_ratio_mobile = imgm.aspect_ratio
+      endif
       break
     endif
   endfor
@@ -61,6 +67,7 @@
   #hero-slideshow-{{ section.id }} .hero-slide,
   #hero-slideshow-{{ section.id }}.is-single .hero-slide { position: absolute; inset: 0; }
   #hero-slideshow-{{ section.id }}.is-single .hero-slide { opacity: 1; visibility: visible; }
+  @media (max-width: 749px) { #hero-slideshow-{{ section.id }} .hero-slides { aspect-ratio: {{ hero_ratio_mobile }}; } }
   {% endif %}
 </style>
 
