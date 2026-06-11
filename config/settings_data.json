@@ -84,7 +84,7 @@
           "overlay_opacity": 0,
           "image_fit": "cover",
           "eyebrow": "",
-          "heading": "Three decades of mastering linen, crafted from the world's finest European flax.",
+          "heading": "Three decades of mastering linen, crafted from the world's finest European Linen.",
           "subheading": "",
           "position_v": "top",
           "position_h": "center",
@@ -376,6 +376,35 @@
           "tile4_eyebrow_color": "#a78a5e",
           "tile4_button_bg_color": "#4a2c2a",
           "tile4_button_text_color": "#ffffff"
+        }
+      },
+      "category-banner-collection": {
+        "type": "category-banner-collection",
+        "settings": {
+          "focal_point": "center center",
+          "overlay_opacity": 0,
+          "image_fit": "cover",
+          "height": "natural",
+          "eyebrow": "",
+          "heading": "",
+          "subheading": "",
+          "position_v": "middle",
+          "position_h": "center",
+          "text_alignment": "center",
+          "offset_x": 0,
+          "offset_y": 0,
+          "eyebrow_size": 11,
+          "heading_size": 44,
+          "subheading_size": 14,
+          "button_label": "",
+          "button_link": "",
+          "button_alignment": "inherit",
+          "button_offset_x": 0,
+          "button_offset_y": 0,
+          "text_color": "#4a2c2a",
+          "eyebrow_color": "#a78a5e",
+          "button_bg_color": "#4a2c2a",
+          "button_text_color": "#ffffff"
         }
       }
     },
