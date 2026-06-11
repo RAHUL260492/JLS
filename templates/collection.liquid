@@ -23,6 +23,19 @@
         assign show_tabs = true
         assign tabs = "womens-linen|Women's Linen,mens-linen|Men's Linen,home-linen|Home Linen"
       endif
+
+      assign coming_soon_handles = ',belts,hats-hair-accessories,jewellery,mens-blazers-suits,mens-jeans,mens-sweaters,mens-sweatshirts-hoodies,mens-swimwear,shoes,sunglasses,winter-fall,womens-blazers-suits,womens-coats-jackets,womens-dresses-jumpsuits-tops-shirts,womens-skirts,womens-sweaters,womens-swimwear,womens-tshirts-tanks,'
+      assign h_key = ',' | append: h | append: ','
+      assign coming_soon = false
+      if coming_soon_handles contains h_key
+        assign coming_soon = true
+      endif
+      assign back_url = '/'
+      if h contains 'womens-'
+        assign back_url = '/collections/women'
+      elsif h contains 'mens-'
+        assign back_url = '/collections/men'
+      endif
     -%}
     <header class="category-header">
       <h1 class="category-title">{{ collection.title | default: 'SHOP ALL APPAREL' | upcase }}</h1>
@@ -37,6 +50,28 @@
       {%- endif -%}
     </header>
 
+    {%- if coming_soon -%}
+    <section class="coming-soon">
+      <div class="coming-soon__inner">
+        <p class="coming-soon__eyebrow">Coming Soon</p>
+        <h2 class="coming-soon__title">{{ collection.title | default: 'This collection' }}</h2>
+        <p class="coming-soon__text">We're crafting something special. This collection isn't live just yet — leave your email and we'll let you know the moment it drops.</p>
+        {%- form 'customer' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="coming-soon__success">Thank you — we'll be in touch when {{ collection.title }} launches.</p>
+          {%- else -%}
+            <div class="coming-soon__form">
+              <input type="hidden" name="contact[tags]" value="coming-soon, {{ collection.handle }}">
+              <input type="email" name="contact[email]" class="coming-soon__email" placeholder="Enter your email" aria-label="Email address" required>
+              <button type="submit" class="coming-soon__btn">Notify Me</button>
+            </div>
+            {%- if form.errors -%}<p class="coming-soon__error">{{ form.errors | default_errors }}</p>{%- endif -%}
+          {%- endif -%}
+        {%- endform -%}
+        <a href="{{ back_url }}" class="coming-soon__back">Continue shopping</a>
+      </div>
+    </section>
+    {%- else -%}
     {%- paginate collection.products by 24 -%}
     <!-- FILTER & SORT TOOLBAR (functional, native faceted filters) -->
     <form method="get" class="collection-toolbar" id="CollectionFilterForm">
@@ -170,7 +205,9 @@
       </nav>
     {%- endif -%}
     {%- endpaginate -%}
+    {%- endif -%}
 
+    {%- unless coming_soon -%}
     <!-- RELATED LINKS ROW -->
     <section class="related-links-section">
       <div class="related-links-section__inner">
@@ -188,6 +225,7 @@
         </div>
       </div>
     </section>
+    {%- endunless -%}
 
     <!-- SEO CONTENT BLOCK — driven by collection.description if set in Shopify admin -->
     <section class="seo-content-section">
