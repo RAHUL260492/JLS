@@ -356,3 +356,33 @@ if (floatingPromoClose && floatingPromo) {
     if (!e.target.closest('.nav-links .nav-item.has-dropdown')) closeAll(null);
   });
 })();
+
+/* Collection page: functional filter panels + auto-submit */
+(function () {
+  var form = document.getElementById('CollectionFilterForm');
+  if (!form) return;
+  function closePanels(except) {
+    form.querySelectorAll('[data-filter-pill]').forEach(function (b) {
+      if (b === except) return;
+      b.setAttribute('aria-expanded', 'false');
+      if (b.nextElementSibling) b.nextElementSibling.hidden = true;
+    });
+  }
+  form.querySelectorAll('[data-filter-pill]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      closePanels(btn);
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      if (btn.nextElementSibling) btn.nextElementSibling.hidden = open;
+    });
+  });
+  form.querySelectorAll('input[type="checkbox"][data-filter-input]').forEach(function (cb) {
+    cb.addEventListener('change', function () { form.submit(); });
+  });
+  var sort = form.querySelector('[data-auto-submit]');
+  if (sort) sort.addEventListener('change', function () { form.submit(); });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-filter-group]')) closePanels(null);
+  });
+})();
