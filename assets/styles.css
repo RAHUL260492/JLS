@@ -2180,8 +2180,8 @@ shopify-media img, shopify-media video {
 .nav-dropdown__link {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 1px;
   padding: 9px 20px;
   font-family: var(--font-body);
   font-size: 13px;
@@ -2226,7 +2226,7 @@ shopify-media img, shopify-media video {
   text-transform: uppercase;
   color: var(--color-accent-gold);
   font-weight: var(--font-weight-medium);
-  margin-left: 8px;
+  margin-left: 0;
   white-space: nowrap;
 }
 
@@ -2240,7 +2240,7 @@ shopify-media img, shopify-media video {
 }
 .nav-dropdown__divider {
   color: var(--color-text-muted);
-  margin: 0 4px;
+  margin: 0 1px;
   font-weight: var(--font-weight-light);
 }
 
