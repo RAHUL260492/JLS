@@ -2170,6 +2170,12 @@ shopify-media img, shopify-media video {
   min-width: 1040px;
   grid-template-columns: repeat(4, 1fr);
 }
+/* Wide variant: 5 columns (Men/Women with Shoes & Accessories + Home) */
+.nav-megamenu--5 {
+  min-width: 1240px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+}
 
 /* Reveal on hover and focus-within for keyboard users */
 .nav-item.has-dropdown:hover > .nav-dropdown,
