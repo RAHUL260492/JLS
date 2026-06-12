@@ -2222,6 +2222,16 @@ shopify-media img, shopify-media video {
   color: var(--color-warm-brown);
 }
 
+/* Sale links — highlighted */
+.nav-dropdown__link--sale {
+  color: #b3261e;
+  font-weight: var(--font-weight-semibold);
+}
+.nav-dropdown__link--sale:hover,
+.nav-dropdown__link--sale:focus-visible {
+  color: #8f1d18;
+}
+
 /* "Coming soon" muted styling */
 .nav-dropdown__link--soon {
   color: var(--color-text-muted);
