@@ -2226,7 +2226,7 @@ shopify-media img, shopify-media video {
   text-transform: uppercase;
   color: var(--color-accent-gold);
   font-weight: var(--font-weight-medium);
-  margin-left: 0;
+  margin-left: 8px;
   white-space: nowrap;
 }
 
