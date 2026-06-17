@@ -84,7 +84,7 @@
     color: #1a1a1a;
     margin-bottom: 24px;
   }
-  .pdp__price shopify-money::before { content: "$"; }
+  /* currency symbol comes from the store money format (format="money") */
   .pdp__variant-selector { margin: 24px 0; }
   .pdp__variant-selector shopify-variant-selector {
     display: block;
@@ -268,7 +268,7 @@
             <p class="pdp__vendor"><shopify-data query="product.vendor"></shopify-data></p>
             <h1 class="pdp__title"><shopify-data query="product.title"></shopify-data></h1>
             <div class="pdp__price">
-              <shopify-money format="money_without_currency" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
+              <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
             </div>
 
             <div class="pdp__variant-selector">
@@ -323,7 +323,7 @@
           <details>
             <summary>Shipping &amp; Returns</summary>
             <div class="pdp__details-body">
-              <p>Complimentary standard shipping on orders over $150. Express options available at checkout.</p>
+              <p>Complimentary standard shipping on orders over Rs. 1,500. Express options available at checkout.</p>
               <p>Free returns within 30 days. <a href="/pages/returns" style="color:#1a1a1a; border-bottom:1px solid #1a1a1a;">View return policy</a>.</p>
             </div>
           </details>
@@ -357,7 +357,7 @@
                   <shopify-data query="product.title"></shopify-data>
                 </p>
                 <p class="pdp__related-card-price">
-                  $<shopify-money format="money_without_currency" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
+                  <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
                 </p>
               </a>
             </template>
