@@ -2170,11 +2170,26 @@ shopify-media img, shopify-media video {
   min-width: 1040px;
   grid-template-columns: repeat(4, 1fr);
 }
-/* Wide variant: 5 columns (Men/Women with Shoes & Accessories + Home) */
+/* Wide variant: 5 columns (Men/Women with Shoes & Accessories + Home).
+   The menu breaks out of its nav item and centers in the viewport, capped to
+   the screen width, so all columns stay on-screen on laptops. Anchored to the
+   header so its vertical position stays correct in every scroll state. */
+.nav-item.has-megamenu { position: static; }
 .nav-megamenu--5 {
-  min-width: 1240px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  right: auto;
+  min-width: 0;
+  width: min(1240px, calc(100vw - 48px));
   grid-template-columns: repeat(5, 1fr);
   gap: 18px;
+  transform: translate(-50%, -6px);
+}
+.nav-item.has-dropdown:hover > .nav-megamenu--5,
+.nav-item.has-dropdown:focus-within > .nav-megamenu--5,
+.nav-item.has-dropdown.is-open > .nav-megamenu--5 {
+  transform: translate(-50%, 0);
 }
 
 /* Reveal on hover and focus-within for keyboard users */
