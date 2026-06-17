@@ -2186,7 +2186,12 @@ shopify-media img, shopify-media video {
      animation, so we must not rely on it for horizontal centering) */
   margin-left: calc(min(1240px, 100vw - 48px) / -2);
   grid-template-columns: repeat(5, 1fr);
-  gap: 18px;
+  gap: 16px;
+}
+/* Allow long labels to wrap so the 5 columns fit the capped width instead of
+   forcing the grid wider than the viewport (which clips the right column). */
+.nav-megamenu--5 .nav-dropdown__link {
+  white-space: normal;
 }
 
 /* Reveal on hover and focus-within for keyboard users */
