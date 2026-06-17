@@ -2182,14 +2182,11 @@ shopify-media img, shopify-media video {
   right: auto;
   min-width: 0;
   width: min(1240px, calc(100vw - 48px));
+  /* center on the viewport via margin (transform is used by the open
+     animation, so we must not rely on it for horizontal centering) */
+  margin-left: calc(min(1240px, 100vw - 48px) / -2);
   grid-template-columns: repeat(5, 1fr);
   gap: 18px;
-  transform: translate(-50%, -6px);
-}
-.nav-item.has-dropdown:hover > .nav-megamenu--5,
-.nav-item.has-dropdown:focus-within > .nav-megamenu--5,
-.nav-item.has-dropdown.is-open > .nav-megamenu--5 {
-  transform: translate(-50%, 0);
 }
 
 /* Reveal on hover and focus-within for keyboard users */
