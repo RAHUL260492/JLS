@@ -11,43 +11,5 @@
     <!-- Editorial Split (editable section — manage in Shopify Theme Customizer) -->
     {% section 'editorial-split' %}
     
-    <!-- New Arrivals -->
-    <section class="new-arrivals">
-      <div class="new-arrivals__header">
-        <h2 class="new-arrivals__title scroll-reveal" data-split>Your New Arrivals</h2>
-        <p class="new-arrivals__subtitle scroll-reveal">
-          A personal curation of new pieces we think you'll love.
-        </p>
-      </div>
-      
-      <div class="new-arrivals__carousel-wrapper">
-        <button class="carousel-arrow carousel-arrow--left" aria-label="Scroll left">&lsaquo;</button>
-        
-        <div class="new-arrivals__carousel" id="arrivalsCarousel">
-          <shopify-list-context id="arrivalsGridContext" type="product" query="products" first="10" style="display: contents;">
-            <template>
-              <article class="product-card" style="position:relative;">
-                <a href="#" onclick="event.preventDefault(); document.getElementById('product-modal-context').update(event); document.getElementById('product-modal').showModal();" class="product-card__image-link">
-                  <div class="product-card__image-wrapper">
-                    <shopify-media query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
-                  </div>
-                </a>
-                <div class="product-card__info">
-                  <a href="#" onclick="event.preventDefault(); document.getElementById('product-modal-context').update(event); document.getElementById('product-modal').showModal();" class="product-card__name">
-                    <shopify-data query="product.title"></shopify-data>
-                  </a>
-                  <p class="product-card__price">
-                    <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
-                  </p>
-                  <p class="product-card__promo">
-                    <shopify-data query="product.vendor"></shopify-data>
-                  </p>
-                </div>
-              </article>
-            </template>
-          </shopify-list-context>
-        </div>
-        
-        <button class="carousel-arrow carousel-arrow--right" aria-label="Scroll right">&rsaquo;</button>
-      </div>
-    </section>
+    <!-- New Arrivals (editable section — pick products in Shopify Theme Customizer) -->
+    {% section 'new-arrivals' %}

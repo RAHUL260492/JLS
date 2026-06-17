@@ -1,0 +1,93 @@
+<!-- New Arrivals carousel — products are selectable in the Theme Customizer -->
+<section class="new-arrivals">
+  <div class="new-arrivals__header">
+    <h2 class="new-arrivals__title scroll-reveal" data-split>{{ section.settings.heading | default: 'Your New Arrivals' }}</h2>
+    {%- if section.settings.subtitle != blank -%}
+      <p class="new-arrivals__subtitle scroll-reveal">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="new-arrivals__carousel-wrapper">
+    <button class="carousel-arrow carousel-arrow--left" aria-label="Scroll left">&lsaquo;</button>
+
+    <div class="new-arrivals__carousel" id="arrivalsCarousel">
+      {%- comment -%} Use the admin-selected products; if none chosen, fall back to newest products. {%- endcomment -%}
+      {%- if section.settings.products.count > 0 -%}
+        {%- assign carousel_products = section.settings.products -%}
+      {%- else -%}
+        {%- assign carousel_products = collections.all.products -%}
+      {%- endif -%}
+
+      {%- for product in carousel_products limit: section.settings.max_products -%}
+        <article class="product-card" style="position:relative;">
+          <a href="{{ product.url }}" class="product-card__image-link">
+            <div class="product-card__image-wrapper">
+              {%- if product.featured_image -%}
+                <img src="{{ product.featured_image | image_url: width: 800 }}"
+                     srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 800 }} 800w"
+                     sizes="(min-width: 990px) 25vw, 60vw"
+                     alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                     loading="lazy" width="800" height="1067">
+              {%- endif -%}
+            </div>
+          </a>
+          <div class="product-card__info">
+            <a href="{{ product.url }}" class="product-card__name">{{ product.title }}</a>
+            <p class="product-card__price">
+              {%- if product.compare_at_price > product.price -%}
+                <span class="price--sale">{{ product.price | money }}</span> <s>{{ product.compare_at_price | money }}</s>
+              {%- else -%}
+                {{ product.price | money }}
+              {%- endif -%}
+            </p>
+            {%- if product.vendor != blank -%}<p class="product-card__promo">{{ product.vendor }}</p>{%- endif -%}
+          </div>
+        </article>
+      {%- else -%}
+        <p class="new-arrivals__subtitle">No products to show yet. Add some in the theme editor.</p>
+      {%- endfor -%}
+    </div>
+
+    <button class="carousel-arrow carousel-arrow--right" aria-label="Scroll right">&rsaquo;</button>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "New Arrivals",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Your New Arrivals"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "A personal curation of new pieces we think you'll love."
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Products",
+      "limit": 24,
+      "info": "Pick the exact products to feature in the carousel. If none are selected, the newest products are shown."
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Max products to show",
+      "min": 4,
+      "max": 24,
+      "step": 1,
+      "default": 12
+    }
+  ],
+  "presets": [
+    { "name": "New Arrivals" }
+  ]
+}
+{% endschema %}
