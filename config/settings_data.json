@@ -406,6 +406,35 @@
           "button_bg_color": "#4a2c2a",
           "button_text_color": "#ffffff"
         }
+      },
+      "new-arrivals": {
+        "type": "new-arrivals",
+        "settings": {
+          "heading": "Your New Arrivals",
+          "subtitle": "A personal curation of new pieces we think you'll love.",
+          "products": [
+            "ban0001_black",
+            "ban0001_blue",
+            "ban0001_white",
+            "ban0002_red",
+            "lined001_black",
+            "lined001_blue",
+            "lined001_brown",
+            "lined001_cocoa",
+            "lined001_sagegrey",
+            "lined001_pink",
+            "lined001_white",
+            "tjac-ss003",
+            "tjac-ss007",
+            "tjac-ss002",
+            "tjac-ss006",
+            "the-tequila-postcard-hand-painted-cuban-shirt-unisex-copy",
+            "tjac-ss001",
+            "tjac-ss008",
+            "tjac-ss004"
+          ],
+          "max_products": 18
+        }
       }
     },
     "content_for_index": []
