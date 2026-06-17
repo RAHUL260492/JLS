@@ -2165,10 +2165,21 @@ shopify-media img, shopify-media video {
   margin: 0;
   padding: 0;
 }
-/* Wide variant: 4 columns (e.g. Men menu with Shoes & Accessories) */
+/* Wide variant: 4 columns (e.g. Women menu — Discover, all clothing, Shoes,
+   Home). Centered & viewport-capped like the 5-col variant. */
 .nav-megamenu--4 {
-  min-width: 1040px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  right: auto;
+  min-width: 0;
+  width: min(1040px, calc(100vw - 48px));
+  margin-left: calc(min(1040px, 100vw - 48px) / -2);
   grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.nav-megamenu--4 .nav-dropdown__link {
+  white-space: normal;
 }
 /* Wide variant: 5 columns (Men/Women with Shoes & Accessories + Home).
    The menu breaks out of its nav item and centers in the viewport, capped to
