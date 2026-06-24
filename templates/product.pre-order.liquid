@@ -1,0 +1,344 @@
+{% comment %}
+  product.liquid — product detail page (PDP)
+  Renders for any URL like /products/<handle>.
+  Layout: stacked image gallery on the left, sticky info column on the right
+  (vendor, title, price, variant selector, add-to-cart, details accordion).
+  Below: "You May Also Like" related products from the same collection.
+{% endcomment %}
+
+<style>
+  /* ---------- PDP layout ---------- */
+  .pdp {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  .pdp__breadcrumb {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 24px;
+  }
+  .pdp__breadcrumb a { color: #888; text-decoration: none; }
+  .pdp__breadcrumb a:hover { color: #1a1a1a; }
+  .pdp__breadcrumb span.sep { margin: 0 8px; }
+
+  .pdp__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 48px;
+    align-items: start;
+  }
+  @media (max-width: 960px) {
+    .pdp__layout { grid-template-columns: 1fr; gap: 24px; }
+  }
+
+  /* ---------- Image gallery (left) ---------- */
+  .pdp__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pdp__gallery-item {
+    background: #f5f4f0;
+    overflow: hidden;
+  }
+  .pdp__gallery-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ---------- Sticky info column (right) ---------- */
+  .pdp__info {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+  }
+  .pdp__info-inner {
+    padding: 0;
+  }
+  .pdp__vendor {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #888;
+    margin: 0 0 8px;
+  }
+  .pdp__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 28px;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    margin: 0 0 12px;
+    color: #1a1a1a;
+  }
+  .pdp__price {
+    font-family: 'Jost', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    color: #1a1a1a;
+    margin-bottom: 24px;
+  }
+  /* currency symbol comes from the store money format (format="money") */
+  .pdp__variant-selector { margin: 24px 0; }
+  .pdp__variant-selector shopify-variant-selector {
+    display: block;
+    font-family: 'Jost', sans-serif;
+  }
+  .pdp__add-to-cart {
+    width: 100%;
+    padding: 16px 24px;
+    background: #1a1a1a;
+    color: #fff;
+    border: 1px solid #1a1a1a;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    margin-bottom: 12px;
+  }
+  .pdp__add-to-cart:hover {
+    background: #fff;
+    color: #1a1a1a;
+  }
+  .pdp__add-to-cart[disabled],
+  .pdp__add-to-cart[disabled]:hover {
+    background: #ccc;
+    color: #fff;
+    border-color: #ccc;
+    cursor: not-allowed;
+  }
+  .pdp__wishlist {
+    width: 100%;
+    padding: 14px 24px;
+    background: #fff;
+    color: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-bottom: 24px;
+  }
+
+  /* ---------- Accordion details ---------- */
+  .pdp__details details {
+    border-top: 1px solid #e8e5dd;
+    padding: 16px 0;
+  }
+  .pdp__details details:last-of-type { border-bottom: 1px solid #e8e5dd; }
+  .pdp__details summary {
+    cursor: pointer;
+    list-style: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .pdp__details summary::-webkit-details-marker { display: none; }
+  .pdp__details summary::after {
+    content: '+';
+    font-size: 16px;
+    transition: transform 0.2s;
+  }
+  .pdp__details details[open] summary::after { content: '−'; }
+  .pdp__details-body {
+    padding: 16px 0 4px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #555;
+  }
+  .pdp__details-body p { margin: 0 0 8px; }
+
+  /* ---------- "You may also like" ---------- */
+  .pdp__related {
+    margin-top: 80px;
+    padding-top: 48px;
+    border-top: 1px solid #e8e5dd;
+  }
+  .pdp__related-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 24px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 32px;
+    color: #1a1a1a;
+  }
+  .pdp__related-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 900px) {
+    .pdp__related-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .pdp__related-card {
+    text-decoration: none;
+    color: inherit;
+  }
+  .pdp__related-card-image {
+    aspect-ratio: 4 / 5;
+    background: #f5f4f0;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .pdp__related-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .pdp__related-card:hover .pdp__related-card-image img { transform: scale(1.03); }
+  .pdp__related-card-name {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: #1a1a1a;
+    margin: 0 0 4px;
+  }
+  .pdp__related-card-price {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    color: #888;
+    margin: 0;
+  }
+</style>
+
+<main id="main" class="pdp">
+
+  <!-- Breadcrumb -->
+  <nav class="pdp__breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span class="sep">/</span>
+    {% if collection %}
+      <a href="{{ collection.url }}">{{ collection.title }}</a>
+      <span class="sep">/</span>
+    {% endif %}
+    <span>{{ product.title }}</span>
+  </nav>
+
+  <div class="pdp__layout">
+
+    <!-- LEFT: Image gallery (Liquid-rendered for SEO + fast first paint) -->
+    <div class="pdp__gallery">
+      {% if product.images.size > 0 %}
+        {% for image in product.images %}
+          <div class="pdp__gallery-item">
+            <img src="{{ image | image_url: width: 1400 }}"
+                 srcset="{{ image | image_url: width: 600 }} 600w,
+                         {{ image | image_url: width: 900 }} 900w,
+                         {{ image | image_url: width: 1400 }} 1400w"
+                 sizes="(max-width: 960px) 100vw, 60vw"
+                 alt="{{ image.alt | default: product.title | escape }}"
+                 width="{{ image.width }}"
+                 height="{{ image.height }}"
+                 loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                 fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}">
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="pdp__gallery-item">
+          <img src="{{ 'no-image.png' | asset_url }}" alt="{{ product.title | escape }}">
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- RIGHT: Sticky product info (web components for live variant data) -->
+    <aside class="pdp__info">
+      <div class="pdp__info-inner">
+
+        <shopify-context type="product" handle="{{ product.handle }}">
+          <template>
+            <p class="pdp__vendor"><shopify-data query="product.vendor"></shopify-data></p>
+            <h1 class="pdp__title"><shopify-data query="product.title"></shopify-data></h1>
+            <div class="pdp__price">
+              <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
+            </div>
+
+            <div class="pdp__variant-selector">
+              <shopify-variant-selector></shopify-variant-selector>
+            </div>
+
+            <button
+              class="pdp__add-to-cart"
+              onclick="document.getElementById('cart').addLine(event); document.getElementById('cart').showModal();"
+              shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale">
+              Add to Bag
+            </button>
+
+            <button class="pdp__wishlist" type="button" aria-label="Add to wishlist">
+              ♡ &nbsp; Add to Wishlist
+            </button>
+          </template>
+        </shopify-context>
+
+        <!-- Accordion details (server-rendered from product) -->
+        <div class="pdp__details">
+          <details open>
+            <summary>Product Details</summary>
+            <div class="pdp__details-body">
+              {% if product.description != blank %}
+                {{ product.description }}
+              {% else %}
+                <p>Premium, considered essentials from Just Adulting Club. Crafted from carefully selected fabrics and finished with quiet, refined detailing.</p>
+              {% endif %}
+            </div>
+          </details>
+
+          <details>
+            <summary>Size &amp; Fit</summary>
+            <div class="pdp__details-body">
+              <p>Model is wearing size M. Fits true to size — order your normal size for the intended fit. For an oversized look, size up.</p>
+              <p><a href="/pages/size-guide" style="color:#1a1a1a; border-bottom:1px solid #1a1a1a;">View size guide</a></p>
+            </div>
+          </details>
+
+          <details>
+            <summary>Materials &amp; Care</summary>
+            <div class="pdp__details-body">
+              {% if product.metafields.custom.materials %}
+                {{ product.metafields.custom.materials }}
+              {% else %}
+                <p>Refer to the care label inside the garment for full instructions. Machine wash cold with like colours. Reshape and dry flat.</p>
+              {% endif %}
+            </div>
+          </details>
+
+          <details>
+            <summary>Shipping &amp; Returns</summary>
+            <div class="pdp__details-body">
+              <p>Complimentary standard shipping on orders over Rs. 1,500. Express options available at checkout.</p>
+              <p>Free returns within 30 days. <a href="/pages/returns" style="color:#1a1a1a; border-bottom:1px solid #1a1a1a;">View return policy</a>.</p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+
+</main>
+
+<!-- ===== Pre-order editorial story (all blocks editable in Theme Customizer) ===== -->
+{% section 'pre-order-quote' %}
+{% section 'pre-order-features' %}
+{% section 'pre-order-hero' %}
+{% section 'pre-order-philosophy' %}
+{% section 'pre-order-flatlay' %}

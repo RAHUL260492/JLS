@@ -1,0 +1,48 @@
+{%- comment -%} Pre-order story: cinematic full-bleed hero with overlaid title {%- endcomment -%}
+<section class="po-hero" style="min-height:{{ section.settings.height }}px;">
+  {%- if section.settings.image != blank -%}
+    <img class="po-hero__bg" src="{{ section.settings.image | image_url: width: 2200 }}"
+         srcset="{{ section.settings.image | image_url: width: 1200 }} 1200w, {{ section.settings.image | image_url: width: 2200 }} 2200w"
+         sizes="100vw" alt="{{ section.settings.title | escape }}" loading="lazy">
+  {%- else -%}
+    <span class="po-hero__bg po-hero__bg--placeholder"></span>
+  {%- endif -%}
+  <span class="po-hero__scrim" style="opacity:{{ section.settings.overlay | divided_by: 100.0 }};"></span>
+  <div class="po-hero__content" style="color:{{ section.settings.text_color }};">
+    {%- if section.settings.eyebrow != blank -%}<p class="po-hero__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2 class="po-hero__title">{{ section.settings.title }}</h2>{%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.po-hero { position: relative; display: grid; place-items: center; overflow: hidden; text-align: center; }
+.po-hero__bg { position:absolute; inset:0; width:100%; height:100%; object-fit: cover; }
+.po-hero__bg--placeholder { background: radial-gradient(120% 120% at 50% 30%, #c8702a, #2a1c12); }
+.po-hero__scrim { position:absolute; inset:0; background:#000; }
+.po-hero__content { position: relative; z-index: 1; padding: 24px; }
+.po-hero__eyebrow {
+  font-family: var(--font-body, 'Jost', sans-serif);
+  letter-spacing: 0.45em; text-transform: uppercase; font-size: 13px; margin: 0 0 4px; padding-left: 0.45em;
+}
+.po-hero__title {
+  font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic; font-weight: 600;
+  font-size: clamp(56px, 13vw, 160px); line-height: 0.9; margin: 0;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pre-order: Hero",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "MARCH" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Denims" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#e8c27a" },
+    { "type": "range", "id": "overlay", "label": "Image darkening", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 25 },
+    { "type": "range", "id": "height", "label": "Height", "min": 360, "max": 900, "step": 20, "unit": "px", "default": 560 }
+  ],
+  "presets": [ { "name": "Pre-order: Hero" } ]
+}
+{% endschema %}

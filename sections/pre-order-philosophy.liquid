@@ -1,0 +1,39 @@
+{%- comment -%} Pre-order story: philosophy copy + care instructions band {%- endcomment -%}
+<section class="po-philo" style="background:{{ section.settings.bg_color }};color:{{ section.settings.text_color }};">
+  <div class="po-philo__inner">
+    <div class="po-philo__copy">
+      {%- if section.settings.body != blank -%}{{ section.settings.body }}{%- endif -%}
+    </div>
+    {%- if section.settings.care != blank -%}
+      <div class="po-philo__care">
+        {%- if section.settings.care_heading != blank -%}<p class="po-philo__care-heading">{{ section.settings.care_heading }}</p>{%- endif -%}
+        <div class="po-philo__care-lines">{{ section.settings.care | newline_to_br }}</div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.po-philo { padding: clamp(48px, 8vw, 96px) clamp(20px, 5vw, 64px); }
+.po-philo__inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(24px, 6vw, 80px); align-items: start; }
+.po-philo__copy { font-family: var(--font-heading, Georgia, serif); font-size: clamp(20px, 2.6vw, 30px); line-height: 1.3; }
+.po-philo__copy p { margin: 0 0 0.5em; }
+.po-philo__care { font-family: var(--font-body, 'Jost', sans-serif); font-size: 13px; line-height: 1.9; letter-spacing: 0.03em; padding-top: 6px; }
+.po-philo__care-heading { font-size: 18px; letter-spacing: 0.2em; margin: 0 0 10px; }
+@media (max-width: 767px) { .po-philo__inner { grid-template-columns: 1fr; } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pre-order: Philosophy",
+  "tag": "section",
+  "settings": [
+    { "type": "richtext", "id": "body", "label": "Statement", "default": "<p>Denims are a different animal. Wear them lots, wash them little and watch them age.</p>" },
+    { "type": "text", "id": "care_heading", "label": "Care heading", "default": "" },
+    { "type": "textarea", "id": "care", "label": "Care instructions (one per line)", "default": "Wash sparingly\nWash separately\nCold water only\nWash & dry inside out\nNo machine dry" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#c8702a" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#241405" }
+  ],
+  "presets": [ { "name": "Pre-order: Philosophy" } ]
+}
+{% endschema %}

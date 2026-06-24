@@ -1,0 +1,46 @@
+{%- comment -%} Pre-order story: big testimonial quote {%- endcomment -%}
+<section class="po-quote" style="background:{{ section.settings.bg_color }};color:{{ section.settings.text_color }};">
+  <div class="po-quote__inner">
+    {%- if section.settings.quote != blank -%}
+      <blockquote class="po-quote__text">{{ section.settings.quote }}</blockquote>
+    {%- endif -%}
+    {%- if section.settings.author != blank -%}
+      <p class="po-quote__author" style="color:{{ section.settings.author_color }};">~ {{ section.settings.author }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.po-quote { padding: clamp(64px, 12vw, 140px) 24px; text-align: center; }
+.po-quote__inner { max-width: 760px; margin: 0 auto; }
+.po-quote__text {
+  font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-weight: 500;
+  font-size: clamp(28px, 4.5vw, 52px);
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+.po-quote__author {
+  font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-size: clamp(15px, 2vw, 20px);
+  margin: 28px 0 0;
+  opacity: 0.9;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pre-order: Quote",
+  "tag": "section",
+  "settings": [
+    { "type": "textarea", "id": "quote", "label": "Quote", "default": "\"Perfect waist. Right length. Right Inseam. Feels 10/10!\"" },
+    { "type": "text", "id": "author", "label": "Attribution", "default": "Solomon Somar" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#2a1c12" },
+    { "type": "color", "id": "text_color", "label": "Quote text", "default": "#e8c89a" },
+    { "type": "color", "id": "author_color", "label": "Attribution text", "default": "#b99a73" }
+  ],
+  "presets": [ { "name": "Pre-order: Quote" } ]
+}
+{% endschema %}
