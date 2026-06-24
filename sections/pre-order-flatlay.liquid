@@ -1,13 +1,20 @@
 {%- comment -%} Pre-order story: flat-lay product shot on a colored field {%- endcomment -%}
 <section class="po-flatlay" style="background:{{ section.settings.bg_color }};">
   <div class="po-flatlay__inner">
-    {%- if section.settings.image != blank -%}
+    {%- if section.settings.video != blank -%}
+      <video class="po-flatlay__img" autoplay muted loop playsinline preload="metadata"
+             {% if section.settings.image != blank %}poster="{{ section.settings.image | image_url: width: 1800 }}"{% endif %}>
+        {%- for source in section.settings.video.sources -%}
+          <source src="{{ source.url }}" type="{{ source.mime_type }}">
+        {%- endfor -%}
+      </video>
+    {%- elsif section.settings.image != blank -%}
       <img class="po-flatlay__img" src="{{ section.settings.image | image_url: width: 1800 }}"
            srcset="{{ section.settings.image | image_url: width: 900 }} 900w, {{ section.settings.image | image_url: width: 1800 }} 1800w"
            sizes="(min-width: 768px) 80vw, 100vw"
            alt="{{ section.settings.caption | default: 'Product' | escape }}" loading="lazy">
     {%- else -%}
-      <div class="po-flatlay__placeholder">Add a flat-lay image</div>
+      <div class="po-flatlay__placeholder">Add a flat-lay image or video</div>
     {%- endif -%}
     {%- if section.settings.caption != blank -%}
       <p class="po-flatlay__caption" style="color:{{ section.settings.text_color }};">{{ section.settings.caption }}</p>
@@ -32,7 +39,8 @@
   "name": "Pre-order: Flat-lay",
   "tag": "section",
   "settings": [
-    { "type": "image_picker", "id": "image", "label": "Flat-lay image" },
+    { "type": "image_picker", "id": "image", "label": "Flat-lay image or GIF" },
+    { "type": "video", "id": "video", "label": "Flat-lay video (optional)", "info": "Plays muted on loop; overrides the image." },
     { "type": "text", "id": "caption", "label": "Caption (optional)", "default": "" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#c8702a" },
     { "type": "color", "id": "text_color", "label": "Caption text", "default": "#241405" }

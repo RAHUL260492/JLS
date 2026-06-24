@@ -1,6 +1,13 @@
 {%- comment -%} Pre-order story: cinematic full-bleed hero with overlaid title {%- endcomment -%}
 <section class="po-hero" style="min-height:{{ section.settings.height }}px;">
-  {%- if section.settings.image != blank -%}
+  {%- if section.settings.video != blank -%}
+    <video class="po-hero__bg" autoplay muted loop playsinline preload="metadata"
+           {% if section.settings.image != blank %}poster="{{ section.settings.image | image_url: width: 2200 }}"{% endif %}>
+      {%- for source in section.settings.video.sources -%}
+        <source src="{{ source.url }}" type="{{ source.mime_type }}">
+      {%- endfor -%}
+    </video>
+  {%- elsif section.settings.image != blank -%}
     <img class="po-hero__bg" src="{{ section.settings.image | image_url: width: 2200 }}"
          srcset="{{ section.settings.image | image_url: width: 1200 }} 1200w, {{ section.settings.image | image_url: width: 2200 }} 2200w"
          sizes="100vw" alt="{{ section.settings.title | escape }}" loading="lazy">
@@ -36,7 +43,8 @@
   "name": "Pre-order: Hero",
   "tag": "section",
   "settings": [
-    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "image_picker", "id": "image", "label": "Background image or GIF" },
+    { "type": "video", "id": "video", "label": "Background video (optional)", "info": "Plays muted on loop; overrides the image. The image is used as the poster." },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "MARCH" },
     { "type": "text", "id": "title", "label": "Title", "default": "Denims" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#e8c27a" },
