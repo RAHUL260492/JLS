@@ -196,7 +196,7 @@
           "banner1_heading_size": 58,
           "banner1_subheading_size": 14,
           "banner1_button_label": "Pre Order Now",
-          "banner1_button_link": "",
+          "banner1_button_link": "shopify://collections/pre-order",
           "banner1_button_alignment": "inherit",
           "banner1_button_offset_x": 0,
           "banner1_button_offset_y": 0,
