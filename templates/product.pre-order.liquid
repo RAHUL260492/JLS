@@ -247,10 +247,27 @@
         {%- endif -%}
       {%- endfor -%}
       {%- if has_color_variants -%}
-        {%- comment -%} Colour variants: show only the selected variant's image so it matches the chosen swatch. {%- endcomment -%}
-        <div class="pdp__gallery-item pdp__gallery-item--main">
-          <shopify-media query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
-        </div>
+        {%- comment -%} Colour variants: render every photo tagged with its colour; the script shows only the selected colour's photos. Assign each photo to its colour variant in Admin (Product > Media > Assign to variant). {%- endcomment -%}
+        {%- assign color_idx = 0 -%}
+        {%- for opt in product.options_with_values -%}
+          {%- assign on = opt.name | downcase -%}
+          {%- if on contains 'color' or on contains 'colour' -%}{%- assign color_idx = forloop.index0 -%}{%- endif -%}
+        {%- endfor -%}
+        <span class="pdp__selected-variant" data-selected-variant hidden><shopify-data query="product.selectedOrFirstAvailableVariant.title"></shopify-data></span>
+        {%- for image in product.images -%}
+          {%- assign img_colors = '' -%}
+          {%- for v in image.variants -%}
+            {%- assign cv = v.options[color_idx] | downcase | strip -%}
+            {%- assign img_colors = img_colors | append: '|' | append: cv | append: '|' -%}
+          {%- endfor -%}
+          <div class="pdp__gallery-item" data-colors="{{ img_colors }}">
+            <img src="{{ image | image_url: width: 1400 }}"
+                 srcset="{{ image | image_url: width: 600 }} 600w, {{ image | image_url: width: 900 }} 900w, {{ image | image_url: width: 1400 }} 1400w"
+                 sizes="(max-width: 960px) 100vw, 60vw"
+                 alt="{{ image.alt | default: product.title | escape }}"
+                 width="{{ image.width }}" height="{{ image.height }}" loading="lazy">
+          </div>
+        {%- endfor -%}
       {%- elsif product.images.size > 0 -%}
         {%- for image in product.images -%}
           <div class="pdp__gallery-item">

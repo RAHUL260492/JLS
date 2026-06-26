@@ -421,3 +421,44 @@ if (floatingPromoClose && floatingPromo) {
     update();
   });
 })();
+
+// ============================================
+// PDP — show only the selected colour's photos
+// Each gallery image carries data-colors (the colour values it belongs to).
+// A hidden element mirrors the selected variant title; when it changes we
+// show images whose colour is in the title (untagged images always show).
+// ============================================
+(function () {
+  function initColorGallery() {
+    var sig = document.querySelector('[data-selected-variant]');
+    var gallery = document.querySelector('.pdp__gallery');
+    if (!sig || !gallery) return false;
+    var items = gallery.querySelectorAll('.pdp__gallery-item[data-colors]');
+    if (!items.length) return false;
+
+    function apply() {
+      var title = (sig.textContent || '').toLowerCase();
+      if (!title) return; // not hydrated yet
+      var anyShown = false;
+      items.forEach(function (it) {
+        var colors = (it.getAttribute('data-colors') || '').toLowerCase();
+        var show = !colors // untagged images are shared across colours
+          || colors.split('|').filter(Boolean).some(function (c) { return title.indexOf(c) !== -1; });
+        it.style.display = show ? '' : 'none';
+        if (show) anyShown = true;
+      });
+      // Safety: never leave the gallery empty
+      if (!anyShown) items.forEach(function (it) { it.style.display = ''; });
+    }
+
+    apply();
+    new MutationObserver(apply).observe(sig, { childList: true, characterData: true, subtree: true });
+    return true;
+  }
+
+  var tries = 0;
+  var iv = setInterval(function () {
+    if (initColorGallery() || ++tries > 60) clearInterval(iv);
+  }, 150);
+  document.addEventListener('DOMContentLoaded', initColorGallery);
+})();
