@@ -239,11 +239,20 @@
 
     <!-- LEFT: Image gallery. The main image reacts to the selected variant (colour swatch). -->
     <div class="pdp__gallery">
-      <div class="pdp__gallery-item pdp__gallery-item--main">
-        <shopify-media query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
-      </div>
-      {% if product.images.size > 0 %}
-        {% for image in product.images %}
+      {%- assign has_color_variants = false -%}
+      {%- for opt in product.options_with_values -%}
+        {%- assign opt_name = opt.name | downcase -%}
+        {%- if opt_name contains 'color' or opt_name contains 'colour' -%}
+          {%- if opt.values.size > 1 -%}{%- assign has_color_variants = true -%}{%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if has_color_variants -%}
+        {%- comment -%} Colour variants: show only the selected variant's image so it matches the chosen swatch. {%- endcomment -%}
+        <div class="pdp__gallery-item pdp__gallery-item--main">
+          <shopify-media query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
+        </div>
+      {%- elsif product.images.size > 0 -%}
+        {%- for image in product.images -%}
           <div class="pdp__gallery-item">
             <img src="{{ image | image_url: width: 1400 }}"
                  srcset="{{ image | image_url: width: 600 }} 600w,
@@ -255,8 +264,10 @@
                  height="{{ image.height }}"
                  loading="lazy">
           </div>
-        {% endfor %}
-      {% endif %}
+        {%- endfor -%}
+      {%- else -%}
+        <div class="pdp__gallery-item"><img src="{{ 'no-image.png' | asset_url }}" alt="{{ product.title | escape }}"></div>
+      {%- endif -%}
     </div>
 
     <!-- RIGHT: Sticky product info (web components for live variant data) -->
