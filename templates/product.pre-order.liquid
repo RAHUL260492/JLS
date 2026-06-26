@@ -233,10 +233,15 @@
     <span>{{ product.title }}</span>
   </nav>
 
+  <shopify-context type="product" handle="{{ product.handle }}">
+  <template>
   <div class="pdp__layout">
 
-    <!-- LEFT: Image gallery (Liquid-rendered for SEO + fast first paint) -->
+    <!-- LEFT: Image gallery. The main image reacts to the selected variant (colour swatch). -->
     <div class="pdp__gallery">
+      <div class="pdp__gallery-item pdp__gallery-item--main">
+        <shopify-media query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
+      </div>
       {% if product.images.size > 0 %}
         {% for image in product.images %}
           <div class="pdp__gallery-item">
@@ -248,14 +253,9 @@
                  alt="{{ image.alt | default: product.title | escape }}"
                  width="{{ image.width }}"
                  height="{{ image.height }}"
-                 loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                 fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}">
+                 loading="lazy">
           </div>
         {% endfor %}
-      {% else %}
-        <div class="pdp__gallery-item">
-          <img src="{{ 'no-image.png' | asset_url }}" alt="{{ product.title | escape }}">
-        </div>
       {% endif %}
     </div>
 
@@ -263,30 +263,26 @@
     <aside class="pdp__info">
       <div class="pdp__info-inner">
 
-        <shopify-context type="product" handle="{{ product.handle }}">
-          <template>
-            <p class="pdp__vendor"><shopify-data query="product.vendor"></shopify-data></p>
-            <h1 class="pdp__title"><shopify-data query="product.title"></shopify-data></h1>
-            <div class="pdp__price">
-              <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
-            </div>
+        <p class="pdp__vendor"><shopify-data query="product.vendor"></shopify-data></p>
+        <h1 class="pdp__title"><shopify-data query="product.title"></shopify-data></h1>
+        <div class="pdp__price">
+          <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
+        </div>
 
-            <div class="pdp__variant-selector">
-              <shopify-variant-selector></shopify-variant-selector>
-            </div>
+        <div class="pdp__variant-selector">
+          <shopify-variant-selector></shopify-variant-selector>
+        </div>
 
-            <button
-              class="pdp__add-to-cart"
-              onclick="document.getElementById('cart').addLine(event); document.getElementById('cart').showModal();"
-              shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale">
-              Add to Bag
-            </button>
+        <button
+          class="pdp__add-to-cart"
+          onclick="document.getElementById('cart').addLine(event); document.getElementById('cart').showModal();"
+          shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale">
+          Add to Bag
+        </button>
 
-            <button class="pdp__wishlist" type="button" aria-label="Add to wishlist">
-              ♡ &nbsp; Add to Wishlist
-            </button>
-          </template>
-        </shopify-context>
+        <button class="pdp__wishlist" type="button" aria-label="Add to wishlist">
+          ♡ &nbsp; Add to Wishlist
+        </button>
 
         <!-- Accordion details (server-rendered from product) -->
         <div class="pdp__details">
@@ -333,6 +329,8 @@
     </aside>
 
   </div>
+  </template>
+  </shopify-context>
 
 </main>
 

@@ -2057,6 +2057,16 @@ shopify-variant-selector::part(radio-disabled) {
   text-decoration: line-through;
 }
 
+/* PDP gallery: reactive main image (changes with the selected variant) */
+.pdp__gallery-item--main { background: #f5f4f0; overflow: hidden; }
+.pdp__gallery shopify-media { display: block; width: 100%; }
+.pdp__gallery shopify-media img,
+.pdp__gallery shopify-media video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .product-modal {
   padding: 0;
   border: none;
