@@ -462,3 +462,60 @@ if (floatingPromoClose && floatingPromo) {
   }, 150);
   document.addEventListener('DOMContentLoaded', initColorGallery);
 })();
+
+// ============================================
+// Wishlist (saved to the browser via localStorage)
+// ============================================
+(function () {
+  var KEY = 'ja_wishlist';
+  function read() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
+  function write(l) { localStorage.setItem(KEY, JSON.stringify(l)); }
+  function has(l, h) { return l.some(function (i) { return i.handle === h; }); }
+  function updateCount() {
+    var n = read().length;
+    document.querySelectorAll('[data-wishlist-count]').forEach(function (el) {
+      el.textContent = n; el.hidden = n === 0;
+    });
+  }
+  function syncBtn(btn) {
+    var on = has(read(), btn.getAttribute('data-handle'));
+    btn.classList.toggle('is-active', on);
+    var icon = btn.querySelector('.pdp__wishlist-icon');
+    var label = btn.querySelector('.pdp__wishlist-label');
+    if (icon) icon.textContent = on ? '♥' : '♡';
+    if (label) label.textContent = on ? 'In Wishlist' : 'Add to Wishlist';
+  }
+  function bind() {
+    document.querySelectorAll('[data-wishlist-toggle]').forEach(function (btn) {
+      if (btn.__wl) { syncBtn(btn); return; }
+      btn.__wl = true;
+      syncBtn(btn);
+      btn.addEventListener('click', function () {
+        var list = read(); var h = btn.getAttribute('data-handle');
+        if (!h) return;
+        if (has(list, h)) {
+          list = list.filter(function (i) { return i.handle !== h; });
+        } else {
+          list.push({
+            handle: h,
+            title: btn.getAttribute('data-title'),
+            url: btn.getAttribute('data-url'),
+            image: btn.getAttribute('data-image'),
+            price: btn.getAttribute('data-price')
+          });
+        }
+        write(list); syncBtn(btn); updateCount();
+        document.dispatchEvent(new CustomEvent('wishlist:change'));
+      });
+    });
+  }
+  updateCount();
+  document.addEventListener('wishlist:change', updateCount);
+  // The wishlist button sits inside a web-component template, so retry until present.
+  var wtries = 0;
+  var wiv = setInterval(function () {
+    bind();
+    if (document.querySelector('[data-wishlist-toggle]') || ++wtries > 60) clearInterval(wiv);
+  }, 150);
+  document.addEventListener('DOMContentLoaded', function () { bind(); updateCount(); });
+})();

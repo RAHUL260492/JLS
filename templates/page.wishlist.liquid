@@ -1,0 +1,45 @@
+<main class="wishlist-page">
+  <h1 class="wishlist-page__title">{{ page.title | default: 'My Wishlist' }}</h1>
+  <div class="wishlist-grid" id="wishlistGrid"></div>
+  <p class="wishlist-empty" id="wishlistEmpty" hidden>Your wishlist is empty. Browse the shop and tap “Add to Wishlist” on any product.</p>
+</main>
+
+<script>
+  (function () {
+    var KEY = 'ja_wishlist';
+    function read() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
+    function write(l) { localStorage.setItem(KEY, JSON.stringify(l)); }
+    function esc(s) { return (s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function render() {
+      var grid = document.getElementById('wishlistGrid');
+      var empty = document.getElementById('wishlistEmpty');
+      if (!grid) return;
+      var list = read();
+      grid.innerHTML = '';
+      if (!list.length) { empty.hidden = false; return; }
+      empty.hidden = true;
+      list.forEach(function (it) {
+        var card = document.createElement('article');
+        card.className = 'wishlist-card';
+        card.innerHTML =
+          '<a href="' + esc(it.url) + '" class="wishlist-card__img">' + (it.image ? '<img src="' + esc(it.image) + '" alt="' + esc(it.title) + '" loading="lazy">' : '') + '</a>' +
+          '<div class="wishlist-card__info">' +
+            '<a href="' + esc(it.url) + '" class="wishlist-card__name">' + esc(it.title) + '</a>' +
+            (it.price ? '<p class="wishlist-card__price">' + esc(it.price) + '</p>' : '') +
+            '<button type="button" class="wishlist-card__remove" data-handle="' + esc(it.handle) + '">Remove</button>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+      grid.querySelectorAll('.wishlist-card__remove').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var h = b.getAttribute('data-handle');
+          write(read().filter(function (i) { return i.handle !== h; }));
+          render();
+          document.dispatchEvent(new CustomEvent('wishlist:change'));
+        });
+      });
+    }
+    document.addEventListener('DOMContentLoaded', render);
+    document.addEventListener('wishlist:change', render);
+  })();
+</script>

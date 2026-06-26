@@ -2659,3 +2659,52 @@ shopify-media img, shopify-media video {
 .coming-soon__success { font-family: var(--font-body); font-size: 15px; color: var(--color-warm-brown); margin: 0 0 20px; }
 .coming-soon__error { font-size: 13px; color: #b3261e; margin: 10px 0 0; }
 .coming-soon__back { display: inline-block; margin-top: 26px; font-family: var(--font-body); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-text-primary); text-decoration: underline; text-underline-offset: 4px; }
+
+/* ============================================
+   Shipping/Returns/Exchange policy lists (PDP accordion)
+   ============================================ */
+.pdp-policy__heading {
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 16px 0 6px;
+  color: var(--color-text-primary, #1a1a1a);
+}
+.pdp-policy__heading:first-child { margin-top: 0; }
+.pdp-policy__list { margin: 0 0 4px; padding-left: 18px; }
+.pdp-policy__list li { margin: 0 0 6px; line-height: 1.5; }
+.pdp-policy__list a { color: #1a1a1a; border-bottom: 1px solid #1a1a1a; }
+
+/* ============================================
+   Wishlist
+   ============================================ */
+.pdp__wishlist.is-active { border-color: #1a1a1a; }
+.pdp__wishlist.is-active .pdp__wishlist-icon { color: #c0392b; }
+.nav-icon--wishlist { position: relative; }
+.nav-icon__count {
+  position: absolute; top: -6px; right: -8px;
+  min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 999px; background: #1a1a1a; color: #fff;
+  font-family: var(--font-body, sans-serif); font-size: 10px; line-height: 16px;
+  text-align: center;
+}
+.wishlist-page { max-width: 1200px; margin: 0 auto; padding: 48px 24px 80px; }
+.wishlist-page__title {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(28px, 4vw, 44px); margin: 0 0 32px; text-align: center;
+}
+.wishlist-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+@media (max-width: 900px) { .wishlist-grid { grid-template-columns: repeat(2, 1fr); } }
+.wishlist-card__img { display: block; background: #f5f4f0; aspect-ratio: 3/4; overflow: hidden; }
+.wishlist-card__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wishlist-card__info { padding: 12px 2px; }
+.wishlist-card__name { display: block; color: #1a1a1a; text-decoration: none; font-family: var(--font-body, sans-serif); font-size: 14px; }
+.wishlist-card__price { margin: 4px 0 8px; font-size: 14px; color: #1a1a1a; }
+.wishlist-card__remove {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font-family: var(--font-body, sans-serif); font-size: 12px; letter-spacing: 0.05em;
+  text-transform: uppercase; color: #888; border-bottom: 1px solid #ccc;
+}
+.wishlist-card__remove:hover { color: #1a1a1a; border-color: #1a1a1a; }
+.wishlist-empty { text-align: center; color: #888; font-family: var(--font-body, sans-serif); padding: 40px 0; }

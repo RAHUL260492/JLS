@@ -351,8 +351,14 @@
           Add to Bag
         </button>
 
-        <button class="pdp__wishlist" type="button" aria-label="Add to wishlist">
-          ♡ &nbsp; Add to Wishlist
+        <button class="pdp__wishlist" type="button" aria-label="Add to wishlist"
+          data-wishlist-toggle
+          data-handle="{{ product.handle }}"
+          data-title="{{ product.title | escape }}"
+          data-url="{{ product.url }}"
+          data-image="{{ product.featured_image | image_url: width: 400 }}"
+          data-price="{{ product.price | money }}">
+          <span class="pdp__wishlist-icon">♡</span> &nbsp; <span class="pdp__wishlist-label">Add to Wishlist</span>
         </button>
 
         <!-- Accordion details (server-rendered from product) -->
@@ -388,10 +394,9 @@
           </details>
 
           <details>
-            <summary>Shipping &amp; Returns</summary>
+            <summary>Shipping, Returns &amp; Exchange</summary>
             <div class="pdp__details-body">
-              <p>Complimentary standard shipping on orders over Rs. 1,500. Express options available at checkout.</p>
-              <p>Free returns within 30 days. <a href="/pages/returns" style="color:#1a1a1a; border-bottom:1px solid #1a1a1a;">View return policy</a>.</p>
+              {% render 'shipping-returns' %}
             </div>
           </details>
         </div>
