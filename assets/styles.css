@@ -2713,3 +2713,32 @@ shopify-media img, shopify-media video {
 .pdp__details-body ul { margin: 6px 0 12px; padding-left: 18px; }
 .pdp__details-body ul li { margin: 0 0 6px; line-height: 1.5; }
 .pdp__details-body p strong { letter-spacing: 0.04em; }
+
+/* ============================================
+   PDP gallery on mobile: horizontal swipe carousel (catalogue style)
+   ============================================ */
+@media (max-width: 960px) {
+  .pdp__gallery {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 6px;
+    scroll-padding: 0;
+  }
+  .pdp__gallery::-webkit-scrollbar { display: none; }
+  .pdp__gallery-item {
+    flex: 0 0 100%;
+    max-width: 100%;
+    scroll-snap-align: start;
+  }
+  .pdp__gallery-item img,
+  .pdp__gallery-item shopify-media,
+  .pdp__gallery-item shopify-media img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
