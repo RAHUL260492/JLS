@@ -323,7 +323,7 @@
           "tile2_subheading_size": 14,
           "tile2_button_label": "Shop Now",
           "tile2_button_link": "shopify://products/white-imperial-press-shirt",
-          "tile2_button_alignment": "inherit",
+          "tile2_button_alignment": "center",
           "tile2_button_offset_x": 0,
           "tile2_button_offset_y": 0,
           "tile2_text_color": "#4a2c2a",
