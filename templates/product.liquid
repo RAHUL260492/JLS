@@ -377,26 +377,21 @@
           <details>
             <summary>Size &amp; Fit</summary>
             <div class="pdp__details-body">
-              <p>Model is wearing size M. Fits true to size — order your normal size for the intended fit. For an oversized look, size up.</p>
-              <p><a href="/pages/size-guide" style="color:#1a1a1a; border-bottom:1px solid #1a1a1a;">View size guide</a></p>
+              {{ settings.pdp_size_fit }}
             </div>
           </details>
 
           <details>
             <summary>Materials &amp; Care</summary>
             <div class="pdp__details-body">
-              {% if product.metafields.custom.materials %}
-                {{ product.metafields.custom.materials }}
-              {% else %}
-                <p>Refer to the care label inside the garment for full instructions. Machine wash cold with like colours. Reshape and dry flat.</p>
-              {% endif %}
+              {% if product.metafields.custom.materials != blank %}{{ product.metafields.custom.materials }}{% else %}{{ settings.pdp_materials_care }}{% endif %}
             </div>
           </details>
 
           <details>
             <summary>Shipping, Returns &amp; Exchange</summary>
             <div class="pdp__details-body">
-              {% render 'shipping-returns' %}
+              {% if settings.pdp_shipping != blank %}{{ settings.pdp_shipping }}{% else %}{% render 'shipping-returns' %}{% endif %}
             </div>
           </details>
         </div>

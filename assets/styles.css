@@ -2708,3 +2708,8 @@ shopify-media img, shopify-media video {
 }
 .wishlist-card__remove:hover { color: #1a1a1a; border-color: #1a1a1a; }
 .wishlist-empty { text-align: center; color: #888; font-family: var(--font-body, sans-serif); padding: 40px 0; }
+
+/* Rich-text lists inside PDP accordion bodies (editable Size&Fit / Materials / Shipping) */
+.pdp__details-body ul { margin: 6px 0 12px; padding-left: 18px; }
+.pdp__details-body ul li { margin: 0 0 6px; line-height: 1.5; }
+.pdp__details-body p strong { letter-spacing: 0.04em; }
