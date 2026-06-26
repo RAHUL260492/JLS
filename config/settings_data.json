@@ -18,7 +18,7 @@
             "settings": {
               "product": "",
               "collection": "",
-              "link": "",
+              "link": "shopify://collections/the-linen-edit",
               "image": "shopify://shop_images/WARM_SAND_DUSTY_ROSE_PINK_LINEN_SHIRT.png",
               "label": "The Linen Shop",
               "cta_text": "Shop Now"
@@ -29,7 +29,7 @@
             "settings": {
               "product": "",
               "collection": "",
-              "link": "",
+              "link": "shopify://collections/the-getaway-edit",
               "image": "shopify://shop_images/TEQUILA_POSTCARD.png",
               "label": "The GETAWAT EDiT",
               "cta_text": "Shop Now"
@@ -40,7 +40,7 @@
             "settings": {
               "product": "",
               "collection": "",
-              "link": "",
+              "link": "shopify://collections/womens-dresses-jumpsuits-tops-shirts",
               "image": "shopify://shop_images/UPCOMING_COLLECTIONS.png",
               "label": "Dresses",
               "cta_text": "Shop Now"
@@ -51,7 +51,7 @@
             "settings": {
               "product": "",
               "collection": "",
-              "link": "",
+              "link": "shopify://collections/shoes-accessories",
               "image": "shopify://shop_images/WhatsApp_Image_2026-06-01_at_14.47.39.jpg",
               "label": "ACCESSORIES",
               "cta_text": "Shop Now"
