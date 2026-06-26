@@ -156,7 +156,7 @@
                   <img src="{{ product.featured_image | image_url: width: 800 }}"
                        srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 800 }} 800w, {{ product.featured_image | image_url: width: 1200 }} 1200w"
                        sizes="(min-width: 990px) 25vw, 50vw"
-                       alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="800" height="1067">
+                       alt="{{ product.featured_image.alt | default: product.title | escape }}" width="800" height="1067" decoding="async" loading="{% if forloop.index <= 8 %}eager{% else %}lazy{% endif %}"{% if forloop.index <= 4 %} fetchpriority="high"{% endif %}>
                 {%- endif -%}
               </div>
             </a>

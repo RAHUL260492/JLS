@@ -274,7 +274,7 @@
                  srcset="{{ image | image_url: width: 600 }} 600w, {{ image | image_url: width: 900 }} 900w, {{ image | image_url: width: 1400 }} 1400w"
                  sizes="(max-width: 960px) 100vw, 60vw"
                  alt="{{ image.alt | default: product.title | escape }}"
-                 width="{{ image.width }}" height="{{ image.height }}" loading="lazy">
+                 width="{{ image.width }}" height="{{ image.height }}" decoding="async" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"{% if forloop.first %} fetchpriority="high"{% endif %}>
           </div>
         {%- endfor -%}
       {%- elsif product.images.size > 0 -%}
@@ -288,7 +288,8 @@
                  alt="{{ image.alt | default: product.title | escape }}"
                  width="{{ image.width }}"
                  height="{{ image.height }}"
-                 loading="lazy">
+                 decoding="async"
+                 loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"{% if forloop.first %} fetchpriority="high"{% endif %}>
           </div>
         {%- endfor -%}
       {%- else -%}
