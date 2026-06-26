@@ -325,8 +325,23 @@
           </div>
         {%- endif -%}
 
+        {%- comment -%} If colour has a single value it's redundant (the swatch row handles colour) — show only the size option to avoid an inconsistent colour control. {%- endcomment -%}
+        {%- assign size_option_name = '' -%}
+        {%- assign color_value_count = 0 -%}
+        {%- for opt in product.options_with_values -%}
+          {%- assign on3 = opt.name | downcase -%}
+          {%- if on3 contains 'color' or on3 contains 'colour' -%}
+            {%- assign color_value_count = opt.values.size -%}
+          {%- elsif size_option_name == '' -%}
+            {%- assign size_option_name = opt.name -%}
+          {%- endif -%}
+        {%- endfor -%}
         <div class="pdp__variant-selector">
-          <shopify-variant-selector></shopify-variant-selector>
+          {%- if color_value_count == 1 and size_option_name != blank -%}
+            <shopify-variant-selector visible-option="{{ size_option_name }}"></shopify-variant-selector>
+          {%- else -%}
+            <shopify-variant-selector></shopify-variant-selector>
+          {%- endif -%}
         </div>
 
         <button
