@@ -2718,8 +2718,9 @@ shopify-media img, shopify-media video {
    PDP gallery on mobile: horizontal swipe carousel (catalogue style)
    ============================================ */
 @media (max-width: 960px) {
-  .pdp__gallery {
-    flex-direction: row;
+  /* higher specificity (.pdp …) so this beats the template's inline base rule */
+  .pdp .pdp__gallery {
+    flex-direction: row !important;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
@@ -2728,15 +2729,15 @@ shopify-media img, shopify-media video {
     gap: 6px;
     scroll-padding: 0;
   }
-  .pdp__gallery::-webkit-scrollbar { display: none; }
-  .pdp__gallery-item {
-    flex: 0 0 100%;
+  .pdp .pdp__gallery::-webkit-scrollbar { display: none; }
+  .pdp .pdp__gallery-item {
+    flex: 0 0 100% !important;
     max-width: 100%;
     scroll-snap-align: start;
   }
-  .pdp__gallery-item img,
-  .pdp__gallery-item shopify-media,
-  .pdp__gallery-item shopify-media img {
+  .pdp .pdp__gallery-item img,
+  .pdp .pdp__gallery-item shopify-media,
+  .pdp .pdp__gallery-item shopify-media img {
     width: 100%;
     height: auto;
     display: block;
