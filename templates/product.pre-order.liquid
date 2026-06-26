@@ -247,18 +247,27 @@
         {%- endif -%}
       {%- endfor -%}
       {%- if has_color_variants -%}
-        {%- comment -%} Colour variants: render every photo tagged with its colour; the script shows only the selected colour's photos. Assign each photo to its colour variant in Admin (Product > Media > Assign to variant). {%- endcomment -%}
+        {%- comment -%} Colour variants: tag each photo with the colour(s) named in its Alt text (and any variant it's assigned to); the script shows only the selected colour's photos. Put the colour word in each photo's Alt text in Admin. {%- endcomment -%}
         {%- assign color_idx = 0 -%}
+        {%- assign color_values = '' -%}
         {%- for opt in product.options_with_values -%}
           {%- assign on = opt.name | downcase -%}
-          {%- if on contains 'color' or on contains 'colour' -%}{%- assign color_idx = forloop.index0 -%}{%- endif -%}
+          {%- if on contains 'color' or on contains 'colour' -%}
+            {%- assign color_idx = forloop.index0 -%}
+            {%- for val in opt.values -%}{%- assign color_values = color_values | append: '~' | append: val.name | downcase | strip -%}{%- endfor -%}
+          {%- endif -%}
         {%- endfor -%}
+        {%- assign color_value_list = color_values | split: '~' -%}
         <span class="pdp__selected-variant" data-selected-variant hidden><shopify-data query="product.selectedOrFirstAvailableVariant.title"></shopify-data></span>
         {%- for image in product.images -%}
           {%- assign img_colors = '' -%}
+          {%- assign alt_l = image.alt | downcase -%}
+          {%- for cval in color_value_list -%}
+            {%- if cval != blank and alt_l contains cval -%}{%- assign img_colors = img_colors | append: '|' | append: cval | append: '|' -%}{%- endif -%}
+          {%- endfor -%}
           {%- for v in image.variants -%}
             {%- assign cv = v.options[color_idx] | downcase | strip -%}
-            {%- assign img_colors = img_colors | append: '|' | append: cv | append: '|' -%}
+            {%- unless img_colors contains cv -%}{%- assign img_colors = img_colors | append: '|' | append: cv | append: '|' -%}{%- endunless -%}
           {%- endfor -%}
           <div class="pdp__gallery-item" data-colors="{{ img_colors }}">
             <img src="{{ image | image_url: width: 1400 }}"
