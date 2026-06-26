@@ -2057,6 +2057,32 @@ shopify-variant-selector::part(radio-disabled) {
   text-decoration: line-through;
 }
 
+/* PDP cross-product colour swatches (link to sibling colour products) */
+.pdp__color-group { margin: 20px 0 4px; }
+.pdp__color-group-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-caption, #888);
+  margin: 0 0 8px;
+}
+.pdp__color-group-swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.pdp__color-group-swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--sw, #ccc);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  display: inline-block;
+  cursor: pointer;
+  transition: outline-offset 0.15s ease;
+}
+.pdp__color-group-swatch.is-active {
+  outline: 1.5px solid var(--color-text-primary, #1a1a1a);
+  outline-offset: 3px;
+}
+
 /* PDP gallery: reactive main image (changes with the selected variant) */
 .pdp__gallery-item--main { background: #f5f4f0; overflow: hidden; }
 .pdp__gallery shopify-media { display: block; width: 100%; }

@@ -306,6 +306,25 @@
           <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
         </div>
 
+        {%- comment -%} Cross-product colour swatches: link to the sibling colour products. {%- endcomment -%}
+        {%- assign color_siblings = product.metafields.custom.color_group.value -%}
+        {%- if color_siblings and color_siblings.size > 1 -%}
+          <div class="pdp__color-group">
+            <p class="pdp__color-group-label">Colour</p>
+            <div class="pdp__color-group-swatches">
+              {%- for sib in color_siblings -%}
+                {%- assign sib_hex = sib.metafields.custom.swatch.value | default: '#cccccc' -%}
+                {%- assign sib_color = sib.title -%}
+                {%- for o in sib.options_with_values -%}
+                  {%- assign on2 = o.name | downcase -%}
+                  {%- if on2 contains 'color' or on2 contains 'colour' -%}{%- assign sib_color = o.values.first.name -%}{%- endif -%}
+                {%- endfor -%}
+                <a href="{{ sib.url }}" class="pdp__color-group-swatch{% if sib.id == product.id %} is-active{% endif %}" style="--sw:{{ sib_hex }}" title="{{ sib_color | escape }}" aria-label="{{ sib_color | escape }}"></a>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
         <div class="pdp__variant-selector">
           <shopify-variant-selector></shopify-variant-selector>
         </div>
