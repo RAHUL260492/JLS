@@ -1,0 +1,18 @@
+<a href="{{ product.url }}" class="featured-card"{% if dup %} aria-hidden="true" tabindex="-1"{% endif %}>
+  <div class="featured-card__img">
+    {%- if product.featured_image -%}
+      <img src="{{ product.featured_image | image_url: width: 500 }}"
+           srcset="{{ product.featured_image | image_url: width: 300 }} 300w, {{ product.featured_image | image_url: width: 500 }} 500w"
+           sizes="240px" alt="{{ product.featured_image.alt | default: product.title | escape }}"
+           loading="lazy" decoding="async" width="500" height="667">
+    {%- endif -%}
+  </div>
+  <p class="featured-card__name">{{ product.title }}</p>
+  <p class="featured-card__price">
+    {%- if product.compare_at_price > product.price -%}
+      <span class="price--sale">{{ product.price | money }}</span> <s>{{ product.compare_at_price | money }}</s>
+    {%- else -%}
+      {{ product.price | money }}
+    {%- endif -%}
+  </p>
+</a>

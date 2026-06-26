@@ -302,7 +302,6 @@
     <aside class="pdp__info">
       <div class="pdp__info-inner">
 
-        <p class="pdp__vendor"><shopify-data query="product.vendor"></shopify-data></p>
         <h1 class="pdp__title"><shopify-data query="product.title"></shopify-data></h1>
         <div class="pdp__price">
           <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
@@ -365,7 +364,7 @@
 
         <!-- Accordion details (server-rendered from product) -->
         <div class="pdp__details">
-          <details open>
+          <details>
             <summary>Product Details</summary>
             <div class="pdp__details-body">
               {% if product.description != blank %}

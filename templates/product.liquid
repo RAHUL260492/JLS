@@ -302,7 +302,6 @@
     <aside class="pdp__info">
       <div class="pdp__info-inner">
 
-        <p class="pdp__vendor"><shopify-data query="product.vendor"></shopify-data></p>
         <h1 class="pdp__title"><shopify-data query="product.title"></shopify-data></h1>
         <div class="pdp__price">
           <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
@@ -365,7 +364,7 @@
 
         <!-- Accordion details (server-rendered from product) -->
         <div class="pdp__details">
-          <details open>
+          <details>
             <summary>Product Details</summary>
             <div class="pdp__details-body">
               {% if product.description != blank %}
@@ -405,37 +404,7 @@
   </template>
   </shopify-context>
 
-  <!-- "You may also like" — pull from the first collection this product belongs to,
-       or fall back to /collections/all -->
-  <section class="pdp__related">
-    <h2 class="pdp__related-title">You May Also Like</h2>
-
-    {% assign related_handle = 'all' %}
-    {% if product.collections.size > 0 %}
-      {% assign related_handle = product.collections.first.handle %}
-    {% endif %}
-
-    <div class="pdp__related-grid">
-      <shopify-context type="collection" handle="{{ related_handle }}">
-        <template>
-          <shopify-list-context type="product" query="collection.products" first="4" style="display: contents;">
-            <template>
-              <a class="pdp__related-card" shopify-attr--href="product.onlineStoreUrl">
-                <div class="pdp__related-card-image">
-                  <shopify-media query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
-                </div>
-                <p class="pdp__related-card-name">
-                  <shopify-data query="product.title"></shopify-data>
-                </p>
-                <p class="pdp__related-card-price">
-                  <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
-                </p>
-              </a>
-            </template>
-          </shopify-list-context>
-        </template>
-      </shopify-context>
-    </div>
-  </section>
+  <!-- Featured Items — editable in Theme Customizer (pick products, auto-scrolls right→left) -->
+  {% section 'featured-items' %}
 
 </main>
