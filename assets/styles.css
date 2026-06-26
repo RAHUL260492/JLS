@@ -2746,3 +2746,17 @@ shopify-media img, shopify-media video {
     display: block;
   }
 }
+
+/* PDP — measurement note for the "Customize" size option */
+.pdp__custom-note {
+  margin: -8px 0 16px;
+  padding: 12px 14px;
+  background: #faf6ee;
+  border: 1px solid #e6dcc6;
+  border-radius: 2px;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 13px;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  color: #6b5a3a;
+}

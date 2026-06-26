@@ -345,6 +345,9 @@
           {%- endif -%}
         </div>
 
+        <span class="pdp__vtitle" data-variant-title hidden><shopify-data query="product.selectedOrFirstAvailableVariant.title"></shopify-data></span>
+        <p class="pdp__custom-note" data-custom-note hidden>✦ Our team will reach out to you to take your measurements for this customised outfit.</p>
+
         <button
           class="pdp__add-to-cart"
           onclick="document.getElementById('cart').addLine(event); document.getElementById('cart').showModal();"

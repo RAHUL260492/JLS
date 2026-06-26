@@ -519,3 +519,25 @@ if (floatingPromoClose && floatingPromo) {
   }, 150);
   document.addEventListener('DOMContentLoaded', function () { bind(); updateCount(); });
 })();
+
+// ============================================
+// PDP — "Customize" size shows a measurement note
+// ============================================
+(function () {
+  function init() {
+    var sig = document.querySelector('[data-variant-title]');
+    var note = document.querySelector('[data-custom-note]');
+    if (!sig || !note) return false;
+    function apply() {
+      var t = (sig.textContent || '').toLowerCase();
+      var isCustom = t.indexOf('customi') !== -1 || t.indexOf('made to measure') !== -1 || t.indexOf('made-to-measure') !== -1;
+      note.hidden = !isCustom;
+    }
+    apply();
+    new MutationObserver(apply).observe(sig, { childList: true, characterData: true, subtree: true });
+    return true;
+  }
+  var tries = 0;
+  var iv = setInterval(function () { if (init() || ++tries > 60) clearInterval(iv); }, 150);
+  document.addEventListener('DOMContentLoaded', init);
+})();
