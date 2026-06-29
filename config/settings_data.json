@@ -40,9 +40,9 @@
             "settings": {
               "product": "",
               "collection": "",
-              "link": "shopify://collections/womens-dresses-jumpsuits-tops-shirts",
-              "image": "shopify://shop_images/UPCOMING_COLLECTIONS.png",
-              "label": "Dresses",
+              "link": "shopify://collections/the-workwear-edit",
+              "image": "shopify://shop_images/MOF_WRINKLE_FREE_59d71ba5-d4fb-4b2d-9a2c-2b51be014f05.jpg",
+              "label": "THE WORKWEAR EDIT",
               "cta_text": "Shop Now"
             }
           },
@@ -104,7 +104,7 @@
           "button_bg_color": "#4a2c2a",
           "button_text_color": "#ffffff",
           "slide2_image": "shopify://shop_images/WhatsApp_Image_2026-06-06_at_16.19.19.jpg",
-          "slide2_image_mobile": "shopify://shop_images/Gemini_Generated_Image_ju99ddju99ddju99.png",
+          "slide2_image_mobile": "shopify://shop_images/1080_x_1350_px.png",
           "slide2_focal_point": "center center",
           "slide2_overlay_opacity": 0,
           "slide2_image_fit": "cover",
