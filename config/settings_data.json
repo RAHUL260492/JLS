@@ -282,7 +282,7 @@
         "type": "editorial-split",
         "settings": {
           "height": "natural",
-          "tile1_image": "shopify://shop_images/WhatsApp_Image_2026-06-01_at_14.47.03.jpg",
+          "tile1_image": "shopify://shop_images/1440_px_3d864b43-2644-4440-8425-d25377605a6b.jpg",
           "tile1_image_mobile": "shopify://shop_images/C7_3.png",
           "tile1_focal_point": "center center",
           "tile1_overlay_opacity": 0,
@@ -307,7 +307,7 @@
           "tile1_eyebrow_color": "#a78a5e",
           "tile1_button_bg_color": "#4a2c2a",
           "tile1_button_text_color": "#ffffff",
-          "tile2_image": "shopify://shop_images/COSMO_A1_GREY_1_cf1c5687-710b-4fb3-8c7a-b85b1f71fbba.png",
+          "tile2_image": "shopify://shop_images/C7_3_copy.jpg",
           "tile2_image_mobile": "shopify://shop_images/COSMO_A1_GREY_1_cf1c5687-710b-4fb3-8c7a-b85b1f71fbba.png",
           "tile2_focal_point": "center center",
           "tile2_overlay_opacity": 0,
