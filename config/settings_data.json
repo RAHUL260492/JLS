@@ -451,8 +451,9 @@
       "pre-order-hero": {
         "type": "pre-order-hero",
         "settings": {
-          "eyebrow": "MARCH",
-          "title": "Denims",
+          "video": "shopify://files/videos/WhatsApp Video 2026-06-02 at 4.59.32 PM.mp4",
+          "eyebrow": "Just Adulting",
+          "title": "EXCLUSIVES",
           "text_color": "#e8c27a",
           "overlay": 25,
           "height": 560
