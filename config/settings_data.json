@@ -437,6 +437,26 @@
           ],
           "max_products": 18
         }
+      },
+      "pre-order-quote": {
+        "type": "pre-order-quote",
+        "settings": {
+          "quote": "\"A bespoke fit without the bespoke wait.\"",
+          "author": "",
+          "bg_color": "#2a1c12",
+          "text_color": "#e8c89a",
+          "author_color": "#b99a73"
+        }
+      },
+      "pre-order-hero": {
+        "type": "pre-order-hero",
+        "settings": {
+          "eyebrow": "MARCH",
+          "title": "Denims",
+          "text_color": "#e8c27a",
+          "overlay": 25,
+          "height": 560
+        }
       }
     },
     "content_for_index": []
