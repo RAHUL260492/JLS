@@ -2911,3 +2911,13 @@ shopify-media img, shopify-media video {
   border-top: 1px solid var(--color-border-light, #e5e5e5);
   font-size: 13px; line-height: 1.65; color: var(--color-text-caption, #6a6a6a);
 }
+
+/* Shipping, Return & Exchange page — footnote under the policy body */
+.shipping-page__footnote {
+  max-width: 820px; margin: 40px auto 0; padding-top: 20px;
+  border-top: 1px solid var(--color-border-light, #e5e5e5);
+  font-family: var(--font-body, sans-serif);
+  font-size: 13.5px; line-height: 1.65;
+  color: var(--color-text-caption, #6a6a6a);
+}
+.shipping-page__footnote a { color: var(--color-text-primary, #1a1a1a); text-decoration: underline; text-underline-offset: 2px; }

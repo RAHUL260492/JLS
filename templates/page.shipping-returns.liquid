@@ -1,26 +1,102 @@
 {% comment %}
   page.shipping-returns.liquid — Shipping, Return & Exchange
-  Renders the same policy as the PDP "Shipping, Returns & Exchange" accordion,
-  using the same source cascade, so the two can never drift apart:
-    settings.pdp_shipping (store default) -> shipping-returns snippet (fallback)
-  Edit the policy once in Theme settings and both this page and every PDP update.
+  Content taken from the Terms & Conditions document (Delivery, Unable to
+  deliver, Availability of products, Your right to cancel, Returns policy,
+  Risk and title, Merchandise related sections).
 {% endcomment %}
 
 <main class="legal-page">
   <header class="legal-page__header">
-    <h1 class="legal-page__title">{{ page.title | default: 'Shipping, Return &amp; Exchange' }}</h1>
+    <h1 class="legal-page__title">{{ page.title | default: 'Shipping, Return and Exchange' }}</h1>
     <p class="legal-page__contact">
       Questions? Write to <a href="mailto:beyond9official@gmail.com">beyond9official@gmail.com</a>
       or call <a href="tel:+9108431751394">+91-08431751394</a> (Mon &ndash; Fri, 10am to 6pm).
     </p>
   </header>
 
-  <div class="legal-body shipping-page__policy">
-    {% if settings.pdp_shipping != blank %}{{ settings.pdp_shipping }}{% else %}{% render 'shipping-returns' %}{% endif %}
+  <nav class="legal-toc" aria-label="On this page">
+    <h2 class="legal-toc__heading">On this page</h2>
+    <ul class="legal-toc__list">
+      <li><a href="#shipping">Shipping &amp; delivery</a></li>
+      <li><a href="#unable-to-deliver">If we cannot deliver</a></li>
+      <li><a href="#packaging">Damaged or tampered parcels</a></li>
+      <li><a href="#cancel">Cancelling an order</a></li>
+      <li><a href="#returns">Returns</a></li>
+      <li><a href="#exchange">Exchange</a></li>
+      <li><a href="#refunds">Refunds</a></li>
+      <li><a href="#defects">Defective or wrong products</a></li>
+    </ul>
+  </nav>
+
+  <div class="legal-body">
+
+    <h2 id="shipping">Shipping &amp; delivery</h2>
+    <p>The items we offer on this website are available for worldwide shipping.</p>
+    <p>Subject to availability, and unless there are any exceptional circumstances, we will endeavour to fulfill your order for the product(s) listed in the order confirmation by the delivery date set out in the order confirmation.</p>
+    <p>Reasons for delay could include:</p>
+    <ul>
+      <li>Unforeseen circumstances or bad weather.</li>
+      <li>Delivery area not under our scope of network.</li>
+    </ul>
+    <p>Shipping charges of INR 90/- will be charged for order values below INR 2,500/-.</p>
+    <p>For international orders, customs duties may be levied at the time of delivery in certain countries.</p>
+
+    <h2 id="unable-to-deliver">If we cannot deliver</h2>
+    <p>If we are unable to deliver the goods to you after two attempts by our partner, given that they have contacted you to reschedule the delivery, the parcel shall be RTO'd (returned to origin) to the brand, and a credit amount shall be issued to your Just Adulting wallet.</p>
+    <p><strong>Please note:</strong> this is valid for prepaid orders only, and if the order is an OTP verified RTO then the shipping charges will not be refunded.</p>
+
+    <h2 id="packaging">Damaged or tampered parcels</h2>
+    <p>The products will be at your risk from the time of delivery.</p>
+    <p>The brand has a sealed packaging practice. You are requested and have the liberty to refuse the parcel if the condition of the packaging is found to be damaged, tampered, open, or soiled. In such cases, the brand also needs to be notified in writing only at <a href="mailto:beyond9official@gmail.com">beyond9official@gmail.com</a>.</p>
+    <p>On such refusal, the brand shall make arrangements to dispatch new merchandise (if holding stock) or issue a credit in the Just Adulting wallet to the client, which is in the case of prepaid registered orders only.</p>
+    <p>Upon assuring the condition of the parcel and duly accepting the consignment, the brand does not take responsibility for the goods or their condition once the parcel is received by the customer.</p>
+    <p>Do not accept the package if it is tampered with, and do not share the OTP with the carrier if you have not received the product.</p>
+
+    <h2 id="cancel">Cancelling an order</h2>
+    <p>If you are contracting as a consumer, you may cancel a contract at any time before the dispatch of goods. In this case, you shall receive a full refund of the price paid for the products by our returns policy.</p>
+    <p>Refunds for customer requested cancellations will be issued via gift cards.</p>
+    <p>All orders for products are subject to availability. In the event of supply difficulties, or because products are no longer in stock, we reserve the right to process your cancellation and initiate a refund for prepaid orders.</p>
+    <p>You will not have any right to cancel a contract for the supply of any of the following products:</p>
+    <ul>
+      <li>Customized items</li>
+      <li>Products whose original wrapping has been removed</li>
+    </ul>
+
+    <h2 id="returns">Returns</h2>
+    <p>If you wish to return a product within the period of <strong>7 days post-delivery</strong>, you can place a return order for the products from your shipping address.</p>
+    <p>In case the pin code provided by you is not serviceable by our shipping partner, the self-shipping option is also available. The cost of shipping will be refunded only if the courier slip is shared with us.</p>
+    <p>There is no additional charge for any exchange orders or return orders.</p>
+    <p>Your right to return only applies to products that are returned in the same condition as you received them. You should also include all of the product instructions, documents, and wrappings. Any product that is damaged, or not in the same condition as you received it, or which is worn simply beyond opening the product, will not be refunded. You should therefore take reasonable care of the product(s) while they are in your possession.</p>
+    <p>No returns, and only exchanges, will be applicable on orders which are placed during a sale.</p>
+    <p>A non-refundable charge of INR 100 will be applied on all cash on delivery (COD) orders below INR 3,000. Additionally, a non-refundable charge of INR 300 will be applied on all COD orders for footwear and orders above the range of INR 9,500.</p>
+    <p>Do not hand over the product without a pick-up slip or SMS confirmation.</p>
+
+    <h2 id="exchange">Exchange</h2>
+    <ul>
+      <li>Exchange is subject to availability of size.</li>
+      <li>There is no additional charge for any exchange orders.</li>
+      <li>For new orders of a lower price, the balance amount will be refunded as a gift voucher.</li>
+      <li>Only exchanges are applicable on orders purchased on sale or offer.</li>
+      <li>For customized orders, we provide one free alteration. Refer to the customization terms and conditions.</li>
+      <li>Please share an unboxing video of the package for any wrong product received.</li>
+    </ul>
+
+    <h2 id="refunds">Refunds</h2>
+    <p>The refund shall be initiated within <strong>3-5 business days</strong> from the date of return pick-up.</p>
+    <p>Upon receipt of the product, we will fully examine it and notify you of your right to a refund (if any) via e-mail within a reasonable period of time. We aim to process the refund as soon as possible and, in any case, within <strong>7-10 working days</strong> of the day we confirmed to you via e-mail that you are entitled to a refund in your chosen mode (account/source).</p>
+    <p>Refunds of any nature for any order or product can only be made if the payment was received from our payment partners or delivery partners in our verified bank account.</p>
+
+    <h2 id="defects">Defective or wrong products</h2>
+    <p>Defective or wrong products will be refunded.</p>
+    <p>In circumstances where you consider that the product does not conform to the contract at the time of delivery, you should promptly contact us via our web form with details of the product and its damage. Alternatively, you can contact us by mail at <a href="mailto:beyond9official@gmail.com">beyond9official@gmail.com</a> where you will receive instructions from us.</p>
+    <p>Please share an unboxing video of the package for any wrong or missing item received.</p>
+    <p>For any merchandise-related manufacturing defects, kindly reach out to us within <strong>30 days</strong> of order delivery. Issues raised beyond the given time will be subjective.</p>
+    <p>For footwear, we provide a <strong>60-day warranty</strong> under manufacturing defects.</p>
+    <p>Wrong product handover in return: action will be taken on the basis of package opening footage and we will be returning the same product we have received. In such cases, the seller will not be liable for any loss, and no action will be taken if the customer fails to raise the query within 7 days of pickup.</p>
+
   </div>
 
   <p class="shipping-page__footnote">
-    These are our operational shipping and returns terms. For the full legal terms,
-    see our <a href="/pages/terms">Terms &amp; Conditions</a>.
+    These terms form part of our full <a href="/pages/terms">Terms &amp; Conditions</a>.
   </p>
 </main>
