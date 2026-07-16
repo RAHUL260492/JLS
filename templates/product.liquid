@@ -86,13 +86,6 @@
     margin-bottom: 24px;
   }
   /* currency symbol comes from the store money format (format="money") */
-  /* Sale pricing: shown automatically whenever compare-at price > price */
-  .pdp__price-now { color: #b3261e; }
-  .pdp__price-was {
-    color: #999999;
-    margin-left: 8px;
-    text-decoration-thickness: 1px;
-  }
   .pdp__variant-selector { margin: 24px 0; }
   .pdp__variant-selector shopify-variant-selector {
     display: block;
@@ -310,14 +303,8 @@
       <div class="pdp__info-inner">
 
         <h1 class="pdp__title"><shopify-data query="product.title"></shopify-data></h1>
-        {%- assign pdp_variant = product.selected_or_first_available_variant -%}
         <div class="pdp__price">
-          {%- if pdp_variant.compare_at_price > pdp_variant.price -%}
-            <shopify-money class="pdp__price-now" format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
-            <s class="pdp__price-was"><shopify-money format="money" query="product.selectedOrFirstAvailableVariant.compareAtPrice"></shopify-money></s>
-          {%- else -%}
-            <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
-          {%- endif -%}
+          <shopify-money format="money" query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
         </div>
 
         {%- comment -%} Cross-product colour swatches: link to the sibling colour products. {%- endcomment -%}

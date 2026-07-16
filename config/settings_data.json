@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "pdp_materials_care": "<p>Crafted from 100% cotton, naturally breathable, exceptionally soft & made to last. <br/><br/>Wash warm, heat isn't their thing. Turn inside out before washing (grip stays stronger, longer). Tumble dry medium. If this is complicated then reach out to your parents. <br/><br/>Made in India. </p>",
     "sections": {
       "featured-categories": {
         "type": "featured-categories",
@@ -457,6 +458,15 @@
           "text_color": "#e8c27a",
           "overlay": 25,
           "height": 560
+        }
+      },
+      "featured-items": {
+        "type": "featured-items",
+        "settings": {
+          "heading": "Featured Items",
+          "products": [],
+          "max": 12,
+          "speed": 45
         }
       }
     },
