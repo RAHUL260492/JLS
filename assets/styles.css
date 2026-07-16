@@ -2827,3 +2827,87 @@ shopify-media img, shopify-media video {
   border-left: 2px solid var(--color-accent-gold, #c9a96e);
   padding: 18px 22px; margin: 20px 0 0;
 }
+
+/* ===== Contact page ===== */
+.contact-page { max-width: 1080px; margin: 0 auto; padding: 48px 24px 96px; }
+.contact-page__header { text-align: center; margin-bottom: 48px; }
+.contact-page__title {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(30px, 4.5vw, 46px); font-weight: 400;
+  margin: 0 0 14px; color: var(--color-text-primary, #1a1a1a);
+}
+.contact-page__intro {
+  font-family: var(--font-body, sans-serif);
+  font-size: 15px; line-height: 1.7; margin: 0 auto; max-width: 520px;
+  color: var(--color-text-caption, #6a6a6a);
+}
+.contact-page__layout {
+  display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 56px; align-items: start;
+}
+@media (max-width: 860px) {
+  .contact-page__layout { grid-template-columns: 1fr; gap: 40px; }
+}
+
+.contact-form__field { margin-bottom: 20px; }
+.contact-form__label {
+  display: block; font-family: var(--font-body, sans-serif);
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--color-text-caption, #6a6a6a); margin-bottom: 7px;
+}
+.contact-form__input {
+  width: 100%; height: 44px; padding: 0 14px;
+  border: 1px solid #cccccc; border-radius: 0;
+  background: var(--color-white, #fff);
+  font-family: var(--font-body, sans-serif); font-size: 14px;
+  color: var(--color-text-primary, #1a1a1a);
+  outline: none; transition: border-color 0.2s;
+}
+.contact-form__textarea { height: auto; padding: 12px 14px; line-height: 1.65; resize: vertical; }
+.contact-form__input:focus { border-color: var(--color-near-black, #1a1a1a); }
+.contact-form__submit {
+  padding: 0 34px; height: 46px;
+  background: var(--color-near-black, #1a1a1a); color: var(--color-white, #fff);
+  border: 1px solid var(--color-near-black, #1a1a1a);
+  font-family: var(--font-body, sans-serif);
+  font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+  cursor: pointer; transition: background 0.2s, color 0.2s; margin-top: 4px;
+}
+.contact-form__submit:hover { background: var(--color-white, #fff); color: var(--color-near-black, #1a1a1a); }
+.contact-form__success {
+  background: #f0f7f2; border-left: 2px solid var(--color-sale-green, #177245);
+  padding: 14px 18px; margin: 0 0 24px;
+  font-family: var(--font-body, sans-serif); font-size: 14px; line-height: 1.6; color: #17603a;
+}
+.contact-form__errors {
+  background: #fdf2f2; border-left: 2px solid #b3261e;
+  padding: 14px 18px; margin: 0 0 24px;
+  font-family: var(--font-body, sans-serif); font-size: 13.5px; line-height: 1.6; color: #8b2332;
+}
+.contact-form__errors p { margin: 0 0 6px; font-weight: 600; }
+.contact-form__errors ul { margin: 0; padding-left: 18px; }
+
+.contact-details { font-family: var(--font-body, sans-serif); }
+.contact-details__heading {
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--color-text-caption, #6a6a6a);
+  margin: 0 0 12px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border-light, #e5e5e5);
+}
+.contact-details__heading:not(:first-child) { margin-top: 32px; }
+.contact-details__list { margin: 0 0 4px; font-size: 14px; line-height: 1.6; }
+.contact-details__list dt {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--color-text-muted, #999); margin-top: 10px;
+}
+.contact-details__list dd { margin: 2px 0 0; color: var(--color-text-body, #3a3a3a); }
+.contact-details__address {
+  font-style: normal; font-size: 14px; line-height: 1.7;
+  color: var(--color-text-body, #3a3a3a); margin: 0;
+}
+.contact-details a { color: var(--color-text-primary, #1a1a1a); text-decoration: underline; text-underline-offset: 2px; }
+.contact-details a:hover { color: var(--color-promo-burgundy, #6b2d3e); }
+.contact-details__note {
+  margin: 32px 0 0; padding-top: 16px;
+  border-top: 1px solid var(--color-border-light, #e5e5e5);
+  font-size: 13px; line-height: 1.65; color: var(--color-text-caption, #6a6a6a);
+}

@@ -1,0 +1,136 @@
+{% comment %}
+  page.contact.liquid — Contact Us
+  Uses Shopify's native {% form 'contact' %}, which posts to /contact and
+  emails the store's "Store contact" / customer service address
+  (Settings -> Notifications). No third-party app required.
+{% endcomment %}
+
+<main class="contact-page">
+  <header class="contact-page__header">
+    <h1 class="contact-page__title">{{ page.title | default: 'Contact Us' }}</h1>
+    <p class="contact-page__intro">
+      Questions about an order, a product, or a return? Send us a note and our
+      customer care team will get back to you.
+    </p>
+  </header>
+
+  <div class="contact-page__layout">
+
+    <!-- Form -->
+    <div class="contact-form-wrap">
+      {%- form 'contact', class: 'contact-form' -%}
+
+        {%- if form.posted_successfully? -%}
+          <p class="contact-form__success" role="status">
+            Thanks for getting in touch. We&rsquo;ve received your message and will reply by email shortly.
+          </p>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <div class="contact-form__errors" role="alert">
+            <p>Please check the following:</p>
+            <ul>
+              {%- for field in form.errors -%}
+                <li>
+                  {%- if field == 'form' -%}
+                    {{ form.errors.messages[field] }}
+                  {%- else -%}
+                    {{ form.errors.translated_fields[field] }} — {{ form.errors.messages[field] }}
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="contact-name">Name</label>
+          <input
+            class="contact-form__input"
+            type="text"
+            id="contact-name"
+            name="contact[name]"
+            value="{{ form.name | default: customer.name }}"
+            autocomplete="name"
+            required>
+        </div>
+
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="contact-email">Email</label>
+          <input
+            class="contact-form__input"
+            type="email"
+            id="contact-email"
+            name="contact[email]"
+            value="{{ form.email | default: customer.email }}"
+            autocomplete="email"
+            spellcheck="false"
+            autocapitalize="off"
+            required>
+        </div>
+
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="contact-phone">Phone Number</label>
+          <input
+            class="contact-form__input"
+            type="tel"
+            id="contact-phone"
+            name="contact[phone]"
+            value="{{ form.phone | default: customer.phone }}"
+            autocomplete="tel"
+            pattern="[0-9\-\+\s\(\)]{7,20}">
+        </div>
+
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="contact-body">Query</label>
+          <textarea
+            class="contact-form__input contact-form__textarea"
+            id="contact-body"
+            name="contact[body]"
+            rows="7"
+            required>{{ form.body }}</textarea>
+        </div>
+
+        <button type="submit" class="contact-form__submit">Send Message</button>
+      {%- endform -%}
+    </div>
+
+    <!-- Company details -->
+    <aside class="contact-details">
+      <h2 class="contact-details__heading">Customer Care</h2>
+      <dl class="contact-details__list">
+        <dt>Email</dt>
+        <dd><a href="mailto:beyond9official@gmail.com">beyond9official@gmail.com</a></dd>
+
+        <dt>Phone</dt>
+        <dd><a href="tel:+9108431751394">+91-08431751394</a></dd>
+
+        <dt>Hours</dt>
+        <dd>Mon &ndash; Fri, 10am to 6pm</dd>
+      </dl>
+
+      <h2 class="contact-details__heading">Company Address</h2>
+      <address class="contact-details__address">
+        Beyond 9<br>
+        #16, 1st Main Road,<br>
+        RMV Stage 2,<br>
+        Bengaluru 560094
+      </address>
+
+      <h2 class="contact-details__heading">Marketed By</h2>
+      <address class="contact-details__address">
+        Beyond 9<br>
+        #16, 1st Main Road,<br>
+        RMV Stage 2,<br>
+        Bengaluru 560094
+      </address>
+
+      <p class="contact-details__note">
+        For trade inquiries, write to
+        <a href="mailto:beyond9official@gmail.com">beyond9official@gmail.com</a>.
+        See our <a href="/pages/terms">Terms &amp; Conditions</a> for returns and refunds.
+      </p>
+    </aside>
+
+  </div>
+</main>
