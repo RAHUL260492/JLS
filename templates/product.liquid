@@ -395,7 +395,7 @@
           <details>
             <summary>Shipping, Returns &amp; Exchange</summary>
             <div class="pdp__details-body">
-              {% if settings.pdp_shipping != blank %}{{ settings.pdp_shipping }}{% else %}{% render 'shipping-returns' %}{% endif %}
+              {% if product.metafields.custom.shipping_returns != blank %}{{ product.metafields.custom.shipping_returns }}{% elsif settings.pdp_shipping != blank %}{{ settings.pdp_shipping }}{% else %}{% render 'shipping-returns' %}{% endif %}
             </div>
           </details>
         </div>
