@@ -1,0 +1,26 @@
+{% comment %}
+  page.shipping-returns.liquid — Shipping, Return & Exchange
+  Renders the same policy as the PDP "Shipping, Returns & Exchange" accordion,
+  using the same source cascade, so the two can never drift apart:
+    settings.pdp_shipping (store default) -> shipping-returns snippet (fallback)
+  Edit the policy once in Theme settings and both this page and every PDP update.
+{% endcomment %}
+
+<main class="legal-page">
+  <header class="legal-page__header">
+    <h1 class="legal-page__title">{{ page.title | default: 'Shipping, Return &amp; Exchange' }}</h1>
+    <p class="legal-page__contact">
+      Questions? Write to <a href="mailto:beyond9official@gmail.com">beyond9official@gmail.com</a>
+      or call <a href="tel:+9108431751394">+91-08431751394</a> (Mon &ndash; Fri, 10am to 6pm).
+    </p>
+  </header>
+
+  <div class="legal-body shipping-page__policy">
+    {% if settings.pdp_shipping != blank %}{{ settings.pdp_shipping }}{% else %}{% render 'shipping-returns' %}{% endif %}
+  </div>
+
+  <p class="shipping-page__footnote">
+    These are our operational shipping and returns terms. For the full legal terms,
+    see our <a href="/pages/terms">Terms &amp; Conditions</a>.
+  </p>
+</main>
