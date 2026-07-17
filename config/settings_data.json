@@ -387,6 +387,7 @@
         "type": "category-banner-collection",
         "settings": {
           "image": "shopify://shop_images/banner_explorer.jpg",
+          "image_mobile": "shopify://shop_images/BANANA_POLO_ADDITIONAL_BANNER.png",
           "focal_point": "center center",
           "overlay_opacity": 0,
           "image_fit": "cover",
