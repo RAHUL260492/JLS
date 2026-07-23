@@ -12,7 +12,6 @@
     assign po_flatlay_show = true
   endif
 -%}
-<!--DBG image_blank={{ section.settings.image | default: "NIL" }} video_blank={{ section.settings.video | default: "NIL" }} design_mode={{ request.design_mode }} show={{ po_flatlay_show }} MARKER77-->
 {%- if po_flatlay_show -%}
 <section class="po-flatlay" style="background:{{ section.settings.bg_color }};">
   <div class="po-flatlay__inner">
