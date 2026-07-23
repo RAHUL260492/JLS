@@ -65,10 +65,6 @@
   {%- assign sc_use_metafield_tag = true -%}
 {%- endif -%}
 
-{%- if part == 'modal' -%}
-  <!-- size-chart debug | type={{ sc_metafield.type }} | list={{ sc_is_list }} | size={{ sc_source.size }} | first={{ sc_source.first }} | raw={{ sc_metafield.value }} | resolved={{ sc_urls | strip }} -->
-{%- endif -%}
-
 {%- comment -%} Only offer a size chart where there is a size to choose. {%- endcomment -%}
 {%- assign sc_has_size = false -%}
 {%- for sc_opt in product.options_with_values -%}
