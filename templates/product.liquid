@@ -51,6 +51,17 @@
     height: auto;
     display: block;
   }
+  /* Product videos sit in the same frame as the photos */
+  .pdp__gallery-item--video video,
+  .pdp__gallery-item--video iframe {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    background: #f5f4f0;
+    border: 0;
+  }
 
   /* ---------- Sticky info column (right) ---------- */
   .pdp__info {
@@ -285,20 +296,42 @@
                  width="{{ image.width }}" height="{{ image.height }}" decoding="async" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"{% if forloop.first %} fetchpriority="high"{% endif %}>
           </div>
         {%- endfor -%}
-      {%- elsif product.images.size > 0 -%}
-        {%- for image in product.images -%}
-          <div class="pdp__gallery-item">
-            <img src="{{ image | image_url: width: 1400 }}"
-                 srcset="{{ image | image_url: width: 600 }} 600w,
-                         {{ image | image_url: width: 900 }} 900w,
-                         {{ image | image_url: width: 1400 }} 1400w"
-                 sizes="(max-width: 960px) 100vw, 60vw"
-                 alt="{{ image.alt | default: product.title | escape }}"
-                 width="{{ image.width }}"
-                 height="{{ image.height }}"
-                 decoding="async"
-                 loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"{% if forloop.first %} fetchpriority="high"{% endif %}>
-          </div>
+        {%- comment -%} Videos aren't colour-filtered, so they follow the photos and show for every colour. {%- endcomment -%}
+        {%- for media in product.media -%}
+          {%- case media.media_type -%}
+            {%- when 'video' -%}
+              <div class="pdp__gallery-item pdp__gallery-item--video">
+                {{ media | video_tag: controls: true, playsinline: true, preload: 'metadata', image_size: '1400x' }}
+              </div>
+            {%- when 'external_video' -%}
+              <div class="pdp__gallery-item pdp__gallery-item--video">{{ media | external_video_tag }}</div>
+          {%- endcase -%}
+        {%- endfor -%}
+      {%- elsif product.media.size > 0 -%}
+        {%- comment -%} Walk media (not images) so videos render in the order set in Admin. {%- endcomment -%}
+        {%- for media in product.media -%}
+          {%- case media.media_type -%}
+            {%- when 'image' -%}
+              {%- assign image = media -%}
+              <div class="pdp__gallery-item">
+                <img src="{{ image | image_url: width: 1400 }}"
+                     srcset="{{ image | image_url: width: 600 }} 600w,
+                             {{ image | image_url: width: 900 }} 900w,
+                             {{ image | image_url: width: 1400 }} 1400w"
+                     sizes="(max-width: 960px) 100vw, 60vw"
+                     alt="{{ image.alt | default: product.title | escape }}"
+                     width="{{ image.width }}"
+                     height="{{ image.height }}"
+                     decoding="async"
+                     loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"{% if forloop.first %} fetchpriority="high"{% endif %}>
+              </div>
+            {%- when 'video' -%}
+              <div class="pdp__gallery-item pdp__gallery-item--video">
+                {{ media | video_tag: controls: true, playsinline: true, preload: 'metadata', image_size: '1400x' }}
+              </div>
+            {%- when 'external_video' -%}
+              <div class="pdp__gallery-item pdp__gallery-item--video">{{ media | external_video_tag }}</div>
+          {%- endcase -%}
         {%- endfor -%}
       {%- else -%}
         <div class="pdp__gallery-item"><img src="{{ 'no-image.png' | asset_url }}" alt="{{ product.title | escape }}"></div>
