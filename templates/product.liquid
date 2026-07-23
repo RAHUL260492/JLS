@@ -387,6 +387,8 @@
           {%- endif -%}
         {%- endfor -%}
         <div class="pdp__variant-selector">
+          {%- comment -%} "Size Chart" link — sits on the same line as the Size label. {%- endcomment -%}
+          {% render 'size-chart', product: product, part: 'link' %}
           {%- if color_value_count == 1 and size_option_name != blank -%}
             <shopify-variant-selector visible-option="{{ size_option_name }}"></shopify-variant-selector>
           {%- else -%}
@@ -455,6 +457,9 @@
   </div>
   </template>
   </shopify-context>
+
+  {%- comment -%} Size chart popup — outside the context template so it is always in the real DOM. {%- endcomment -%}
+  {% render 'size-chart', product: product, part: 'modal' %}
 
   <!-- Featured Items — editable in Theme Customizer (pick products, auto-scrolls right→left) -->
   {% section 'featured-items' %}

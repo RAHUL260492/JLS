@@ -1,0 +1,307 @@
+{%- comment -%}
+  Size chart — a "Size Chart" link beside the size selector, and the popup that
+  shows the chart image(s).
+
+  Where the image comes from (first match wins):
+    1. Product metafield  custom.size_chart  — one or more images, set per product
+       in Shopify admin → Products → (product) → Metafields → "Size chart".
+    2. Theme setting      settings.size_chart_image — the store-wide default,
+       set in Customizer → Theme settings → Size chart.
+
+  Renders nothing at all when neither is set, and nothing on products with no
+  size option, so it is safe to render on every product page.
+
+  Usage — both calls are needed, on the same page:
+    {% render 'size-chart', product: product, part: 'link'  %}  inside the variant selector block
+    {% render 'size-chart', product: product, part: 'modal' %}  once, outside <template>
+{%- endcomment -%}
+
+{%- assign sc_source = product.metafields.custom.size_chart.value -%}
+{%- assign sc_from_metafield = true -%}
+{%- if sc_source == blank -%}
+  {%- assign sc_source = settings.size_chart_image -%}
+  {%- assign sc_from_metafield = false -%}
+{%- endif -%}
+
+{%- comment -%}
+  Accept a single image or a list, in any shape a file reference can take:
+  a generic_file (has .url), a media_image (has .image), or a plain image.
+  Each captured entry is "url|width|height" so the <img> can reserve its space.
+{%- endcomment -%}
+{%- capture sc_urls -%}
+  {%- if sc_source.first -%}
+    {%- for sc_file in sc_source -%}
+      {%- if sc_file.url != blank -%}{{ sc_file.url }}|{{ sc_file.width }}|{{ sc_file.height }}
+      {%- elsif sc_file.image != blank -%}{{ sc_file.image | image_url: width: 1800 }}|{{ sc_file.image.width }}|{{ sc_file.image.height }}
+      {%- else -%}{{ sc_file | image_url: width: 1800 }}|{{ sc_file.width }}|{{ sc_file.height }}{%- endif -%},
+    {%- endfor -%}
+  {%- elsif sc_source != blank -%}
+    {%- if sc_source.url != blank -%}{{ sc_source.url }}|{{ sc_source.width }}|{{ sc_source.height }}
+    {%- elsif sc_source.image != blank -%}{{ sc_source.image | image_url: width: 1800 }}|{{ sc_source.image.width }}|{{ sc_source.image.height }}
+    {%- else -%}{{ sc_source | image_url: width: 1800 }}|{{ sc_source.width }}|{{ sc_source.height }}{%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- assign sc_images = sc_urls | strip | split: ',' -%}
+
+{%- comment -%} Only offer a size chart where there is a size to choose. {%- endcomment -%}
+{%- assign sc_has_size = false -%}
+{%- for sc_opt in product.options_with_values -%}
+  {%- assign sc_opt_name = sc_opt.name | downcase -%}
+  {%- if sc_opt_name contains 'size' -%}{%- assign sc_has_size = true -%}{%- endif -%}
+{%- endfor -%}
+{%- if sc_from_metafield -%}{%- assign sc_has_size = true -%}{%- endif -%}
+
+{%- if sc_images.size > 0 and sc_has_size -%}
+  {%- assign sc_heading = settings.size_chart_heading | default: 'Size Chart' -%}
+
+  {%- if part == 'link' -%}
+    <div class="pdp__size-chart" data-size-chart-anchor>
+      <button type="button" class="pdp__size-chart-link" data-size-chart-open aria-haspopup="dialog">
+        <svg viewBox="0 0 24 16" width="15" height="10" aria-hidden="true" focusable="false">
+          <rect x="0.6" y="0.6" width="22.8" height="14.8" rx="1" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M5 0.6v5M9.5 0.6v3M14 0.6v5M18.5 0.6v3" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+        <span>Size Chart</span>
+      </button>
+    </div>
+
+  {%- elsif part == 'modal' -%}
+    <dialog class="size-chart-modal" id="size-chart-modal" aria-labelledby="size-chart-title">
+      <div class="size-chart-modal__panel">
+        <header class="size-chart-modal__head">
+          <h2 class="size-chart-modal__title" id="size-chart-title">{{ sc_heading }}</h2>
+          <button type="button" class="size-chart-modal__close" data-size-chart-close aria-label="Close size chart">&times;</button>
+        </header>
+
+        <div class="size-chart-modal__body">
+          {%- for sc_raw in sc_images -%}
+            {%- assign sc_parts = sc_raw | strip | split: '|' -%}
+            {%- assign sc_img = sc_parts[0] -%}
+            {%- assign sc_w = sc_parts[1] | default: 1400 -%}
+            {%- assign sc_h = sc_parts[2] | default: 1000 -%}
+            {%- if sc_img != blank -%}
+              <a href="{{ sc_img }}" target="_blank" rel="noopener" class="size-chart-modal__figure" title="Open full size">
+                <img src="{{ sc_img }}"
+                     width="{{ sc_w }}"
+                     height="{{ sc_h }}"
+                     alt="{{ sc_heading | escape }} — {{ product.title | escape }}"
+                     loading="lazy"
+                     decoding="async">
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if settings.size_chart_note != blank -%}
+            <div class="size-chart-modal__note">{{ settings.size_chart_note }}</div>
+          {%- endif -%}
+        </div>
+      </div>
+    </dialog>
+
+    <style>
+      /* ---------- "Size Chart" link ---------- */
+      /* Sits at the top-right of the variant selector block, on the same line as
+         the option label the variant selector renders ("Size"). The exact top is
+         re-measured in JS once that component has painted. */
+      .pdp__variant-selector { position: relative; }
+      .pdp__size-chart {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 2;
+        line-height: 1;
+      }
+      .pdp__size-chart-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: 0;
+        font-family: 'Jost', sans-serif;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #1a1a1a;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .pdp__size-chart-link span {
+        border-bottom: 1px solid #1a1a1a;
+        padding-bottom: 2px;
+      }
+      .pdp__size-chart-link:hover { opacity: 0.6; }
+      .pdp__size-chart-link svg { flex: none; }
+
+      /* ---------- Popup ---------- */
+      .size-chart-modal {
+        width: min(860px, calc(100vw - 32px));
+        max-height: 90vh;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        overflow: visible;
+      }
+      .size-chart-modal::backdrop { background: rgba(26, 26, 26, 0.55); }
+      .size-chart-modal[open] { display: block; }
+      .size-chart-modal__panel {
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+        background: #fdfbf7;
+        border: 1px solid #e8e5dd;
+      }
+      .size-chart-modal__head {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 24px;
+        border-bottom: 1px solid #e8e5dd;
+      }
+      .size-chart-modal__title {
+        margin: 0;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-weight: 400;
+        font-size: 24px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #1a1a1a;
+      }
+      .size-chart-modal__close {
+        flex: none;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        background: none;
+        border: 0;
+        font-size: 26px;
+        line-height: 1;
+        color: #1a1a1a;
+        cursor: pointer;
+      }
+      .size-chart-modal__close:hover { opacity: 0.6; }
+      .size-chart-modal__body {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 20px 24px 24px;
+      }
+      .size-chart-modal__figure {
+        display: block;
+        margin: 0 0 16px;
+      }
+      .size-chart-modal__figure:last-of-type { margin-bottom: 0; }
+      .size-chart-modal__figure img {
+        width: 100%;
+        height: auto;
+        display: block;
+        background: #f5f4f0;
+      }
+      .size-chart-modal__note {
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid #e8e5dd;
+        font-family: 'Jost', sans-serif;
+        font-size: 12px;
+        line-height: 1.7;
+        color: #666;
+      }
+      .size-chart-modal__note p { margin: 0 0 6px; }
+
+      @media (max-width: 600px) {
+        .size-chart-modal { width: calc(100vw - 20px); }
+        .size-chart-modal__head { padding: 14px 16px; }
+        .size-chart-modal__title { font-size: 20px; }
+        .size-chart-modal__body { padding: 14px 16px 18px; }
+      }
+    </style>
+
+    <script>
+      (function () {
+        var MODAL_ID = 'size-chart-modal';
+
+        function modal() { return document.getElementById(MODAL_ID); }
+
+        function openChart() {
+          var m = modal();
+          if (!m || m.open) return;
+          if (typeof m.showModal === 'function') { m.showModal(); } else { m.setAttribute('open', ''); }
+          document.documentElement.style.overflow = 'hidden';
+        }
+
+        function closeChart() {
+          var m = modal();
+          if (!m) return;
+          if (typeof m.close === 'function') { m.close(); } else { m.removeAttribute('open'); }
+          document.documentElement.style.overflow = '';
+        }
+
+        // Delegated so it works no matter when the PDP web components paint the
+        // link — composedPath() also catches clicks from inside a shadow root.
+        document.addEventListener('click', function (e) {
+          var path = (e.composedPath && e.composedPath()) || [];
+          var hit = null;
+          for (var i = 0; i < path.length; i++) {
+            var n = path[i];
+            if (!n || n.nodeType !== 1 || !n.hasAttribute) continue;
+            if (n.hasAttribute('data-size-chart-open')) { hit = 'open'; break; }
+            if (n.hasAttribute('data-size-chart-close')) { hit = 'close'; break; }
+          }
+          if (hit === 'open') { e.preventDefault(); openChart(); return; }
+          if (hit === 'close') { e.preventDefault(); closeChart(); return; }
+          // Clicking the backdrop (the dialog element itself) closes it.
+          if (e.target === modal()) closeChart();
+        });
+
+        var m = modal();
+        if (m) m.addEventListener('close', function () { document.documentElement.style.overflow = ''; });
+
+        // Line the link up with the "Size" label rendered by <shopify-variant-selector>.
+        // That component paints asynchronously, so retry briefly after load.
+        function alignLink() {
+          var link = document.querySelector('[data-size-chart-anchor]');
+          var box = link && link.parentElement;
+          var sel = box && box.querySelector('shopify-variant-selector');
+          if (!link || !box || !sel) return false;
+
+          var label = findSizeLabel(sel);
+          if (!label) return false;
+
+          var top = Math.round(label.getBoundingClientRect().top - box.getBoundingClientRect().top);
+          if (top > 0) link.style.top = top + 'px';
+          return true;
+        }
+
+        // <shopify-variant-selector> renders into a shadow root and marks each
+        // option name with part="label" — look for that first, and fall back to a
+        // plain text match if that markup ever changes.
+        function findSizeLabel(root) {
+          var queue = [root];
+          var scanned = 0;
+          while (queue.length && scanned < 40) {
+            var node = queue.shift();
+            scanned++;
+            if (node.shadowRoot) queue.push(node.shadowRoot);
+            if (!node.querySelectorAll) continue;
+            var els = node.querySelectorAll('[part~="label"], label, legend, dt, p, span, div, h2, h3, h4');
+            for (var i = 0; i < els.length; i++) {
+              var el = els[i];
+              if (el.shadowRoot) queue.push(el.shadowRoot);
+              var txt = (el.textContent || '').trim().replace(/[:\s ]+$/, '');
+              if (txt.length <= 24 && /^size\b/i.test(txt)) return el;
+            }
+          }
+          return null;
+        }
+
+        var tries = 0;
+        var timer = setInterval(function () {
+          tries++;
+          if (alignLink() || tries > 30) clearInterval(timer);
+        }, 150);
+      })();
+    </script>
+  {%- endif -%}
+{%- endif -%}
