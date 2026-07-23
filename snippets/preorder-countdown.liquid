@@ -26,22 +26,29 @@
     {%- assign po_closed = true -%}
   {%- endif -%}
 
-  <div class="preorder-timer{% if po_closed %} is-closed{% endif %}"
+  {%- comment -%} Under 24h left reads as "closing soon" — set server-side so there is no flash. {%- endcomment -%}
+  {%- assign po_secs_left = po_end_ts | minus: po_now_ts -%}
+  {%- assign po_urgent = false -%}
+  {%- if po_closed == false and po_secs_left < 86400 -%}
+    {%- assign po_urgent = true -%}
+  {%- endif -%}
+
+  <div class="preorder-timer{% if po_closed %} is-closed{% endif %}{% if po_urgent %} is-urgent{% endif %}"
        data-preorder-timer
        data-ends="{{ po_end_ts }}">
 
-    <p class="preorder-timer__label" data-po-label>
-      {%- if po_closed -%}Pre-order closed{%- else -%}Pre-order closes in{%- endif -%}
-    </p>
+    <div class="preorder-timer__head">
+      <span class="preorder-timer__pip" aria-hidden="true"></span>
+      <p class="preorder-timer__label" data-po-label>
+        {%- if po_closed -%}Pre-order closed{%- elsif po_urgent -%}Closing soon{%- else -%}Pre-order closes in{%- endif -%}
+      </p>
+    </div>
 
     <div class="preorder-timer__clock" data-po-clock{% if po_closed %} hidden{% endif %} role="timer" aria-live="off">
-      <span class="preorder-timer__unit"><b data-po-days>00</b><i>Days</i></span>
-      <span class="preorder-timer__sep" aria-hidden="true">:</span>
-      <span class="preorder-timer__unit"><b data-po-hours>00</b><i>Hrs</i></span>
-      <span class="preorder-timer__sep" aria-hidden="true">:</span>
-      <span class="preorder-timer__unit"><b data-po-mins>00</b><i>Min</i></span>
-      <span class="preorder-timer__sep" aria-hidden="true">:</span>
-      <span class="preorder-timer__unit"><b data-po-secs>00</b><i>Sec</i></span>
+      <div class="preorder-timer__cell"><b data-po-days>00</b><i>Days</i></div>
+      <div class="preorder-timer__cell"><b data-po-hours>00</b><i>Hrs</i></div>
+      <div class="preorder-timer__cell"><b data-po-mins>00</b><i>Min</i></div>
+      <div class="preorder-timer__cell"><b data-po-secs>00</b><i>Sec</i></div>
     </div>
 
     <p class="preorder-timer__note" data-po-note>
@@ -55,61 +62,125 @@
 
   <style>
     .preorder-timer {
-      margin: 20px 0 24px;
-      padding: 16px 18px;
-      border: 1px solid #e6e1d8;
-      background: #faf8f4;
+      --po-accent: #a78a5e;
+      --po-ink: #2a2320;
+      --po-muted: #8f8579;
+      --po-line: #e5dfd4;
+      position: relative;
+      margin: 22px 0 26px;
+      padding: 17px 20px 15px;
+      background: linear-gradient(180deg, #fdfbf7 0%, #f7f3ea 100%);
+      border: 1px solid var(--po-line);
+      border-radius: 2px;
       font-family: var(--font-body, 'Jost', sans-serif);
     }
-    .preorder-timer__label {
-      margin: 0 0 10px;
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #a78a5e;
+    /* Hairline of colour along the top edge, fading out to the right. */
+    .preorder-timer::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--po-accent) 0%, rgba(167,138,94,0.35) 45%, rgba(167,138,94,0) 100%);
     }
-    .preorder-timer__clock {
+
+    .preorder-timer__head {
       display: flex;
-      align-items: baseline;
-      gap: 6px;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 14px;
+    }
+    .preorder-timer__pip {
+      flex: none;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--po-accent);
+    }
+    .preorder-timer__label {
+      margin: 0;
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--po-accent);
+    }
+
+    /* Four equal cells divided by hairlines — replaces the old floating colons,
+       which never sat on the baseline cleanly. */
+    .preorder-timer__clock {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
     }
     .preorder-timer__clock[hidden] { display: none; }
-    .preorder-timer__unit {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 44px;
+    .preorder-timer__cell {
+      position: relative;
+      text-align: center;
+      padding: 2px 4px;
     }
-    .preorder-timer__unit b {
+    .preorder-timer__cell + .preorder-timer__cell::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12%;
+      height: 58%;
+      width: 1px;
+      background: var(--po-line);
+    }
+    .preorder-timer__cell b {
+      display: block;
       font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
-      font-size: 28px;
+      font-size: 34px;
       font-weight: 500;
       line-height: 1;
-      color: #1a1a1a;
+      color: var(--po-ink);
+      /* Tabular figures stop the seconds jittering the layout every tick. */
       font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1;
     }
-    .preorder-timer__unit i {
-      margin-top: 4px;
+    .preorder-timer__cell i {
+      display: block;
+      margin-top: 7px;
       font-style: normal;
-      font-size: 9px;
-      letter-spacing: 0.12em;
+      font-size: 8.5px;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: #8a8175;
+      color: var(--po-muted);
     }
-    .preorder-timer__sep {
-      font-size: 20px;
-      line-height: 1;
-      color: #cfc6b8;
-      transform: translateY(-6px);
-    }
+
     .preorder-timer__note {
-      margin: 12px 0 0;
-      font-size: 12px;
-      color: #6f675c;
+      margin: 14px 0 0;
+      padding-top: 12px;
+      border-top: 1px solid var(--po-line);
+      font-size: 11.5px;
+      color: var(--po-muted);
     }
-    .preorder-timer.is-closed { border-color: #ddd; background: #f4f4f4; }
-    .preorder-timer.is-closed .preorder-timer__label { color: #8a8175; }
+
+    /* Under 24 hours: warmer accent and a slow pulse on the pip. */
+    .preorder-timer.is-urgent { --po-accent: #b4553a; }
+    .preorder-timer.is-urgent .preorder-timer__pip {
+      animation: po-pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes po-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.3; transform: scale(0.75); }
+    }
+
+    .preorder-timer.is-closed {
+      --po-accent: #9a9188;
+      background: #f6f5f3;
+      border-color: #e3e1dd;
+    }
+    .preorder-timer.is-closed::before { background: #ddd9d2; }
+    .preorder-timer.is-closed .preorder-timer__note { border-top-color: #e3e1dd; }
+
+    @media (max-width: 480px) {
+      .preorder-timer { padding: 15px 16px 13px; }
+      .preorder-timer__cell b { font-size: 28px; }
+      .preorder-timer__cell i { font-size: 8px; letter-spacing: 0.12em; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .preorder-timer__pip { animation: none !important; }
+    }
   </style>
 
   <script>
@@ -159,6 +230,12 @@
         out.h.textContent = pad(Math.floor(secs % 86400 / 3600));
         out.m.textContent = pad(Math.floor(secs % 3600 / 60));
         out.s.textContent = pad(secs % 60);
+
+        // Cross into the last 24 hours while the page is open.
+        if (secs < 86400 && !root.classList.contains('is-urgent')) {
+          root.classList.add('is-urgent');
+          if (label) label.textContent = 'Closing soon';
+        }
       }
 
       tick();
