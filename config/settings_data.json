@@ -540,6 +540,32 @@
           "max": 12,
           "speed": 45
         }
+      },
+      "pre-order-features": {
+        "type": "pre-order-features",
+        "settings": {
+          "heading": "",
+          "bg_color": "#2a1c12",
+          "caption_color": "#f3ead9"
+        }
+      },
+      "pre-order-philosophy": {
+        "type": "pre-order-philosophy",
+        "settings": {
+          "body": "<p>Denims are a different animal. Wear them lots, wash them little and watch them age.</p>",
+          "care_heading": "",
+          "care": "",
+          "bg_color": "#c8702a",
+          "text_color": "#241405"
+        }
+      },
+      "pre-order-flatlay": {
+        "type": "pre-order-flatlay",
+        "settings": {
+          "caption": "",
+          "bg_color": "#c8702a",
+          "text_color": "#241405"
+        }
       }
     },
     "content_for_index": []
