@@ -16,29 +16,41 @@
     {% render 'size-chart', product: product, part: 'modal' %}  once, outside <template>
 {%- endcomment -%}
 
-{%- assign sc_source = product.metafields.custom.size_chart.value -%}
+{%- assign sc_metafield = product.metafields.custom.size_chart -%}
+{%- assign sc_source = sc_metafield.value -%}
 {%- assign sc_from_metafield = true -%}
+{%- assign sc_is_list = false -%}
+{%- if sc_metafield.type contains 'list.' -%}{%- assign sc_is_list = true -%}{%- endif -%}
 {%- if sc_source == blank -%}
   {%- assign sc_source = settings.size_chart_image -%}
   {%- assign sc_from_metafield = false -%}
+  {%- assign sc_is_list = false -%}
 {%- endif -%}
 
 {%- comment -%}
-  Accept a single image or a list, in any shape a file reference can take:
-  a generic_file (has .url), a media_image (has .image), or a plain image.
-  Each captured entry is "url|width|height" so the <img> can reserve its space.
+  A file reference can arrive in three shapes, and only one of them can be piped
+  straight into image_url — so resolve each explicitly rather than guessing:
+    media_image  → has .image      (a file picked from Content → Files)
+    image        → has .src        (the theme setting's image_picker)
+    generic_file → has .url        (a PDF or similar)
+  Anything else emits nothing, so an unusable file hides the link instead of
+  printing a broken src. Each entry is "url|width|height" so the <img> can
+  reserve its space. The list/single split comes from the metafield type, not
+  from duck-typing the value.
 {%- endcomment -%}
 {%- capture sc_urls -%}
-  {%- if sc_source.first -%}
+  {%- if sc_is_list -%}
     {%- for sc_file in sc_source -%}
-      {%- if sc_file.url != blank -%}{{ sc_file.url }}|{{ sc_file.width }}|{{ sc_file.height }}
-      {%- elsif sc_file.image != blank -%}{{ sc_file.image | image_url: width: 1800 }}|{{ sc_file.image.width }}|{{ sc_file.image.height }}
-      {%- else -%}{{ sc_file | image_url: width: 1800 }}|{{ sc_file.width }}|{{ sc_file.height }}{%- endif -%},
+      {%- if sc_file.image != blank -%}{{ sc_file.image | image_url: width: 1800 }}|{{ sc_file.image.width }}|{{ sc_file.image.height }},
+      {%- elsif sc_file.src != blank -%}{{ sc_file | image_url: width: 1800 }}|{{ sc_file.width }}|{{ sc_file.height }},
+      {%- elsif sc_file.url != blank -%}{{ sc_file.url }}|{{ sc_file.width }}|{{ sc_file.height }},
+      {%- endif -%}
     {%- endfor -%}
   {%- elsif sc_source != blank -%}
-    {%- if sc_source.url != blank -%}{{ sc_source.url }}|{{ sc_source.width }}|{{ sc_source.height }}
-    {%- elsif sc_source.image != blank -%}{{ sc_source.image | image_url: width: 1800 }}|{{ sc_source.image.width }}|{{ sc_source.image.height }}
-    {%- else -%}{{ sc_source | image_url: width: 1800 }}|{{ sc_source.width }}|{{ sc_source.height }}{%- endif -%}
+    {%- if sc_source.image != blank -%}{{ sc_source.image | image_url: width: 1800 }}|{{ sc_source.image.width }}|{{ sc_source.image.height }}
+    {%- elsif sc_source.src != blank -%}{{ sc_source | image_url: width: 1800 }}|{{ sc_source.width }}|{{ sc_source.height }}
+    {%- elsif sc_source.url != blank -%}{{ sc_source.url }}|{{ sc_source.width }}|{{ sc_source.height }}
+    {%- endif -%}
   {%- endif -%}
 {%- endcapture -%}
 {%- assign sc_images = sc_urls | strip | split: ',' -%}
@@ -66,6 +78,7 @@
     </div>
 
   {%- elsif part == 'modal' -%}
+    <!-- size-chart debug | type={{ sc_metafield.type }} | list={{ sc_is_list }} | count={{ sc_source.size }} | has_image={{ sc_source.first.image.src }} | has_src={{ sc_source.first.src }} | has_url={{ sc_source.first.url }} | resolved={{ sc_urls | strip }} -->
     <dialog class="size-chart-modal" id="size-chart-modal" aria-labelledby="size-chart-title">
       <div class="size-chart-modal__panel">
         <header class="size-chart-modal__head">
