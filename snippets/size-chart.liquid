@@ -162,8 +162,11 @@
       .pdp__size-chart-link svg { flex: none; }
 
       /* ---------- Popup ---------- */
+      /* Shrink to the chart's own width so a small chart gets a compact popup
+         instead of a wide panel with the image marooned in the middle. */
       .size-chart-modal {
-        width: min(860px, calc(100vw - 32px));
+        width: max-content;
+        max-width: min(860px, calc(100vw - 32px));
         max-height: 90vh;
         padding: 0;
         border: 0;
@@ -175,6 +178,7 @@
       .size-chart-modal__panel {
         display: flex;
         flex-direction: column;
+        min-width: min(340px, calc(100vw - 32px));
         max-height: 90vh;
         background: #fdfbf7;
         border: 1px solid #e8e5dd;
@@ -220,9 +224,13 @@
         margin: 0 0 16px;
       }
       .size-chart-modal__figure:last-of-type { margin-bottom: 0; }
+      /* Never upscale: a 458px screenshot renders at 458px and stays sharp, while
+         a large chart still fills the panel. */
       .size-chart-modal__figure img {
-        width: 100%;
+        max-width: 100%;
+        width: auto;
         height: auto;
+        margin: 0 auto;
         display: block;
         background: #f5f4f0;
       }
@@ -238,7 +246,7 @@
       .size-chart-modal__note p { margin: 0 0 6px; }
 
       @media (max-width: 600px) {
-        .size-chart-modal { width: calc(100vw - 20px); }
+        .size-chart-modal { width: auto; max-width: calc(100vw - 20px); }
         .size-chart-modal__head { padding: 14px 16px; }
         .size-chart-modal__title { font-size: 20px; }
         .size-chart-modal__body { padding: 14px 16px 18px; }
@@ -293,12 +301,16 @@
           var sel = box && box.querySelector('shopify-variant-selector');
           if (!link || !box || !sel) return false;
 
+          var boxTop = box.getBoundingClientRect().top;
           var label = findSizeLabel(sel);
-          if (!label) return false;
 
-          var top = Math.round(label.getBoundingClientRect().top - box.getBoundingClientRect().top);
+          // With an open shadow root we can sit exactly on the label's line. If it
+          // is closed, fall back to the selector's own top edge, which still beats
+          // the container's top when the component carries a margin.
+          var ref = label || sel;
+          var top = Math.round(ref.getBoundingClientRect().top - boxTop);
           if (top > 0) link.style.top = top + 'px';
-          return true;
+          return !!label;
         }
 
         // <shopify-variant-selector> renders into a shadow root and marks each
