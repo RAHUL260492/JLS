@@ -320,6 +320,9 @@
           {%- endif -%}
         </div>
 
+        {%- comment -%} Pre-order countdown — renders only if the product has a "Pre-order ends" date. {%- endcomment -%}
+        {% render 'preorder-countdown', product: product %}
+
         {%- comment -%} Cross-product colour swatches: link to the sibling colour products. {%- endcomment -%}
         {%- assign color_siblings = product.metafields.custom.color_group.value -%}
         {%- if color_siblings and color_siblings.size > 1 -%}

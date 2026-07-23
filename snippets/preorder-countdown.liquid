@@ -1,0 +1,168 @@
+{%- comment -%}
+  Pre-order countdown.
+
+  Renders only when the product has a "Pre-order ends" date set
+  (custom.preorder_ends_at). Products without a date show nothing at all, so this
+  snippet is safe to render on every product page.
+
+  The deadline is passed to JS as epoch seconds, which is timezone-independent —
+  the human-readable line below it is formatted in the shop's timezone.
+
+  Once the deadline passes the clock is replaced by a closed message and the
+  add-to-cart button is disabled. That happens server-side on load for anyone
+  arriving after the deadline, and live via the ticker for anyone already on the
+  page when it runs out.
+
+  Usage: {% render 'preorder-countdown', product: product %}
+{%- endcomment -%}
+
+{%- assign po_field = product.metafields.custom.preorder_ends_at -%}
+
+{%- if po_field.value != blank -%}
+  {%- assign po_end_ts = po_field.value | date: '%s' | times: 1 -%}
+  {%- assign po_now_ts = 'now' | date: '%s' | times: 1 -%}
+  {%- assign po_closed = false -%}
+  {%- if po_end_ts <= po_now_ts -%}
+    {%- assign po_closed = true -%}
+  {%- endif -%}
+
+  <div class="preorder-timer{% if po_closed %} is-closed{% endif %}"
+       data-preorder-timer
+       data-ends="{{ po_end_ts }}">
+
+    <p class="preorder-timer__label" data-po-label>
+      {%- if po_closed -%}Pre-order closed{%- else -%}Pre-order closes in{%- endif -%}
+    </p>
+
+    <div class="preorder-timer__clock" data-po-clock{% if po_closed %} hidden{% endif %} role="timer" aria-live="off">
+      <span class="preorder-timer__unit"><b data-po-days>00</b><i>Days</i></span>
+      <span class="preorder-timer__sep" aria-hidden="true">:</span>
+      <span class="preorder-timer__unit"><b data-po-hours>00</b><i>Hrs</i></span>
+      <span class="preorder-timer__sep" aria-hidden="true">:</span>
+      <span class="preorder-timer__unit"><b data-po-mins>00</b><i>Min</i></span>
+      <span class="preorder-timer__sep" aria-hidden="true">:</span>
+      <span class="preorder-timer__unit"><b data-po-secs>00</b><i>Sec</i></span>
+    </div>
+
+    <p class="preorder-timer__note" data-po-note>
+      {%- if po_closed -%}
+        This pre-order window has ended.
+      {%- else -%}
+        Closes {{ po_field.value | date: '%-d %b %Y, %-I:%M %p' }}
+      {%- endif -%}
+    </p>
+  </div>
+
+  <style>
+    .preorder-timer {
+      margin: 20px 0 24px;
+      padding: 16px 18px;
+      border: 1px solid #e6e1d8;
+      background: #faf8f4;
+      font-family: var(--font-body, 'Jost', sans-serif);
+    }
+    .preorder-timer__label {
+      margin: 0 0 10px;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #a78a5e;
+    }
+    .preorder-timer__clock {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .preorder-timer__clock[hidden] { display: none; }
+    .preorder-timer__unit {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 44px;
+    }
+    .preorder-timer__unit b {
+      font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 1;
+      color: #1a1a1a;
+      font-variant-numeric: tabular-nums;
+    }
+    .preorder-timer__unit i {
+      margin-top: 4px;
+      font-style: normal;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #8a8175;
+    }
+    .preorder-timer__sep {
+      font-size: 20px;
+      line-height: 1;
+      color: #cfc6b8;
+      transform: translateY(-6px);
+    }
+    .preorder-timer__note {
+      margin: 12px 0 0;
+      font-size: 12px;
+      color: #6f675c;
+    }
+    .preorder-timer.is-closed { border-color: #ddd; background: #f4f4f4; }
+    .preorder-timer.is-closed .preorder-timer__label { color: #8a8175; }
+  </style>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-preorder-timer]');
+      if (!root) return;
+
+      var endsMs  = parseInt(root.getAttribute('data-ends'), 10) * 1000;
+      var clock   = root.querySelector('[data-po-clock]');
+      var label   = root.querySelector('[data-po-label]');
+      var note    = root.querySelector('[data-po-note]');
+      var out     = {
+        d: root.querySelector('[data-po-days]'),
+        h: root.querySelector('[data-po-hours]'),
+        m: root.querySelector('[data-po-mins]'),
+        s: root.querySelector('[data-po-secs]')
+      };
+      if (!endsMs) return;
+
+      function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+      // Re-asserted on every tick: the buy button is rendered by a web component
+      // that can re-evaluate its own disabled state, which would otherwise undo this.
+      function lockBuying() {
+        var btns = document.querySelectorAll('.pdp__add-to-cart');
+        for (var i = 0; i < btns.length; i++) {
+          var b = btns[i];
+          b.disabled = true;
+          b.setAttribute('aria-disabled', 'true');
+          if (b.textContent.trim() !== 'Pre-order closed') b.textContent = 'Pre-order closed';
+        }
+      }
+
+      function close() {
+        root.classList.add('is-closed');
+        if (clock) clock.hidden = true;
+        if (label) label.textContent = 'Pre-order closed';
+        if (note) note.textContent = 'This pre-order window has ended.';
+        lockBuying();
+      }
+
+      function tick() {
+        var left = endsMs - Date.now();
+        if (left <= 0) { close(); return; }
+        var secs = Math.floor(left / 1000);
+        out.d.textContent = pad(Math.floor(secs / 86400));
+        out.h.textContent = pad(Math.floor(secs % 86400 / 3600));
+        out.m.textContent = pad(Math.floor(secs % 3600 / 60));
+        out.s.textContent = pad(secs % 60);
+      }
+
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+{%- endif -%}
