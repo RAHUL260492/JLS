@@ -470,7 +470,10 @@
             "settings": {
               "collection": "mens-shoes-accessories",
               "heading": "More Men's Shoes & Accessories",
-              "products": []
+              "products": [
+                "cos001",
+                "sentinel-stride-set-two-pack-of-3"
+              ]
             }
           },
           "rule-womens-shoes-accessories": {
@@ -494,7 +497,15 @@
             "settings": {
               "collection": "men",
               "heading": "More Men's Favourites",
-              "products": []
+              "products": [
+                "ban0001_blue",
+                "lined001_brown",
+                "lined001_blue",
+                "ban0002_red",
+                "ban0001_white",
+                "lined001_sagegrey",
+                "lined001_white"
+              ]
             }
           },
           "rule-women": {
