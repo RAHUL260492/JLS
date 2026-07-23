@@ -516,12 +516,12 @@
         "settings": {
           "heading": "Featured Items",
           "products": [
-            "lined001_blue",
-            "lined001_black",
+            "ban0001_black",
             "lined001_sagegrey",
-            "lined001_white",
+            "lined001_pink",
             "ban0001_blue",
-            "ban0002_red"
+            "lined001_blue",
+            "lined001_white"
           ],
           "max": 12,
           "speed": 45
