@@ -364,10 +364,20 @@
             <div class="pdp__color-group-swatches">
               {%- for sib in color_siblings -%}
                 {%- assign sib_hex = sib.metafields.custom.swatch.value | default: '#cccccc' -%}
+                {%- comment -%}
+                  Swatch label: prefer the product's own Colour option value, but fall back to the
+                  product title when that value is a generic catch-all. Two striped shirts both
+                  labelled "Multicolor" tell a shopper nothing about which dot is which.
+                {%- endcomment -%}
                 {%- assign sib_color = sib.title -%}
+                {%- assign generic_colors = 'multicolor,multicolour,multi color,multi colour,multi,assorted,printed,print,various,mixed' | split: ',' -%}
                 {%- for o in sib.options_with_values -%}
                   {%- assign on2 = o.name | downcase -%}
-                  {%- if on2 contains 'color' or on2 contains 'colour' -%}{%- assign sib_color = o.values.first.name -%}{%- endif -%}
+                  {%- if on2 contains 'color' or on2 contains 'colour' -%}
+                    {%- assign cand = o.values.first.name -%}
+                    {%- assign cand_key = cand | downcase | strip | replace: '-', ' ' -%}
+                    {%- unless generic_colors contains cand_key -%}{%- assign sib_color = cand -%}{%- endunless -%}
+                  {%- endif -%}
                 {%- endfor -%}
                 <a href="{{ sib.url }}" class="pdp__color-group-swatch{% if sib.id == product.id %} is-active{% endif %}" style="--sw:{{ sib_hex }}" title="{{ sib_color | escape }}" aria-label="{{ sib_color | escape }}"></a>
               {%- endfor -%}
