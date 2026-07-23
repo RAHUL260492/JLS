@@ -72,6 +72,49 @@
       </div>
     </section>
     {%- else -%}
+
+    {%- comment -%}
+      Shop All exclusions.
+
+      On the "Shop All" collections only, hide made-to-order and pre-order products:
+      they are browsed through their own dedicated pages, not the general grid.
+      Membership is checked by collection rather than by tag because these products
+      carry no consistent tag (only some pre-order items are tagged "pre order").
+
+      shopall_handles  — the collections the exclusion applies to
+      hidden_handles   — the collections whose products get hidden from those grids
+
+      Every other collection page, including /collections/pre-order and the
+      customized-outfit pages themselves, is left completely untouched.
+    {%- endcomment -%}
+    {%- assign shopall_handles = 'men,women' | split: ',' -%}
+    {%- assign hidden_handles = 'mens-customized-outfit,womens-customized-outfit,pre-order' | split: ',' -%}
+    {%- assign apply_hide = false -%}
+    {%- if shopall_handles contains collection.handle -%}
+      {%- assign apply_hide = true -%}
+    {%- endif -%}
+
+    {%- comment -%} Count what will be hidden here so the results total stays honest. {%- endcomment -%}
+    {%- assign hidden_count = 0 -%}
+    {%- assign hidden_seen = '' -%}
+    {%- if apply_hide -%}
+      {%- for h in hidden_handles -%}
+        {%- for p in collections[h].products -%}
+          {%- assign id_key = '|' | append: p.id | append: '|' -%}
+          {%- unless hidden_seen contains id_key -%}
+            {%- for pc in p.collections -%}
+              {%- if pc.handle == collection.handle -%}
+                {%- assign hidden_seen = hidden_seen | append: id_key -%}
+                {%- assign hidden_count = hidden_count | plus: 1 -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endif -%}
+    {%- assign visible_count = collection.products_count | minus: hidden_count -%}
+
     {%- paginate collection.products by 24 -%}
     <!-- FILTER & SORT TOOLBAR (functional, native faceted filters) -->
     <form method="get" class="collection-toolbar" id="CollectionFilterForm">
@@ -124,7 +167,7 @@
         </div>
       </div>
       <div class="collection-toolbar__meta">
-        <p class="results-count">{{ collection.products_count }} Result{% if collection.products_count != 1 %}s{% endif %}</p>
+        <p class="results-count">{{ visible_count }} Result{% if visible_count != 1 %}s{% endif %}</p>
         {%- assign has_active = false -%}
         {%- for filter in collection.filters -%}{%- if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value -%}{%- assign has_active = true -%}{%- endif -%}{%- endfor -%}
         {%- if has_active -%}
@@ -149,6 +192,16 @@
     <section class="product-grid-section">
       <div class="product-grid" id="categoryProductGrid">
         {%- for product in collection.products -%}
+          {%- if apply_hide -%}
+            {%- assign skip_product = false -%}
+            {%- for pc in product.collections -%}
+              {%- if hidden_handles contains pc.handle -%}
+                {%- assign skip_product = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if skip_product -%}{%- continue -%}{%- endif -%}
+          {%- endif -%}
           <article class="product-card">
             <a href="{{ product.url }}" class="product-card__image-link">
               <div class="product-card__image-wrapper">
