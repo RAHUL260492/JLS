@@ -2343,6 +2343,15 @@ shopify-media img, shopify-media video {
   color: var(--color-warm-brown);
 }
 
+/* Non-interactive column headings (Discover, Shoes & Accessories, Home).
+   Rendered as <span>, so they must not read or behave as links. */
+.nav-dropdown__link--static { cursor: default; }
+.nav-dropdown__link--static:hover,
+.nav-dropdown__link--static:focus-visible {
+  color: var(--color-warm-brown);
+  background-color: transparent;
+}
+
 /* "Coming soon" muted styling */
 .nav-dropdown__link--soon {
   color: var(--color-text-muted);
@@ -2588,7 +2597,10 @@ shopify-media img, shopify-media video {
   }
 }
 
-.mobile-nav__subhead a { font-weight: 600; margin-top: 6px; padding-top: 10px; border-top: 1px solid var(--color-border-light); display: inline-block; }
+/* Subhead styling sits on the <li> so it applies whether or not the label is a link
+   (Discover / Shoes & Accessories / Home are plain text; Sale is still a link). */
+.mobile-nav__subhead { font-weight: 600; margin-top: 6px; padding-top: 10px; border-top: 1px solid var(--color-border-light); }
+.mobile-nav__subhead a { font-weight: inherit; margin-top: 0; padding-top: 0; border-top: none; display: inline-block; }
 
 /* Top-level Men/Women/Linen open the dropdown instead of navigating */
 .nav-link--trigger { cursor: pointer; }
