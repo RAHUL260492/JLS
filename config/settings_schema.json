@@ -9,8 +9,9 @@
       {
         "type": "richtext",
         "id": "pdp_size_fit",
-        "label": "Size & Fit",
-        "default": "<p>Fits true to size — order your normal size for the intended fit. For an oversized look, size up.</p><p>Model is wearing size M.</p><p><a href=\"/pages/size-guide\">View size guide</a></p>"
+        "label": "Size & Fit (default)",
+        "default": "<p>Fits true to size — order your normal size for the intended fit. For an oversized look, size up.</p><p>Model is wearing size M.</p><p><a href=\"/pages/size-guide\">View size guide</a></p>",
+        "info": "Shown when a product has no Size & Fit metafield set."
       },
       {
         "type": "richtext",

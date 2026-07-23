@@ -394,7 +394,7 @@
           <details>
             <summary>Size &amp; Fit</summary>
             <div class="pdp__details-body">
-              {{ settings.pdp_size_fit }}
+              {% if product.metafields.custom.size_fit != blank %}{{ product.metafields.custom.size_fit }}{% else %}{{ settings.pdp_size_fit }}{% endif %}
             </div>
           </details>
 
