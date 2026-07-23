@@ -477,7 +477,56 @@
           ],
           "max": 12,
           "speed": 45
-        }
+        },
+        "blocks": {
+          "rule-mens-shoes-accessories": {
+            "type": "rule",
+            "settings": {
+              "collection": "mens-shoes-accessories",
+              "heading": "More Men's Shoes & Accessories",
+              "products": []
+            }
+          },
+          "rule-womens-shoes-accessories": {
+            "type": "rule",
+            "settings": {
+              "collection": "womens-shoes-accessories",
+              "heading": "More Women's Shoes & Accessories",
+              "products": []
+            }
+          },
+          "rule-home": {
+            "type": "rule",
+            "settings": {
+              "collection": "home",
+              "heading": "More Home",
+              "products": []
+            }
+          },
+          "rule-men": {
+            "type": "rule",
+            "settings": {
+              "collection": "men",
+              "heading": "More Men's Favourites",
+              "products": []
+            }
+          },
+          "rule-women": {
+            "type": "rule",
+            "settings": {
+              "collection": "women",
+              "heading": "More Women's Favourites",
+              "products": []
+            }
+          }
+        },
+        "block_order": [
+          "rule-mens-shoes-accessories",
+          "rule-womens-shoes-accessories",
+          "rule-home",
+          "rule-men",
+          "rule-women"
+        ]
       }
     },
     "content_for_index": []
