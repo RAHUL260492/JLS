@@ -467,15 +467,13 @@
         "settings": {
           "heading": "Featured Items",
           "products": [
-            "lined001_blue",
-            "lined001_sagegrey",
-            "lined001_white",
-            "ban0001_blue",
-            "ban0001_white",
-            "tjac-ss005",
-            "tjac-ss001",
-            "mulbery-silk-shirt-2",
-            "white-imperial-press-shirt"
+            "jaig001",
+            "cos002",
+            "reta001",
+            "stm001",
+            "hrtd001",
+            "jaig002",
+            "ret001"
           ],
           "max": 12,
           "speed": 45
