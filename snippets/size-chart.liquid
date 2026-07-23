@@ -55,6 +55,20 @@
 {%- endcapture -%}
 {%- assign sc_images = sc_urls | strip | split: ',' -%}
 
+{%- comment -%}
+  Fallback: if nothing resolved but the merchant clearly set a chart, let
+  metafield_tag render the file itself. It handles every reference shape Shopify
+  can hand back, at the cost of controlling the markup.
+{%- endcomment -%}
+{%- assign sc_use_metafield_tag = false -%}
+{%- if sc_images.size == 0 and sc_metafield.value != blank -%}
+  {%- assign sc_use_metafield_tag = true -%}
+{%- endif -%}
+
+{%- if part == 'modal' -%}
+  <!-- size-chart debug | type={{ sc_metafield.type }} | list={{ sc_is_list }} | size={{ sc_source.size }} | first={{ sc_source.first }} | raw={{ sc_metafield.value }} | resolved={{ sc_urls | strip }} -->
+{%- endif -%}
+
 {%- comment -%} Only offer a size chart where there is a size to choose. {%- endcomment -%}
 {%- assign sc_has_size = false -%}
 {%- for sc_opt in product.options_with_values -%}
@@ -63,7 +77,8 @@
 {%- endfor -%}
 {%- if sc_from_metafield -%}{%- assign sc_has_size = true -%}{%- endif -%}
 
-{%- if sc_images.size > 0 and sc_has_size -%}
+{%- if sc_images.size > 0 or sc_use_metafield_tag -%}{%- assign sc_show = true -%}{%- else -%}{%- assign sc_show = false -%}{%- endif -%}
+{%- if sc_show and sc_has_size -%}
   {%- assign sc_heading = settings.size_chart_heading | default: 'Size Chart' -%}
 
   {%- if part == 'link' -%}
@@ -78,7 +93,6 @@
     </div>
 
   {%- elsif part == 'modal' -%}
-    <!-- size-chart debug | type={{ sc_metafield.type }} | list={{ sc_is_list }} | count={{ sc_source.size }} | has_image={{ sc_source.first.image.src }} | has_src={{ sc_source.first.src }} | has_url={{ sc_source.first.url }} | resolved={{ sc_urls | strip }} -->
     <dialog class="size-chart-modal" id="size-chart-modal" aria-labelledby="size-chart-title">
       <div class="size-chart-modal__panel">
         <header class="size-chart-modal__head">
@@ -87,6 +101,9 @@
         </header>
 
         <div class="size-chart-modal__body">
+          {%- if sc_use_metafield_tag -%}
+            <div class="size-chart-modal__figure">{{ sc_metafield | metafield_tag }}</div>
+          {%- else -%}
           {%- for sc_raw in sc_images -%}
             {%- assign sc_parts = sc_raw | strip | split: '|' -%}
             {%- assign sc_img = sc_parts[0] -%}
@@ -103,6 +120,7 @@
               </a>
             {%- endif -%}
           {%- endfor -%}
+          {%- endif -%}
 
           {%- if settings.size_chart_note != blank -%}
             <div class="size-chart-modal__note">{{ settings.size_chart_note }}</div>
