@@ -1,4 +1,18 @@
-{%- comment -%} Pre-order story: flat-lay product shot on a colored field {%- endcomment -%}
+{%- comment -%}
+  Pre-order story: flat-lay product shot on a colored field.
+
+  With no image or video the section renders nothing on the storefront — an
+  empty coloured band with setup instructions in it is not something a customer
+  should ever see. In the theme editor it still renders, so the merchant has
+  something to click on and drop media into.
+{%- endcomment -%}
+{%- liquid
+  assign po_flatlay_show = false
+  if section.settings.image != blank or section.settings.video != blank or request.design_mode
+    assign po_flatlay_show = true
+  endif
+-%}
+{%- if po_flatlay_show -%}
 <section class="po-flatlay" style="background:{{ section.settings.bg_color }};">
   <div class="po-flatlay__inner">
     {%- if section.settings.video != blank -%}
@@ -14,6 +28,7 @@
            sizes="(min-width: 768px) 80vw, 100vw"
            alt="{{ section.settings.caption | default: 'Product' | escape }}" loading="lazy">
     {%- else -%}
+      {%- comment -%} Only ever reached in the theme editor — see the gate above. {%- endcomment -%}
       <div class="po-flatlay__placeholder">Add a flat-lay image or video</div>
     {%- endif -%}
     {%- if section.settings.caption != blank -%}
@@ -21,6 +36,7 @@
     {%- endif -%}
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
 .po-flatlay { padding: clamp(48px, 9vw, 120px) clamp(20px, 5vw, 64px); }

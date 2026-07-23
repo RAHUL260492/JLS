@@ -66,7 +66,9 @@
       {%- for product in feat limit: section.settings.max -%}
         {% render 'featured-card', product: product, dup: true %}
       {%- else -%}
-        <p class="featured-items__empty">Add products in the theme editor.</p>
+        {%- if request.design_mode -%}
+          <p class="featured-items__empty">Add products in the theme editor.</p>
+        {%- endif -%}
       {%- endfor -%}
     </div>
   </div>

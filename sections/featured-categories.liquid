@@ -61,8 +61,10 @@
               >
             {% else %}
               <div class="category-tile__placeholder-inner">
-                <p class="category-tile__placeholder-eyebrow">Category {{ forloop.index }}</p>
-                <p class="category-tile__placeholder-note">Pick a product in theme editor</p>
+                {%- if request.design_mode -%}
+                  <p class="category-tile__placeholder-eyebrow">Category {{ forloop.index }}</p>
+                  <p class="category-tile__placeholder-note">Pick a product in theme editor</p>
+                {%- endif -%}
               </div>
             {% endif %}
           </div>
@@ -75,7 +77,9 @@
         </div>
       </div>
     {% else %}
-      <p>Add category blocks in the theme editor.</p>
+      {%- if request.design_mode -%}
+        <p>Add category blocks in the theme editor.</p>
+      {%- endif -%}
     {% endfor %}
   </div>
 </section>

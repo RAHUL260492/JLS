@@ -44,7 +44,9 @@
           </div>
         </article>
       {%- else -%}
-        <p class="new-arrivals__subtitle">No products to show yet. Add some in the theme editor.</p>
+        {%- if request.design_mode -%}
+          <p class="new-arrivals__subtitle">No products to show yet. Add some in the theme editor.</p>
+        {%- endif -%}
       {%- endfor -%}
     </div>
 

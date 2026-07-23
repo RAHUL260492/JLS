@@ -1,4 +1,17 @@
-{%- comment -%} Pre-order story: feature mosaic of cards — each card is an image, GIF, or video {%- endcomment -%}
+{%- comment -%}
+  Pre-order story: feature mosaic of cards — each card is an image, GIF, or video.
+
+  With no cards added the section renders nothing on the storefront rather than
+  an empty band carrying setup instructions. It still renders in the theme
+  editor so the merchant can find it and add cards.
+{%- endcomment -%}
+{%- liquid
+  assign po_features_show = false
+  if section.blocks.size > 0 or request.design_mode
+    assign po_features_show = true
+  endif
+-%}
+{%- if po_features_show -%}
 <section class="po-features" style="background:{{ section.settings.bg_color }};">
   {%- if section.settings.heading != blank -%}
     <h2 class="po-features__heading" style="color:{{ section.settings.caption_color }};">{{ section.settings.heading }}</h2>
@@ -28,10 +41,12 @@
         </div>
       </figure>
     {%- else -%}
+      {%- comment -%} Only ever reached in the theme editor — see the gate above. {%- endcomment -%}
       <p class="po-features__caption" style="color:{{ section.settings.caption_color }};">Add cards in the theme editor — each can be an image, GIF, or video.</p>
     {%- endfor -%}
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
 .po-features { padding: clamp(32px, 6vw, 72px) clamp(16px, 4vw, 56px); }
