@@ -1,0 +1,80 @@
+{%- comment -%}
+  Announcement bar — the scrolling promo ticker above the header.
+
+  Rendered from layout/theme.liquid so it appears on every page. Each message is
+  a block, editable in the theme editor.
+
+  The marquee works by translating the track -50%, which means the content must
+  be exactly two identical halves. So the block set is rendered twice, and each
+  half repeats the set `repeat` times. Short messages need a higher repeat to
+  fill the width, otherwise a gap scrolls through.
+
+  Styling lives in assets/styles.css (.announcement-bar*); only the values a
+  merchant can change are inlined here.
+{%- endcomment -%}
+
+{%- if section.settings.enabled and section.blocks.size > 0 -%}
+  {%- assign half_repeat = section.settings.repeat | at_least: 1 -%}
+
+  <div class="announcement-bar"
+       role="marquee"
+       aria-label="Site-wide promotion"
+       style="background-color: {{ section.settings.bg_color }};">
+    <div class="announcement-bar__track"
+         style="--marquee-speed: {{ section.settings.speed }}s; color: {{ section.settings.text_color }};">
+
+      {%- comment -%} Two identical halves — see the note above. {%- endcomment -%}
+      {%- for i in (1..2) -%}
+        {%- for r in (1..half_repeat) -%}
+          {%- for block in section.blocks -%}
+            <span class="announcement-bar__item"
+                  {% if i == 2 %}aria-hidden="true"{% endif %}
+                  {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+          {%- endfor -%}
+        {%- endfor -%}
+      {%- endfor -%}
+
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+/* Speed is a section setting; the keyframes themselves live in styles.css. */
+.announcement-bar__track { animation-duration: var(--marquee-speed, 28s); }
+.announcement-bar__item,
+.announcement-bar__item strong,
+.announcement-bar__item a { color: inherit; }
+/* inline_richtext can emit <p>; keep it on one line inside the flex track. */
+.announcement-bar__item p { display: inline; margin: 0; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "tag": "div",
+  "max_blocks": 10,
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Show announcement bar", "default": true },
+    { "type": "range", "id": "speed", "label": "Scroll duration (seconds, lower = faster)", "min": 10, "max": 90, "step": 2, "default": 28 },
+    { "type": "range", "id": "repeat", "label": "Copies per loop", "min": 1, "max": 6, "step": 1, "default": 2, "info": "Increase if you see an empty gap scroll past. Short messages need more copies." },
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#000000" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#FFFFFF" }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        { "type": "inline_richtext", "id": "text", "label": "Message", "info": "Use the toolbar to bold text or add a link — for example a discount code and a link to the sale.", "default": "Use the code <strong>ADULTING26</strong> at checkout" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "blocks": [ { "type": "message" } ]
+    }
+  ]
+}
+{% endschema %}
