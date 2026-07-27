@@ -573,7 +573,7 @@
           "message-1": {
             "type": "message",
             "settings": {
-              "text": "🎉 USE THE CODE <strong>ADULTING26</strong> AT CHECKOUT &amp; GET EXCLUSIVE OFFERS AND FREEBIES WITH YOUR ORDER ON JULY 3rd &amp; 4th only. &nbsp;·&nbsp; <a href=\"/sale\">SHOP THE SALE →</a>"
+              "text": "🎉 USE THE CODE <strong>ADULTING26</strong> AT CHECKOUT & GET EXCLUSIVE DISCOUNTS AND FREEBIES WITH YOUR ORDER ON 1st & 2nd AUGUST 2026.  ·  <a href=\"/sale\">SHOP THE SALE →</a>"
             }
           }
         },
@@ -585,7 +585,7 @@
           "speed": 28,
           "repeat": 2,
           "bg_color": "#000000",
-          "text_color": "#FFFFFF"
+          "text_color": "#ffffff"
         }
       }
     },
