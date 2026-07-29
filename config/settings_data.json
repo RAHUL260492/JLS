@@ -183,6 +183,7 @@
         "type": "campaign-banners",
         "settings": {
           "banner1_image": "shopify://shop_images/Gemini_Generated_Image_l5eyutl5eyutl5ey.png",
+          "banner1_image_mobile": "shopify://shop_images/WhatsApp_Image_2026-07-28_at_1.13.40_PM.jpg",
           "banner1_focal_point": "center center",
           "banner1_overlay_opacity": 0,
           "banner1_image_fit": "cover",
