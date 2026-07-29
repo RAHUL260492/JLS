@@ -1,0 +1,289 @@
+{% comment %}
+  Search results — Just Adulting Club
+
+  Renders /search?q=… . Reuses the collection page's card, grid, header and
+  pagination classes so it inherits the site styling; only the search-specific
+  bits (the refine box, result meta, non-product results) are styled here.
+
+  Search can return products, pages and articles. Products get the full product
+  card; pages/articles are listed as simple links below the grid.
+{% endcomment %}
+
+<main id="main" class="search-page">
+
+  <header class="category-header search-header">
+    {%- if search.performed -%}
+      <p class="search-header__eyebrow">
+        {%- if search.results_count == 0 -%}
+          No results
+        {%- else -%}
+          {{ search.results_count }} result{% if search.results_count != 1 %}s{% endif %}
+        {%- endif -%}
+      </p>
+      <h1 class="category-title">
+        {%- if search.terms != blank -%}&ldquo;{{ search.terms | escape }}&rdquo;{%- else -%}Search{%- endif -%}
+      </h1>
+    {%- else -%}
+      <h1 class="category-title">Search</h1>
+      <p class="search-header__eyebrow">Find products, collections and more</p>
+    {%- endif -%}
+
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
+      <input type="search" name="q" value="{{ search.terms | escape }}"
+             class="search-page__input" placeholder="Search for products…"
+             aria-label="Search" autocomplete="off" autofocus>
+      <button type="submit" class="search-page__submit" aria-label="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>Search</span>
+      </button>
+    </form>
+  </header>
+
+  {%- if search.performed -%}
+    {%- if search.results_count == 0 -%}
+
+      <section class="search-empty">
+        <p class="search-empty__lead">We couldn&rsquo;t find anything for &ldquo;{{ search.terms | escape }}&rdquo;.</p>
+        <p class="search-empty__hint">Check the spelling, try a broader term, or browse below.</p>
+        <div class="search-empty__links">
+          <a href="/collections/men" class="search-empty__link">Shop Men</a>
+          <a href="/collections/women" class="search-empty__link">Shop Women</a>
+          <a href="/collections/linen" class="search-empty__link">The Linen Edit</a>
+          <a href="/collections/sale" class="search-empty__link">Sale</a>
+        </div>
+      </section>
+
+    {%- else -%}
+      {%- paginate search.results by 24 -%}
+
+        {%- comment -%} Count products on this page so the grid only renders when there are some. {%- endcomment -%}
+        {%- assign product_count = 0 -%}
+        {%- for item in search.results -%}{%- if item.object_type == 'product' -%}{%- assign product_count = product_count | plus: 1 -%}{%- endif -%}{%- endfor -%}
+
+        {%- comment -%} Products first, in the same card as the collection grid. {%- endcomment -%}
+        {%- if product_count > 0 -%}
+        <section class="product-grid-section">
+          <div class="product-grid">
+            {%- for item in search.results -%}
+              {%- if item.object_type == 'product' -%}
+                <article class="product-card">
+                  <a href="{{ item.url }}" class="product-card__image-link">
+                    <div class="product-card__image-wrapper">
+                      {%- if item.featured_image -%}
+                        <img src="{{ item.featured_image | image_url: width: 800 }}"
+                             srcset="{{ item.featured_image | image_url: width: 400 }} 400w, {{ item.featured_image | image_url: width: 800 }} 800w, {{ item.featured_image | image_url: width: 1200 }} 1200w"
+                             sizes="(min-width: 990px) 25vw, 50vw"
+                             alt="{{ item.featured_image.alt | default: item.title | escape }}"
+                             width="800" height="1067" decoding="async"
+                             loading="{% if forloop.index <= 8 %}eager{% else %}lazy{% endif %}">
+                      {%- endif -%}
+                    </div>
+                  </a>
+                  {%- assign color_option = null -%}
+                  {%- for opt in item.options_with_values -%}
+                    {%- assign opt_name = opt.name | downcase -%}
+                    {%- if opt_name contains 'color' or opt_name contains 'colour' -%}{%- assign color_option = opt -%}{%- endif -%}
+                  {%- endfor -%}
+                  {%- if color_option -%}
+                    <div class="product-card__swatches">
+                      {%- for value in color_option.values limit: 5 -%}
+                        <a href="{{ value.variant.url | default: item.url }}" class="swatch" title="{{ value.name | escape }}" aria-label="{{ value.name | escape }}" style="{% if value.swatch.image %}background-image:url('{{ value.swatch.image | image_url: width: 48 }}');{% elsif value.swatch.color %}background-color:{{ value.swatch.color }};{% elsif value.variant.image %}background-image:url('{{ value.variant.image | image_url: width: 48 }}');{% else %}background-color:{{ value.name | downcase | replace: ' ', '' }};{% endif %}"></a>
+                      {%- endfor -%}
+                      {%- if color_option.values.size > 5 -%}<span class="swatch-more">+{{ color_option.values.size | minus: 5 }}</span>{%- endif -%}
+                    </div>
+                  {%- endif -%}
+                  <div class="product-card__info">
+                    <a href="{{ item.url }}" class="product-card__name">{{ item.title }}</a>
+                    <p class="product-card__price">
+                      {%- if item.compare_at_price > item.price -%}
+                        <span class="price--sale">{{ item.price | money }}</span> <s>{{ item.compare_at_price | money }}</s>
+                      {%- else -%}
+                        {{ item.price | money }}
+                      {%- endif -%}
+                    </p>
+                    {%- if item.vendor != blank -%}<p class="product-card__promo">{{ item.vendor }}</p>{%- endif -%}
+                  </div>
+                </article>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </section>
+        {%- endif -%}
+
+        {%- comment -%} Pages & articles, if any matched, as a tidy link list. {%- endcomment -%}
+        {%- assign non_product = 0 -%}
+        {%- for item in search.results -%}{%- unless item.object_type == 'product' -%}{%- assign non_product = non_product | plus: 1 -%}{%- endunless -%}{%- endfor -%}
+        {%- if non_product > 0 -%}
+          <section class="search-pages">
+            <h2 class="search-pages__title">Pages &amp; articles</h2>
+            <ul class="search-pages__list">
+              {%- for item in search.results -%}
+                {%- unless item.object_type == 'product' -%}
+                  <li class="search-pages__item">
+                    <a href="{{ item.url }}" class="search-pages__link">{{ item.title }}</a>
+                    {%- if item.content or item.excerpt -%}
+                      <p class="search-pages__excerpt">{{ item.excerpt | default: item.content | strip_html | truncatewords: 26 }}</p>
+                    {%- endif -%}
+                  </li>
+                {%- endunless -%}
+              {%- endfor -%}
+            </ul>
+          </section>
+        {%- endif -%}
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="pagination-section" role="navigation" aria-label="Pagination">
+            <div class="pagination-section__inner pagination-links">
+              {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" class="pagination-link">&lsaquo;</a>{%- endif -%}
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}<a href="{{ part.url }}" class="pagination-link">{{ part.title }}</a>
+                {%- else -%}<span class="pagination-link{% if part.title == paginate.current_page %} is-current{% endif %}">{{ part.title }}</span>{%- endif -%}
+              {%- endfor -%}
+              {%- if paginate.next -%}<a href="{{ paginate.next.url }}" class="pagination-link">&rsaquo;</a>{%- endif -%}
+            </div>
+          </nav>
+        {%- endif -%}
+
+      {%- endpaginate -%}
+    {%- endif -%}
+  {%- endif -%}
+
+</main>
+
+<style>
+  .search-page { background: var(--color-white, #fff); }
+
+  .search-header { padding-bottom: var(--space-xl, 32px); }
+  .search-header__eyebrow {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-caption, #a78a5e);
+    margin: 0 0 10px;
+  }
+  .search-header .category-title { margin-bottom: 0; }
+
+  /* Refine box — echoes the PDP add-to-cart proportions, in the brand ink. */
+  .search-page__form {
+    display: flex;
+    gap: 0;
+    max-width: 520px;
+    margin: 24px auto 0;
+    border: 1px solid var(--color-near-black, #1a1a1a);
+  }
+  .search-page__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 48px;
+    padding: 0 16px;
+    border: 0;
+    background: transparent;
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--color-text-primary, #1a1a1a);
+    outline: none;
+  }
+  .search-page__input::placeholder { color: var(--color-text-muted, #999); }
+  .search-page__submit {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 22px;
+    background: var(--color-near-black, #1a1a1a);
+    color: #fff;
+    border: 0;
+    cursor: pointer;
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s;
+  }
+  .search-page__submit:hover { background: #000; }
+  .search-page__submit svg { display: block; }
+  @media (max-width: 600px) {
+    .search-page__submit span { display: none; }
+    .search-page__submit { padding: 0 18px; }
+  }
+
+  /* Empty state */
+  .search-empty {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: var(--space-2xl, 64px) var(--section-padding-horizontal, 24px) calc(var(--space-2xl, 64px) * 1.4);
+    text-align: center;
+  }
+  .search-empty__lead {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: clamp(20px, 3vw, 26px);
+    color: var(--color-near-black, #1a1a1a);
+    margin: 0 0 8px;
+  }
+  .search-empty__hint {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 14px;
+    color: var(--color-text-muted, #888);
+    margin: 0 0 28px;
+  }
+  .search-empty__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  .search-empty__link {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-near-black, #1a1a1a);
+    border: 1px solid var(--color-border-light, #ddd);
+    padding: 12px 20px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .search-empty__link:hover {
+    border-color: var(--color-near-black, #1a1a1a);
+    background: var(--color-near-black, #1a1a1a);
+    color: #fff;
+  }
+
+  /* Pages & articles results */
+  .search-pages {
+    max-width: var(--content-max-width, 1400px);
+    margin: 0 auto;
+    padding: 0 var(--section-padding-horizontal, 24px) var(--space-2xl, 64px);
+  }
+  .search-pages__title {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 0.03em;
+    color: var(--color-near-black, #1a1a1a);
+    margin: 0 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-border-light, #e8e5dd);
+  }
+  .search-pages__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 20px; }
+  .search-pages__link {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--color-near-black, #1a1a1a);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .search-pages__excerpt {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--color-text-muted, #777);
+    margin: 6px 0 0;
+    max-width: 68ch;
+  }
+</style>
