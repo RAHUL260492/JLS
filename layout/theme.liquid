@@ -176,15 +176,44 @@
       </ul>
       
       <div class="nav-actions">
-        <div class="search-wrapper">
-          <input type="search" class="search-input" placeholder="Search...">
-          <button class="search-btn" aria-label="Search">
+        {%- comment -%}
+          Native Shopify search: GET /search?q=… renders the results page.
+          On mobile the input is hidden by CSS, so the button first reveals it
+          (see the script below) and only submits once there's a query.
+        {%- endcomment -%}
+        <form class="search-wrapper" action="{{ routes.search_url }}" method="get" role="search" data-search-form>
+          <input type="search" name="q" class="search-input" placeholder="Search..."
+                 aria-label="Search" autocomplete="off"
+                 value="{{ search.terms | escape }}" data-search-input>
+          <button type="submit" class="search-btn" aria-label="Search" data-search-submit>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </button>
-        </div>
+        </form>
+        <script>
+          (function () {
+            var form = document.querySelector('[data-search-form]');
+            if (!form) return;
+            var input = form.querySelector('[data-search-input]');
+            form.addEventListener('submit', function (e) {
+              // If the input is hidden (mobile) or empty, reveal + focus instead of
+              // submitting an empty query.
+              var hidden = input.offsetParent === null;
+              if (hidden && !form.classList.contains('is-open')) {
+                e.preventDefault();
+                form.classList.add('is-open');
+                input.focus();
+                return;
+              }
+              if (!input.value.trim()) {
+                e.preventDefault();
+                input.focus();
+              }
+            });
+          })();
+        </script>
         <a href="/pages/wishlist" class="nav-icon nav-icon--wishlist" aria-label="Wishlist">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
