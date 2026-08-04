@@ -600,6 +600,24 @@ body {
   margin-top: 8px;
   line-height: 1.6;
 }
+.footer-legal__credit {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #555555;
+  margin-top: 14px;
+}
+.footer-legal__credit a {
+  color: #777777;
+  text-decoration: none;
+  border-bottom: 1px solid #444444;
+  padding-bottom: 1px;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+.footer-legal__credit a:hover {
+  color: var(--color-white);
+  border-bottom-color: var(--color-white);
+}
 
 @media (max-width: 768px) {
   .footer-columns {
