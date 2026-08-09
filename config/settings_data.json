@@ -20,8 +20,8 @@
             "type": "category",
             "settings": {
               "product": "",
-              "collection": "mens-linen",
-              "link": "shopify://collections/the-linen-edit",
+              "collection": "",
+              "link": "shopify://collections/mens-linen",
               "image": "shopify://shop_images/WARM_SAND_DUSTY_ROSE_PINK_LINEN_SHIRT.png",
               "label": "The Linen Shop",
               "cta_text": "Shop Now"
