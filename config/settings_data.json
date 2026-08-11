@@ -590,7 +590,7 @@
         ],
         "settings": {
           "enabled": true,
-          "speed": 28,
+          "speed": 40,
           "repeat": 2,
           "bg_color": "#000000",
           "text_color": "#ffffff"
