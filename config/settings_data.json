@@ -387,6 +387,7 @@
       "category-banner-collection": {
         "type": "category-banner-collection",
         "settings": {
+          "image": "shopify://shop_images/1502.jpg",
           "focal_point": "center center",
           "overlay_opacity": 0,
           "image_fit": "cover",
