@@ -20,10 +20,6 @@
       if settings.seo_home_description != blank
         assign seo_description = settings.seo_home_description
       endif
-    else
-      unless page_title contains shop.name
-        assign seo_title = page_title | append: ' | ' | append: shop.name
-      endunless
     endif
     assign seo_site_name = settings.seo_site_name | default: shop.name
   -%}
@@ -31,7 +27,16 @@
   {%- if seo_description != blank %}
   <meta name="description" content="{{ seo_description | strip_html | escape | truncate: 300 }}">
   {%- endif %}
-  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="canonical" href="{{ canonical_url | escape }}">
+  {%- comment -%} From the live "JLS SEO fixes" theme: product structured data + noindex on empty collections. {%- endcomment -%}
+  {%- if request.page_type == 'product' %}
+  <script type="application/ld+json">{{ product | structured_data }}</script>
+  {%- endif %}
+  {%- if request.page_type == 'collection' and collection.all_products_count == 0 %}
+    {%- unless collection.handle == 'sustainability' %}
+  <meta name="robots" content="noindex, follow">
+    {%- endunless %}
+  {%- endif %}
   <meta property="og:site_name" content="{{ seo_site_name | escape }}">
   <meta property="og:title" content="{{ seo_title | escape }}">
   {%- if seo_description != blank %}<meta property="og:description" content="{{ seo_description | strip_html | escape | truncate: 300 }}">{% endif %}

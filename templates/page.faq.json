@@ -18,14 +18,14 @@
           "type": "faq",
           "settings": {
             "question": "Do you charge for shipping?",
-            "answer": "<p>Shipping is free on all orders. A ₹100 Cash on Delivery charge applies to COD orders below ₹3,000.</p>"
+            "answer": "<p>Shipping is free on all orders. A ₹150 Cash on Delivery charge applies to COD orders below ₹3,000.</p>"
           }
         },
         "faq_3": {
           "type": "faq",
           "settings": {
             "question": "When will my order ship and arrive?",
-            "answer": "<p>Orders are shipped from our warehouse within 4 working days and delivered within 10 working days. You'll receive a tracking number as soon as your order ships.</p>"
+            "answer": "<p>Orders are shipped from our warehouse within 2–3 working days and delivered in 3–10 working days. You'll receive a tracking number as soon as your order ships.</p>"
           }
         },
         "faq_4": {
@@ -53,7 +53,7 @@
           "type": "faq",
           "settings": {
             "question": "What is your return policy?",
-            "answer": "<p>We offer a 7-day return policy on returnable products. Items must be unused, unworn and have their original tags intact. Jewellery, socks, scarves, innerwear, masks, and items discounted 50% or more are non-returnable. See <a href=\"/pages/shipping-returns\">Shipping, Return and Exchange</a> for full details.</p>"
+            "answer": "<p>We offer a 7-day return policy on returnable products. Items must be unused, unworn and have their original tags intact. Jewellery, socks, scarves, innerwear, masks, items discounted 50% or more, and products bought from the Sale section are non-returnable. See <a href=\"/pages/shipping-returns\">Shipping, Return and Exchange</a> for full details.</p>"
           }
         },
         "faq_8": {
