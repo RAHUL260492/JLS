@@ -92,8 +92,8 @@
   <script type="module" src="https://cdn.shopify.com/storefront/web-components.js"></script>
   
   {{ content_for_header }}
-</head>
-<body>
+{%- render 'foxify-head' -%}</head>
+<body>{% sections 'foxify-header-group' %}
   
   <shopify-store store-domain="qannqy-a0.myshopify.com" public-access-token="f3438dab625b9043724c6eb2339bb792">
     <!-- Cart Component -->
@@ -741,5 +741,5 @@
   {% if template contains 'collection' %}
   <script defer src="{{ 'category.js' | asset_url }}"></script>
   {% endif %}
-</body>
+{%- render 'foxify-footer' -%}{% sections 'foxify-footer-group' %}</body>
 </html>
