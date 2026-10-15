@@ -212,112 +212,604 @@
   "tag": "div",
   "class": "pb-section",
   "settings": [
-    { "type": "checkbox", "id": "show_page_title", "label": "Show page title", "default": true },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow (small line above title)" },
-    { "type": "text", "id": "title", "label": "Title", "info": "Leave empty to use the page's own title." },
-    { "type": "richtext", "id": "intro", "label": "Intro" },
-    { "type": "select", "id": "width", "label": "Content width", "default": "narrow", "options": [ { "value": "narrow", "label": "Narrow (reading)" }, { "value": "wide", "label": "Wide" } ] },
-    { "type": "select", "id": "background", "label": "Background", "default": "white", "options": [ { "value": "white", "label": "White" }, { "value": "cream", "label": "Cream" } ] }
+    {
+      "type": "checkbox",
+      "id": "show_page_title",
+      "label": "Show page title",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow (small line above title)"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "info": "Leave empty to use the page's own title."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Content width",
+      "default": "narrow",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow (reading)"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Background",
+      "default": "white",
+      "options": [
+        {
+          "value": "white",
+          "label": "White"
+        },
+        {
+          "value": "cream",
+          "label": "Cream"
+        }
+      ]
+    }
   ],
   "blocks": [
-    { "type": "heading", "name": "Heading", "settings": [
-      { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
-      { "type": "text", "id": "title", "label": "Heading", "default": "Heading" },
-      { "type": "text", "id": "subtitle", "label": "Subheading" },
-      { "type": "select", "id": "align", "label": "Alignment", "default": "left", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ] }
-    ] },
-    { "type": "text", "name": "Text", "settings": [
-      { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Write your text here.</p>" },
-      { "type": "select", "id": "align", "label": "Alignment", "default": "left", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ] }
-    ] },
-    { "type": "notice", "name": "Banner / Coming soon", "settings": [
-      { "type": "select", "id": "style", "label": "Style", "default": "soft", "options": [ { "value": "soft", "label": "Soft (cream)" }, { "value": "dark", "label": "Dark" }, { "value": "outline", "label": "Outline" } ] },
-      { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Coming soon" },
-      { "type": "text", "id": "title", "label": "Title" },
-      { "type": "richtext", "id": "text", "label": "Text" },
-      { "type": "text", "id": "button_label", "label": "Button label" },
-      { "type": "url", "id": "button_link", "label": "Button link" }
-    ] },
-    { "type": "image", "name": "Image", "settings": [
-      { "type": "image_picker", "id": "image", "label": "Image" },
-      { "type": "text", "id": "caption", "label": "Caption / alt text" },
-      { "type": "select", "id": "size", "label": "Size", "default": "full", "options": [ { "value": "full", "label": "Full width" }, { "value": "medium", "label": "Medium" } ] }
-    ] },
-    { "type": "gallery", "name": "Image gallery", "settings": [
-      { "type": "text", "id": "title", "label": "Title" },
-      { "type": "image_picker", "id": "image_1", "label": "Image 1" },
-      { "type": "image_picker", "id": "image_2", "label": "Image 2" },
-      { "type": "image_picker", "id": "image_3", "label": "Image 3" },
-      { "type": "image_picker", "id": "image_4", "label": "Image 4" },
-      { "type": "image_picker", "id": "image_5", "label": "Image 5" },
-      { "type": "image_picker", "id": "image_6", "label": "Image 6" }
-    ] },
-    { "type": "video", "name": "Video", "settings": [
-      { "type": "text", "id": "title", "label": "Title" },
-      { "type": "video", "id": "video", "label": "Upload video", "info": "Upload directly to Shopify. Takes priority over the link below." },
-      { "type": "video_url", "id": "video_url", "label": "…or YouTube / Vimeo link", "accept": ["youtube", "vimeo"] },
-      { "type": "text", "id": "caption", "label": "Caption" }
-    ] },
-    { "type": "image_text", "name": "Image with text", "settings": [
-      { "type": "image_picker", "id": "image", "label": "Image" },
-      { "type": "checkbox", "id": "image_right", "label": "Image on the right", "default": false },
-      { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
-      { "type": "text", "id": "title", "label": "Heading" },
-      { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Tell your story here.</p>" },
-      { "type": "text", "id": "button_label", "label": "Button label" },
-      { "type": "url", "id": "button_link", "label": "Button link" }
-    ] },
-    { "type": "faq", "name": "FAQ question", "settings": [
-      { "type": "text", "id": "question", "label": "Question", "default": "Your question" },
-      { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Your answer.</p>" },
-      { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
-    ] },
-    { "type": "job", "name": "Job opening", "settings": [
-      { "type": "text", "id": "title", "label": "Role", "default": "Role title" },
-      { "type": "text", "id": "location", "label": "Location", "default": "Bengaluru" },
-      { "type": "text", "id": "job_type", "label": "Type", "default": "Full-time" },
-      { "type": "richtext", "id": "description", "label": "Job description", "default": "<p><strong>About the role</strong></p><p>Describe the role.</p><p><strong>What you'll do</strong></p><ul><li>Responsibility</li></ul><p><strong>What we're looking for</strong></p><ul><li>Requirement</li></ul>" },
-      { "type": "text", "id": "apply_email", "label": "Apply by email", "default": "thejustadultingclub@gmail.com" },
-      { "type": "url", "id": "apply_link", "label": "…or apply link (form / LinkedIn)", "info": "Overrides the email." }
-    ] },
-    { "type": "timeline", "name": "Timeline step", "settings": [
-      { "type": "text", "id": "date", "label": "Date / label", "default": "Step" },
-      { "type": "text", "id": "title", "label": "Title", "default": "Milestone" },
-      { "type": "richtext", "id": "text", "label": "Text" }
-    ] },
-    { "type": "contact", "name": "Contact channels", "settings": [
-      { "type": "text", "id": "title", "label": "Title", "default": "Reach out to us" },
-      { "type": "text", "id": "website_label", "label": "Website label", "default": "Send us a message" },
-      { "type": "url", "id": "website_link", "label": "Website link" },
-      { "type": "url", "id": "instagram", "label": "Instagram URL", "default": "https://www.instagram.com/thejustadultingclub" },
-      { "type": "text", "id": "instagram_label", "label": "Instagram label", "default": "@thejustadultingclub" },
-      { "type": "text", "id": "whatsapp", "label": "WhatsApp number (with country code)", "info": "e.g. +91 98765 43210" },
-      { "type": "text", "id": "email", "label": "Email", "default": "thejustadultingclub@gmail.com" },
-      { "type": "text", "id": "phone", "label": "Phone" }
-    ] },
-    { "type": "store", "name": "Store / studio", "settings": [
-      { "type": "image_picker", "id": "image", "label": "Studio photo" },
-      { "type": "text", "id": "name", "label": "Name", "default": "Just Adulting Studio — Bengaluru" },
-      { "type": "richtext", "id": "address", "label": "Address", "default": "<p>#16, 1st Main Road, RMV Stage 2,<br>Bengaluru 560094</p>" },
-      { "type": "richtext", "id": "hours", "label": "Hours", "default": "<p>Mon – Fri, 10am to 6pm</p>" },
-      { "type": "text", "id": "phone", "label": "Phone" },
-      { "type": "url", "id": "map_link", "label": "Google Maps link" }
-    ] },
-    { "type": "button", "name": "Button", "settings": [
-      { "type": "text", "id": "label", "label": "Label", "default": "Shop now" },
-      { "type": "url", "id": "link", "label": "Link" },
-      { "type": "select", "id": "style", "label": "Style", "default": "solid", "options": [ { "value": "solid", "label": "Solid" }, { "value": "outline", "label": "Outline" } ] },
-      { "type": "select", "id": "align", "label": "Alignment", "default": "left", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ] }
-    ] },
-    { "type": "track", "name": "Order tracking", "limit": 1, "settings": [
-      { "type": "text", "id": "account_title", "label": "Account card title", "default": "Track with your account" },
-      { "type": "richtext", "id": "account_text", "label": "Account card text", "default": "<p>Sign in with the email or phone number you ordered with to see every order, its status and its tracking link.</p>" },
-      { "type": "text", "id": "awb_title", "label": "Tracking card title", "default": "Track with a tracking number" },
-      { "type": "richtext", "id": "awb_text", "label": "Tracking card text", "default": "<p>Paste the tracking (AWB) number from your shipping email or SMS. Works for every courier we ship with.</p>" },
-      { "type": "text", "id": "tracking_pattern", "label": "Tracking URL", "default": "https://track.aftership.com/{number}", "info": "{number} is replaced with what the customer types. The default auto-detects the courier. If you ship only with one partner, use its link, e.g. https://shiprocket.co/tracking/{number}" }
-    ] },
-    { "type": "divider", "name": "Divider", "settings": [] }
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subheading"
+        },
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Alignment",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Write your text here.</p>"
+        },
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Alignment",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "notice",
+      "name": "Banner / Coming soon",
+      "settings": [
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Style",
+          "default": "soft",
+          "options": [
+            {
+              "value": "soft",
+              "label": "Soft (cream)"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "Coming soon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption / alt text"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Size",
+          "default": "full",
+          "options": [
+            {
+              "value": "full",
+              "label": "Full width"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "gallery",
+      "name": "Image gallery",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Image 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Image 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Image 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Image 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_5",
+          "label": "Image 5"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_6",
+          "label": "Image 6"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Upload video",
+          "info": "Upload directly to Shopify. Takes priority over the link below."
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "label": "…or YouTube / Vimeo link",
+          "accept": [
+            "youtube",
+            "vimeo"
+          ]
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption"
+        }
+      ]
+    },
+    {
+      "type": "image_text",
+      "name": "Image with text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "image_right",
+          "label": "Image on the right",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Tell your story here.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Your question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Your answer.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "job",
+      "name": "Job opening",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Role",
+          "default": "Role title"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "Bengaluru"
+        },
+        {
+          "type": "text",
+          "id": "job_type",
+          "label": "Type",
+          "default": "Full-time"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Job description",
+          "default": "<p><strong>About the role</strong></p><p>Describe the role.</p><p><strong>What you'll do</strong></p><ul><li>Responsibility</li></ul><p><strong>What we're looking for</strong></p><ul><li>Requirement</li></ul>"
+        },
+        {
+          "type": "text",
+          "id": "apply_email",
+          "label": "Apply by email",
+          "default": "thejustadultingclub@gmail.com"
+        },
+        {
+          "type": "url",
+          "id": "apply_link",
+          "label": "…or apply link (form / LinkedIn)",
+          "info": "Overrides the email."
+        }
+      ]
+    },
+    {
+      "type": "timeline",
+      "name": "Timeline step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date / label",
+          "default": "Step"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Milestone"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "contact",
+      "name": "Contact channels",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Reach out to us"
+        },
+        {
+          "type": "text",
+          "id": "website_label",
+          "label": "Website label",
+          "default": "Send us a message"
+        },
+        {
+          "type": "url",
+          "id": "website_link",
+          "label": "Website link"
+        },
+        {
+          "type": "text",
+          "id": "instagram",
+          "label": "Instagram URL",
+          "default": "https://www.instagram.com/thejustadultingclub"
+        },
+        {
+          "type": "text",
+          "id": "instagram_label",
+          "label": "Instagram label",
+          "default": "@thejustadultingclub"
+        },
+        {
+          "type": "text",
+          "id": "whatsapp",
+          "label": "WhatsApp number (with country code)",
+          "info": "e.g. +91 98765 43210"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "label": "Email",
+          "default": "thejustadultingclub@gmail.com"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone"
+        }
+      ]
+    },
+    {
+      "type": "store",
+      "name": "Store / studio",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Studio photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Just Adulting Studio — Bengaluru"
+        },
+        {
+          "type": "richtext",
+          "id": "address",
+          "label": "Address",
+          "default": "<p>#16, 1st Main Road, RMV Stage 2,<br>Bengaluru 560094</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "hours",
+          "label": "Hours",
+          "default": "<p>Mon – Fri, 10am to 6pm</p>"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone"
+        },
+        {
+          "type": "url",
+          "id": "map_link",
+          "label": "Google Maps link"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Style",
+          "default": "solid",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Alignment",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "track",
+      "name": "Order tracking",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "account_title",
+          "label": "Account card title",
+          "default": "Track with your account"
+        },
+        {
+          "type": "richtext",
+          "id": "account_text",
+          "label": "Account card text",
+          "default": "<p>Sign in with the email or phone number you ordered with to see every order, its status and its tracking link.</p>"
+        },
+        {
+          "type": "text",
+          "id": "awb_title",
+          "label": "Tracking card title",
+          "default": "Track with a tracking number"
+        },
+        {
+          "type": "richtext",
+          "id": "awb_text",
+          "label": "Tracking card text",
+          "default": "<p>Paste the tracking (AWB) number from your shipping email or SMS. Works for every courier we ship with.</p>"
+        },
+        {
+          "type": "text",
+          "id": "tracking_pattern",
+          "label": "Tracking URL",
+          "default": "https://track.aftership.com/{number}",
+          "info": "{number} is replaced with what the customer types. The default auto-detects the courier. If you ship only with one partner, use its link, e.g. https://shiprocket.co/tracking/{number}"
+        }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "Divider",
+      "settings": []
+    }
   ],
-  "presets": [ { "name": "Page builder" } ]
+  "presets": [
+    {
+      "name": "Page builder"
+    }
+  ]
 }
 {% endschema %}

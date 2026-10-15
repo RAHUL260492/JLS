@@ -168,13 +168,13 @@
         "content": "Paste a full URL to show that icon in the footer. Clear a field to hide it."
       },
       {
-        "type": "url",
+        "type": "text",
         "id": "social_instagram",
         "label": "Instagram",
         "default": "https://www.instagram.com/thejustadultingclub"
       },
       {
-        "type": "url",
+        "type": "text",
         "id": "social_facebook",
         "label": "Facebook",
         "default": "https://www.facebook.com/share/1Pzfy8SgFS/"
