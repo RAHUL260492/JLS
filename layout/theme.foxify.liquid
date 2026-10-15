@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+   {%- include 'tapita-seo-schema' -%}   
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {%- comment -%}
@@ -93,7 +95,7 @@
   
   {{ content_for_header }}
 {%- render 'foxify-head' -%}</head>
-<body> {% sections 'foxify-header-group' %} 
+<body>{% sections 'foxify-header-group' %}
   
   <shopify-store store-domain="qannqy-a0.myshopify.com" public-access-token="f3438dab625b9043724c6eb2339bb792">
     <!-- Cart Component -->
@@ -525,7 +527,7 @@
   
   
   <main id="main">
-    <div class="foxify-container">{{ content_for_layout }}</div>
+    {{ content_for_layout }}
   </main>
   
   
@@ -741,5 +743,5 @@
   {% if template contains 'collection' %}
   <script defer src="{{ 'category.js' | asset_url }}"></script>
   {% endif %}
-{%- render 'foxify-footer' -%} {% sections 'foxify-footer-group' %} </body>
+{%- render 'foxify-footer' -%}{% sections 'foxify-footer-group' %}</body>
 </html>
