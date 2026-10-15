@@ -1,0 +1,38 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-builder",
+      "settings": {
+        "title": "Careers",
+        "intro": "<p>We're building a modern wardrobe brand from Bengaluru. If you care about craft, detail and great service, we'd love to hear from you.</p>"
+      },
+      "blocks": {
+        "heading_1": {
+          "type": "heading",
+          "settings": {
+            "title": "Open roles",
+            "align": "left",
+            "subtitle": "Click a role to read the full job description."
+          }
+        },
+        "job_2": {
+          "type": "job",
+          "settings": {
+            "title": "General application",
+            "location": "Bengaluru",
+            "job_type": "Any role",
+            "description": "<p>Don't see the right role yet? Send us your CV and a short note about what you'd like to do at Just Adulting — we'll reach out as new roles open.</p>",
+            "apply_email": "thejustadultingclub@gmail.com"
+          }
+        }
+      },
+      "block_order": [
+        "heading_1",
+        "job_2"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

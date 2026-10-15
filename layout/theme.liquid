@@ -3,8 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ page_title }}</title>
-  
+  {%- comment -%}
+    SEO (Theme settings → SEO & search appearance).
+    Home page: the title + description set in theme settings win, so Google shows
+    "The Just Adulting Club | Timeless styles…" instead of the bare shop name.
+    Other pages keep Shopify's own SEO title/description (editable per product,
+    collection and page in Admin → "Search engine listing").
+  {%- endcomment -%}
+  {%- liquid
+    assign seo_title = page_title
+    assign seo_description = page_description
+    if request.page_type == 'index'
+      if settings.seo_home_title != blank
+        assign seo_title = settings.seo_home_title
+      endif
+      if settings.seo_home_description != blank
+        assign seo_description = settings.seo_home_description
+      endif
+    else
+      unless page_title contains shop.name
+        assign seo_title = page_title | append: ' | ' | append: shop.name
+      endunless
+    endif
+    assign seo_site_name = settings.seo_site_name | default: shop.name
+  -%}
+  <title>{{ seo_title | escape }}{% if current_page != 1 %} – Page {{ current_page }}{% endif %}</title>
+  {%- if seo_description != blank %}
+  <meta name="description" content="{{ seo_description | strip_html | escape | truncate: 300 }}">
+  {%- endif %}
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta property="og:site_name" content="{{ seo_site_name | escape }}">
+  <meta property="og:title" content="{{ seo_title | escape }}">
+  {%- if seo_description != blank %}<meta property="og:description" content="{{ seo_description | strip_html | escape | truncate: 300 }}">{% endif %}
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:type" content="{% if request.page_type == 'product' %}product{% else %}website{% endif %}">
+  {%- if page_image %}<meta property="og:image" content="https:{{ page_image | image_url: width: 1200 }}">{% endif %}
+
+  {%- comment -%} Favicon — Google shows this next to the result (replaces the grey globe). {%- endcomment -%}
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 96, height: 96 }}">
+    <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180 }}">
+  {%- else -%}
+    <link rel="icon" type="image/png" href="{{ 'favicon.png' | asset_url }}">
+    <link rel="apple-touch-icon" href="{{ 'favicon.png' | asset_url }}">
+  {%- endif %}
+
+  {%- if request.page_type == 'index' -%}
+  {%- comment -%} Tells Google the site name (first line of the result) and the logo. {%- endcomment -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": {{ seo_site_name | json }},
+      "alternateName": ["Just Adulting Club", "Just Adulting"],
+      "url": {{ request.origin | append: '/' | json }}
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": {{ seo_site_name | json }},
+      "url": {{ request.origin | append: '/' | json }},
+      "logo": {{ 'favicon.png' | asset_url | prepend: 'https:' | json }}
+      {%- assign same_as = '' -%}
+      {%- assign social_keys = 'social_instagram,social_facebook,social_pinterest,social_linkedin,social_youtube,social_x' | split: ',' -%}
+      {%- for key in social_keys -%}
+        {%- if settings[key] != blank -%}{%- assign same_as = same_as | append: '~' | append: settings[key] -%}{%- endif -%}
+      {%- endfor -%}
+      {%- if same_as != blank -%},
+      "sameAs": {{ same_as | remove_first: '~' | split: '~' | json }}
+      {%- endif %}
+    }
+  </script>
+  {%- endif %}
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
@@ -50,58 +123,57 @@
           <div class="nav-megamenu nav-megamenu--4" role="menu" aria-label="Men">
             <ul class="nav-megamenu__col">
               <li role="none"><span class="nav-dropdown__link nav-dropdown__link--featured nav-dropdown__link--static">Discover</span></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-new-arrivals" class="nav-dropdown__link">New Arrivals</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-explorers-club" class="nav-dropdown__link">The Explorers Club</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-linen-edit" class="nav-dropdown__link">The Linen Edit</a></li>
-              <li role="none"><a role="menuitem" href="/collections/winter-fall" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Winter Fall <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-getaway-edit" class="nav-dropdown__link">The Getaway Edit</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-origin-series" class="nav-dropdown__link">The Origin Series <span class="nav-dropdown__sub">Signature Collection</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-workwear-edit" class="nav-dropdown__link">The Workwear Edit</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-archive-reissue-upcycled" class="nav-dropdown__link">Archive Reissue <span class="nav-dropdown__divider">|</span> Upcycled</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-just-adulting-x-lemax" class="nav-dropdown__link">Just Adulting <span class="nav-dropdown__divider">×</span> Lemax</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-just-adulting-x-mof" class="nav-dropdown__link">Just Adulting <span class="nav-dropdown__divider">×</span> MOF</a></li>
+              {% render 'nav-link', handle: 'mens-new-arrivals', label: "New Arrivals" %}
+              {% render 'nav-link', handle: 'mens-explorers-club', label: "The Explorers Club" %}
+              {% render 'nav-link', handle: 'mens-linen-edit', label: "The Linen Edit" %}
+              {% render 'nav-link', handle: 'winter-fall', label: "Winter Fall" %}
+              {% render 'nav-link', handle: 'mens-getaway-edit', label: "The Getaway Edit" %}
+              {% render 'nav-link', handle: 'mens-origin-series', label: 'The Origin Series <span class="nav-dropdown__sub">Signature Collection</span>' %}
+              {% render 'nav-link', handle: 'mens-workwear-edit', label: "The Workwear Edit" %}
+              {% render 'nav-link', handle: 'mens-archive-reissue-upcycled', label: 'Archive Reissue <span class="nav-dropdown__divider">|</span> Upcycled' %}
+              {% render 'nav-link', handle: 'mens-just-adulting-x-mof', label: 'Just Adulting <span class="nav-dropdown__divider">×</span> MOF' %}
             </ul>
             <ul class="nav-megamenu__col">
-              <li role="none"><a role="menuitem" href="/collections/men" class="nav-dropdown__link nav-dropdown__link--featured">Shop All</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-best-sellers" class="nav-dropdown__link">Best Sellers</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-casual-shirts" class="nav-dropdown__link">Casual Shirts</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-tshirts" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">T-Shirts <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-chinos-joggers-pants" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Chinos, Joggers &amp; Casual Pants <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-jeans" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Jeans <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-polos" class="nav-dropdown__link">Polos</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-sweaters" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Sweaters <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-coats-jackets" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Coats &amp; Jackets <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-blazers-suits" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Blazers &amp; Suits <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-dress-shirts" class="nav-dropdown__link">Dress Shirts</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-dress-pants" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Dress Pants <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-sweatshirts-hoodies" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Sweatshirts &amp; Hoodies <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-shorts" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Shorts <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-swimwear" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Swimwear <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              {% render 'nav-link', handle: 'men', label: "Shop All", featured: true %}
+              {% render 'nav-link', handle: 'mens-best-sellers', label: "Best Sellers" %}
+              {% render 'nav-link', handle: 'mens-casual-shirts', label: "Casual Shirts" %}
+              {% render 'nav-link', handle: 'mens-tshirts', label: "T-Shirts" %}
+              {% render 'nav-link', handle: 'mens-chinos-joggers-pants', label: "Chinos, Joggers &amp; Casual Pants" %}
+              {% render 'nav-link', handle: 'mens-jeans', label: "Jeans" %}
+              {% render 'nav-link', handle: 'mens-polos', label: "Polos" %}
+              {% render 'nav-link', handle: 'mens-sweaters', label: "Sweaters" %}
+              {% render 'nav-link', handle: 'mens-coats-jackets', label: "Coats &amp; Jackets" %}
+              {% render 'nav-link', handle: 'mens-blazers-suits', label: "Blazers &amp; Suits" %}
+              {% render 'nav-link', handle: 'mens-dress-shirts', label: "Dress Shirts" %}
+              {% render 'nav-link', handle: 'mens-dress-pants', label: "Dress Pants" %}
+              {% render 'nav-link', handle: 'mens-sweatshirts-hoodies', label: "Sweatshirts &amp; Hoodies" %}
+              {% render 'nav-link', handle: 'mens-shorts', label: "Shorts" %}
+              {% render 'nav-link', handle: 'mens-swimwear', label: "Swimwear" %}
             </ul>
             <ul class="nav-megamenu__col">
               <li role="none"><span class="nav-dropdown__link nav-dropdown__link--featured nav-dropdown__link--static">Shoes &amp; Accessories</span></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-shoes-accessories" class="nav-dropdown__link">Shop All</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-jewellery" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Jewellery <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-shoes" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Shoes <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-bags-wallets" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Bags &amp; Wallets <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-belts" class="nav-dropdown__link">Belts</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-hats-hair-accessories" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Hats <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-sunglasses" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Sunglasses <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-scarves" class="nav-dropdown__link">Scarves</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-socks" class="nav-dropdown__link">Socks</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-perfumes" class="nav-dropdown__link">Perfumes</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-underwear" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Underwear <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              {% render 'nav-link', handle: 'mens-shoes-accessories', label: "Shop All" %}
+              {% render 'nav-link', handle: 'mens-jewellery', label: "Jewellery" %}
+              {% render 'nav-link', handle: 'mens-shoes', label: "Shoes" %}
+              {% render 'nav-link', handle: 'mens-bags-wallets', label: "Bags &amp; Wallets" %}
+              {% render 'nav-link', handle: 'mens-belts', label: "Belts" %}
+              {% render 'nav-link', handle: 'mens-hats-hair-accessories', label: "Hats" %}
+              {% render 'nav-link', handle: 'mens-sunglasses', label: "Sunglasses" %}
+              {% render 'nav-link', handle: 'mens-scarves', label: "Scarves" %}
+              {% render 'nav-link', handle: 'mens-socks', label: "Socks" %}
+              {% render 'nav-link', handle: 'mens-perfumes', label: "Perfumes" %}
+              {% render 'nav-link', handle: 'mens-underwear', label: "Underwear" %}
             </ul>
             <ul class="nav-megamenu__col">
               <li role="none"><span class="nav-dropdown__link nav-dropdown__link--featured nav-dropdown__link--static">Home</span></li>
-              <li role="none"><a role="menuitem" href="/collections/home" class="nav-dropdown__link">Shop All</a></li>
-              <li role="none"><a role="menuitem" href="/collections/bedding" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Bedding <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/towels" class="nav-dropdown__link">Towels</a></li>
-              <li role="none"><a role="menuitem" href="/collections/pillows-throws" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Pillows &amp; Throws <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/magic-wrap" class="nav-dropdown__link">Magic Wrap</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-sale" class="nav-dropdown__link nav-dropdown__link--featured">Sale</a></li>
-              <li role="none"><a role="menuitem" href="/collections/mens-sale" class="nav-dropdown__link nav-dropdown__link--sale">Men's Sale</a></li>
-              <li role="none"><a role="menuitem" href="/collections/home-sale" class="nav-dropdown__link nav-dropdown__link--sale">Home Sale</a></li>
+              {% render 'nav-link', handle: 'home', label: "Shop All" %}
+              {% render 'nav-link', handle: 'bedding', label: "Bedding" %}
+              {% render 'nav-link', handle: 'towels', label: "Towels" %}
+              {% render 'nav-link', handle: 'pillows-throws', label: "Pillows &amp; Throws" %}
+              {% render 'nav-link', handle: 'magic-wrap', label: "Magic Wrap" %}
+              {% render 'nav-link', handle: 'mens-sale', label: "Sale", featured: true %}
+              {% render 'nav-link', handle: 'mens-sale', label: "Men's Sale", sale: true %}
+              {% render 'nav-link', handle: 'home-sale', label: "Home Sale", sale: true %}
             </ul>
           </div>
         </li>
@@ -110,68 +182,76 @@
           <div class="nav-megamenu nav-megamenu--4" role="menu" aria-label="Women">
             <ul class="nav-megamenu__col">
               <li role="none"><span class="nav-dropdown__link nav-dropdown__link--featured nav-dropdown__link--static">Discover</span></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-new-arrivals" class="nav-dropdown__link">New Arrivals</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-linen-edit" class="nav-dropdown__link">The Linen Edit</a></li>
-              <li role="none"><a role="menuitem" href="/collections/winter-fall" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Winter Fall <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-getaway-edit" class="nav-dropdown__link">The Getaway Edit</a></li>
-              <li role="none"><a role="menuitem" href="/collections/retro-colorful" class="nav-dropdown__link">Retro Colorful</a></li>
-              <li role="none"><a role="menuitem" href="/collections/2000s-minimalism" class="nav-dropdown__link">2000's Minimalism</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-workwear-edit" class="nav-dropdown__link">The Workwear Edit</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-explorers-club" class="nav-dropdown__link">The Explorers Club</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-archive-reissue-upcycled" class="nav-dropdown__link">Archive Reissue <span class="nav-dropdown__divider">|</span> Upcycled</a></li>
+              {% render 'nav-link', handle: 'womens-new-arrivals', label: "New Arrivals" %}
+              {% render 'nav-link', handle: 'womens-linen-edit', label: "The Linen Edit" %}
+              {% render 'nav-link', handle: 'winter-fall', label: "Winter Fall" %}
+              {% render 'nav-link', handle: 'womens-getaway-edit', label: "The Getaway Edit" %}
+              {% render 'nav-link', handle: 'retro-colorful', label: "Retro Colorful" %}
+              {% render 'nav-link', handle: '2000s-minimalism', label: "2000's Minimalism" %}
+              {% render 'nav-link', handle: 'womens-workwear-edit', label: "The Workwear Edit" %}
+              {% render 'nav-link', handle: 'womens-explorers-club', label: "The Explorers Club" %}
+              {% render 'nav-link', handle: 'womens-archive-reissue-upcycled', label: 'Archive Reissue <span class="nav-dropdown__divider">|</span> Upcycled' %}
             </ul>
             <ul class="nav-megamenu__col">
-              <li role="none"><a role="menuitem" href="/collections/women" class="nav-dropdown__link nav-dropdown__link--featured">Shop All</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-best-sellers" class="nav-dropdown__link">Best Sellers</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-dresses-jumpsuits-tops-shirts" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Dresses, Jumpsuits, Tops &amp; Shirts <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-pants" class="nav-dropdown__link">Pants</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-denims" class="nav-dropdown__link">Denims</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-tshirts-tanks" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">T-Shirts &amp; Tanks <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-sweaters" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Sweaters <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-skirts" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Skirts <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-shorts" class="nav-dropdown__link">Shorts</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-coats-jackets" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Coats &amp; Jackets <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-blazers-suits" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Blazers &amp; Suits <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-swimwear" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Swimwear <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              {% render 'nav-link', handle: 'women', label: "Shop All", featured: true %}
+              {% render 'nav-link', handle: 'womens-best-sellers', label: "Best Sellers" %}
+              {% render 'nav-link', handle: 'womens-dresses-jumpsuits-tops-shirts', label: "Dresses, Jumpsuits, Tops &amp; Shirts" %}
+              {% render 'nav-link', handle: 'womens-pants', label: "Pants" %}
+              {% render 'nav-link', handle: 'womens-denims', label: "Denims" %}
+              {% render 'nav-link', handle: 'womens-tshirts-tanks', label: "T-Shirts &amp; Tanks" %}
+              {% render 'nav-link', handle: 'womens-sweaters', label: "Sweaters" %}
+              {% render 'nav-link', handle: 'womens-skirts', label: "Skirts" %}
+              {% render 'nav-link', handle: 'womens-shorts', label: "Shorts" %}
+              {% render 'nav-link', handle: 'womens-coats-jackets', label: "Coats &amp; Jackets" %}
+              {% render 'nav-link', handle: 'womens-blazers-suits', label: "Blazers &amp; Suits" %}
+              {% render 'nav-link', handle: 'womens-swimwear', label: "Swimwear" %}
             </ul>
             <ul class="nav-megamenu__col">
               <li role="none"><span class="nav-dropdown__link nav-dropdown__link--featured nav-dropdown__link--static">Shoes &amp; Accessories</span></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-shoes-accessories" class="nav-dropdown__link">Shop All</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-jewellery" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Jewellery <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-shoes" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Shoes <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-bags-wallets" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Bags &amp; Wallets <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-belts" class="nav-dropdown__link">Belts</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-hats-hair-accessories" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Hats <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-sunglasses" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Sunglasses <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-scarves" class="nav-dropdown__link">Scarves</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-socks" class="nav-dropdown__link">Socks</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-perfumes" class="nav-dropdown__link">Perfumes</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-underwear" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Underwear <span class="nav-dropdown__tag">Coming soon</span></a></li>
+              {% render 'nav-link', handle: 'womens-shoes-accessories', label: "Shop All" %}
+              {% render 'nav-link', handle: 'womens-jewellery', label: "Jewellery" %}
+              {% render 'nav-link', handle: 'womens-shoes', label: "Shoes" %}
+              {% render 'nav-link', handle: 'womens-bags-wallets', label: "Bags &amp; Wallets" %}
+              {% render 'nav-link', handle: 'womens-belts', label: "Belts" %}
+              {% render 'nav-link', handle: 'womens-hats-hair-accessories', label: "Hats" %}
+              {% render 'nav-link', handle: 'womens-sunglasses', label: "Sunglasses" %}
+              {% render 'nav-link', handle: 'womens-scarves', label: "Scarves" %}
+              {% render 'nav-link', handle: 'womens-socks', label: "Socks" %}
+              {% render 'nav-link', handle: 'womens-perfumes', label: "Perfumes" %}
+              {% render 'nav-link', handle: 'womens-underwear', label: "Underwear" %}
             </ul>
             <ul class="nav-megamenu__col">
               <li role="none"><span class="nav-dropdown__link nav-dropdown__link--featured nav-dropdown__link--static">Home</span></li>
-              <li role="none"><a role="menuitem" href="/collections/home" class="nav-dropdown__link">Shop All</a></li>
-              <li role="none"><a role="menuitem" href="/collections/bedding" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Bedding <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/towels" class="nav-dropdown__link">Towels</a></li>
-              <li role="none"><a role="menuitem" href="/collections/pillows-throws" class="nav-dropdown__link nav-dropdown__link--soon" aria-disabled="true">Pillows &amp; Throws <span class="nav-dropdown__tag">Coming soon</span></a></li>
-              <li role="none"><a role="menuitem" href="/collections/magic-wrap" class="nav-dropdown__link">Magic Wrap</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-sale" class="nav-dropdown__link nav-dropdown__link--featured">Sale</a></li>
-              <li role="none"><a role="menuitem" href="/collections/womens-sale" class="nav-dropdown__link nav-dropdown__link--sale">Women's Sale</a></li>
-              <li role="none"><a role="menuitem" href="/collections/home-sale" class="nav-dropdown__link nav-dropdown__link--sale">Home Sale</a></li>
+              {% render 'nav-link', handle: 'home', label: "Shop All" %}
+              {% render 'nav-link', handle: 'bedding', label: "Bedding" %}
+              {% render 'nav-link', handle: 'towels', label: "Towels" %}
+              {% render 'nav-link', handle: 'pillows-throws', label: "Pillows &amp; Throws" %}
+              {% render 'nav-link', handle: 'magic-wrap', label: "Magic Wrap" %}
+              {% render 'nav-link', handle: 'womens-sale', label: "Sale", featured: true %}
+              {% render 'nav-link', handle: 'womens-sale', label: "Women's Sale", sale: true %}
+              {% render 'nav-link', handle: 'home-sale', label: "Home Sale", sale: true %}
             </ul>
           </div>
         </li>
         <li class="nav-item has-dropdown">
           <a class="nav-link nav-link--trigger" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Linen</a>
           <ul class="nav-dropdown" role="menu" aria-label="Linen">
-            <li role="none"><a role="menuitem" href="/collections/linen" class="nav-dropdown__link nav-dropdown__link--featured">Shop All Linen</a></li>
-            <li role="none"><a role="menuitem" href="/collections/womens-linen" class="nav-dropdown__link">The Women's Linen Shop</a></li>
-            <li role="none"><a role="menuitem" href="/collections/mens-linen" class="nav-dropdown__link">The Men's Linen Shop</a></li>
-            <li role="none"><a role="menuitem" href="/collections/home-linen" class="nav-dropdown__link">The Home Linen Shop</a></li>
+            {% render 'nav-link', handle: 'linen', label: "Shop All Linen", featured: true %}
+            {% render 'nav-link', handle: 'womens-linen', label: "The Women's Linen Shop" %}
+            {% render 'nav-link', handle: 'mens-linen', label: "The Men's Linen Shop" %}
+            {% render 'nav-link', handle: 'home-linen', label: "The Home Linen Shop" %}
           </ul>
         </li>
         <li><a href="/collections/limited-drops" class="nav-link">Limited Drops</a></li>
         <li><a href="/collections/pre-order" class="nav-link">Pre Order</a></li>
+        <li class="nav-item has-dropdown">
+          <a class="nav-link nav-link--trigger" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Custom Order</a>
+          <ul class="nav-dropdown" role="menu" aria-label="Custom Order">
+            <li role="none"><a role="menuitem" href="/pages/customized-blazer-services" class="nav-dropdown__link nav-dropdown__link--featured">Our Custom Services</a></li>
+            {% render 'nav-link', handle: 'mens-customized-outfit', label: "Men's Customized Outfits" %}
+            {% render 'nav-link', handle: 'womens-customized-outfit', label: "Women's Customized Outfits" %}
+          </ul>
+        </li>
         <li><a href="/collections/sustainability" class="nav-link nav-link--sustainability">Sustainability</a></li>
       </ul>
       
@@ -185,6 +265,7 @@
           <input type="search" name="q" class="search-input" placeholder="Search..."
                  aria-label="Search" autocomplete="off"
                  value="{{ search.terms | escape }}" data-search-input>
+          {% render 'search-fields' %}
           <button type="submit" class="search-btn" aria-label="Search" data-search-submit>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"></circle>
@@ -254,104 +335,153 @@
         <li class="mobile-nav__group">
           <details class="mobile-nav__details">
             <summary class="mobile-nav__summary">Men</summary>
-            <ul class="mobile-nav__sub">
-              <li><a href="/collections/men">Shop All</a></li>
-              <li><a href="/collections/mens-best-sellers">Best Sellers</a></li>
-              <li><a href="/collections/mens-casual-shirts">Casual Shirts</a></li>
-              <li><a href="/collections/mens-tshirts" class="mobile-nav__soon">T-Shirts — Coming soon</a></li>
-              <li><a href="/collections/mens-chinos-joggers-pants" class="mobile-nav__soon">Chinos, Joggers &amp; Casual Pants — Coming soon</a></li>
-              <li><a href="/collections/mens-jeans" class="mobile-nav__soon">Jeans — Coming soon</a></li>
-              <li><a href="/collections/mens-polos">Polos</a></li>
-              <li><a href="/collections/mens-sweaters" class="mobile-nav__soon">Sweaters — Coming soon</a></li>
-              <li><a href="/collections/mens-coats-jackets" class="mobile-nav__soon">Coats &amp; Jackets — Coming soon</a></li>
-              <li><a href="/collections/mens-blazers-suits" class="mobile-nav__soon">Blazers &amp; Suits — Coming soon</a></li>
-              <li><a href="/collections/mens-dress-shirts">Dress Shirts</a></li>
-              <li><a href="/collections/mens-dress-pants" class="mobile-nav__soon">Dress Pants — Coming soon</a></li>
-              <li><a href="/collections/mens-sweatshirts-hoodies" class="mobile-nav__soon">Sweatshirts &amp; Hoodies — Coming soon</a></li>
-              <li><a href="/collections/mens-shorts" class="mobile-nav__soon">Shorts — Coming soon</a></li>
-              <li><a href="/collections/mens-swimwear" class="mobile-nav__soon">Swimwear — Coming soon</a></li>
-              <li class="mobile-nav__subhead">Discover</li>
-              <li><a href="/collections/mens-new-arrivals">New Arrivals</a></li>
-              <li><a href="/collections/mens-explorers-club">The Explorers Club</a></li>
-              <li><a href="/collections/mens-linen-edit">The Linen Edit</a></li>
-              <li><a href="/collections/winter-fall" class="mobile-nav__soon">Winter Fall — Coming soon</a></li>
-              <li><a href="/collections/mens-getaway-edit">The Getaway Edit</a></li>
-              <li><a href="/collections/mens-origin-series">The Origin Series — Signature Collection</a></li>
-              <li><a href="/collections/mens-workwear-edit">The Workwear Edit</a></li>
-              <li><a href="/collections/mens-archive-reissue-upcycled">Archive Reissue | Upcycled</a></li>
-              <li><a href="/collections/mens-just-adulting-x-lemax">Just Adulting × Lemax</a></li>
-              <li><a href="/collections/mens-just-adulting-x-mof">Just Adulting × MOF</a></li>
-              <li class="mobile-nav__subhead">Shoes &amp; Accessories</li>
-              <li><a href="/collections/mens-shoes-accessories">Shop All</a></li>
-              <li><a href="/collections/mens-jewellery" class="mobile-nav__soon">Jewellery — Coming soon</a></li>
-              <li><a href="/collections/mens-shoes" class="mobile-nav__soon">Shoes — Coming soon</a></li>
-              <li><a href="/collections/mens-bags-wallets" class="mobile-nav__soon">Bags &amp; Wallets — Coming soon</a></li>
-              <li><a href="/collections/mens-belts">Belts</a></li>
-              <li><a href="/collections/mens-hats-hair-accessories" class="mobile-nav__soon">Hats — Coming soon</a></li>
-              <li><a href="/collections/mens-sunglasses" class="mobile-nav__soon">Sunglasses — Coming soon</a></li>
-              <li><a href="/collections/mens-scarves">Scarves</a></li>
-              <li><a href="/collections/mens-socks">Socks</a></li>
-              <li><a href="/collections/mens-perfumes">Perfumes</a></li>
-              <li><a href="/collections/mens-underwear" class="mobile-nav__soon">Underwear — Coming soon</a></li>
-              <li class="mobile-nav__subhead">Home</li>
-              <li><a href="/collections/home">Shop All</a></li>
-              <li><a href="/collections/bedding" class="mobile-nav__soon">Bedding — Coming soon</a></li>
-              <li><a href="/collections/towels">Towels</a></li>
-              <li><a href="/collections/pillows-throws" class="mobile-nav__soon">Pillows &amp; Throws — Coming soon</a></li>
-              <li><a href="/collections/magic-wrap">Magic Wrap</a></li>
-              <li class="mobile-nav__subhead"><a href="/collections/mens-sale">Sale</a></li>
-              <li><a href="/collections/mens-sale">Men's Sale</a></li>
-              <li><a href="/collections/home-sale">Home Sale</a></li>
+            <ul class="mobile-nav__sub mobile-nav__sub--groups">
+              <li>
+                <details class="mobile-nav__details mobile-nav__details--nested">
+                  <summary class="mobile-nav__summary mobile-nav__summary--nested">Shop All</summary>
+                  <ul class="mobile-nav__sub">
+                    {% render 'nav-link', handle: 'men', label: "Shop All Men", mode: 'mobile', featured: true %}
+                    {% render 'nav-link', handle: 'mens-best-sellers', label: "Best Sellers", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-casual-shirts', label: "Casual Shirts", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-tshirts', label: "T-Shirts", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-chinos-joggers-pants', label: "Chinos, Joggers &amp; Casual Pants", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-jeans', label: "Jeans", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-polos', label: "Polos", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-sweaters', label: "Sweaters", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-coats-jackets', label: "Coats &amp; Jackets", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-blazers-suits', label: "Blazers &amp; Suits", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-dress-shirts', label: "Dress Shirts", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-dress-pants', label: "Dress Pants", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-sweatshirts-hoodies', label: "Sweatshirts &amp; Hoodies", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-shorts', label: "Shorts", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-swimwear', label: "Swimwear", mode: 'mobile' %}
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <details class="mobile-nav__details mobile-nav__details--nested">
+                  <summary class="mobile-nav__summary mobile-nav__summary--nested">Discover</summary>
+                  <ul class="mobile-nav__sub">
+                    {% render 'nav-link', handle: 'mens-new-arrivals', label: "New Arrivals", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-explorers-club', label: "The Explorers Club", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-linen-edit', label: "The Linen Edit", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'winter-fall', label: "Winter Fall", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-getaway-edit', label: "The Getaway Edit", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-origin-series', label: "The Origin Series — Signature Collection", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-workwear-edit', label: "The Workwear Edit", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-archive-reissue-upcycled', label: "Archive Reissue | Upcycled", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-just-adulting-x-mof', label: "Just Adulting × MOF", mode: 'mobile' %}
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <details class="mobile-nav__details mobile-nav__details--nested">
+                  <summary class="mobile-nav__summary mobile-nav__summary--nested">Shoes &amp; Accessories</summary>
+                  <ul class="mobile-nav__sub">
+                    {% render 'nav-link', handle: 'mens-shoes-accessories', label: "Shop All", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-jewellery', label: "Jewellery", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-shoes', label: "Shoes", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-bags-wallets', label: "Bags &amp; Wallets", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-belts', label: "Belts", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-hats-hair-accessories', label: "Hats", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-sunglasses', label: "Sunglasses", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-scarves', label: "Scarves", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-socks', label: "Socks", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-perfumes', label: "Perfumes", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-underwear', label: "Underwear", mode: 'mobile' %}
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <details class="mobile-nav__details mobile-nav__details--nested">
+                  <summary class="mobile-nav__summary mobile-nav__summary--nested">Home &amp; Sale</summary>
+                  <ul class="mobile-nav__sub">
+                    {% render 'nav-link', handle: 'home', label: "Shop All", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'bedding', label: "Bedding", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'towels', label: "Towels", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'pillows-throws', label: "Pillows &amp; Throws", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'magic-wrap', label: "Magic Wrap", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'mens-sale', label: "Sale", mode: 'mobile', featured: true %}
+                    {% render 'nav-link', handle: 'mens-sale', label: "Men's Sale", mode: 'mobile', sale: true %}
+                    {% render 'nav-link', handle: 'home-sale', label: "Home Sale", mode: 'mobile', sale: true %}
+                  </ul>
+                </details>
+              </li>
             </ul>
           </details>
         </li>
         <li class="mobile-nav__group">
           <details class="mobile-nav__details">
             <summary class="mobile-nav__summary">Women</summary>
-            <ul class="mobile-nav__sub">
-              <li><a href="/collections/women">Shop All</a></li>
-              <li><a href="/collections/womens-best-sellers">Best Sellers</a></li>
-              <li><a href="/collections/womens-dresses-jumpsuits-tops-shirts" class="mobile-nav__soon">Dresses, Jumpsuits, Tops &amp; Shirts — Coming soon</a></li>
-              <li><a href="/collections/womens-pants">Pants</a></li>
-              <li><a href="/collections/womens-denims">Denims</a></li>
-              <li><a href="/collections/womens-tshirts-tanks" class="mobile-nav__soon">T-Shirts &amp; Tanks — Coming soon</a></li>
-              <li><a href="/collections/womens-sweaters" class="mobile-nav__soon">Sweaters — Coming soon</a></li>
-              <li><a href="/collections/womens-skirts" class="mobile-nav__soon">Skirts — Coming soon</a></li>
-              <li><a href="/collections/womens-shorts">Shorts</a></li>
-              <li><a href="/collections/womens-coats-jackets" class="mobile-nav__soon">Coats &amp; Jackets — Coming soon</a></li>
-              <li><a href="/collections/womens-blazers-suits" class="mobile-nav__soon">Blazers &amp; Suits — Coming soon</a></li>
-              <li><a href="/collections/womens-swimwear" class="mobile-nav__soon">Swimwear — Coming soon</a></li>
-              <li class="mobile-nav__subhead">Discover</li>
-              <li><a href="/collections/womens-new-arrivals">New Arrivals</a></li>
-              <li><a href="/collections/womens-linen-edit">The Linen Edit</a></li>
-              <li><a href="/collections/winter-fall" class="mobile-nav__soon">Winter Fall — Coming soon</a></li>
-              <li><a href="/collections/womens-getaway-edit">The Getaway Edit</a></li>
-              <li><a href="/collections/retro-colorful">Retro Colorful</a></li>
-              <li><a href="/collections/2000s-minimalism">2000's Minimalism</a></li>
-              <li><a href="/collections/womens-workwear-edit">The Workwear Edit</a></li>
-              <li><a href="/collections/womens-explorers-club">The Explorers Club</a></li>
-              <li><a href="/collections/womens-archive-reissue-upcycled">Archive Reissue | Upcycled</a></li>
-              <li class="mobile-nav__subhead">Shoes &amp; Accessories</li>
-              <li><a href="/collections/womens-shoes-accessories">Shop All</a></li>
-              <li><a href="/collections/womens-jewellery" class="mobile-nav__soon">Jewellery — Coming soon</a></li>
-              <li><a href="/collections/womens-shoes" class="mobile-nav__soon">Shoes — Coming soon</a></li>
-              <li><a href="/collections/womens-bags-wallets" class="mobile-nav__soon">Bags &amp; Wallets — Coming soon</a></li>
-              <li><a href="/collections/womens-belts">Belts</a></li>
-              <li><a href="/collections/womens-hats-hair-accessories" class="mobile-nav__soon">Hats — Coming soon</a></li>
-              <li><a href="/collections/womens-sunglasses" class="mobile-nav__soon">Sunglasses — Coming soon</a></li>
-              <li><a href="/collections/womens-scarves">Scarves</a></li>
-              <li><a href="/collections/womens-socks">Socks</a></li>
-              <li><a href="/collections/womens-perfumes">Perfumes</a></li>
-              <li><a href="/collections/womens-underwear" class="mobile-nav__soon">Underwear — Coming soon</a></li>
-              <li class="mobile-nav__subhead">Home</li>
-              <li><a href="/collections/home">Shop All</a></li>
-              <li><a href="/collections/bedding" class="mobile-nav__soon">Bedding — Coming soon</a></li>
-              <li><a href="/collections/towels">Towels</a></li>
-              <li><a href="/collections/pillows-throws" class="mobile-nav__soon">Pillows &amp; Throws — Coming soon</a></li>
-              <li><a href="/collections/magic-wrap">Magic Wrap</a></li>
-              <li class="mobile-nav__subhead"><a href="/collections/womens-sale">Sale</a></li>
-              <li><a href="/collections/womens-sale">Women's Sale</a></li>
-              <li><a href="/collections/home-sale">Home Sale</a></li>
+            <ul class="mobile-nav__sub mobile-nav__sub--groups">
+              <li>
+                <details class="mobile-nav__details mobile-nav__details--nested">
+                  <summary class="mobile-nav__summary mobile-nav__summary--nested">Shop All</summary>
+                  <ul class="mobile-nav__sub">
+                    {% render 'nav-link', handle: 'women', label: "Shop All Women", mode: 'mobile', featured: true %}
+                    {% render 'nav-link', handle: 'womens-best-sellers', label: "Best Sellers", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-dresses-jumpsuits-tops-shirts', label: "Dresses, Jumpsuits, Tops &amp; Shirts", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-pants', label: "Pants", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-denims', label: "Denims", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-tshirts-tanks', label: "T-Shirts &amp; Tanks", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-sweaters', label: "Sweaters", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-skirts', label: "Skirts", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-shorts', label: "Shorts", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-coats-jackets', label: "Coats &amp; Jackets", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-blazers-suits', label: "Blazers &amp; Suits", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-swimwear', label: "Swimwear", mode: 'mobile' %}
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <details class="mobile-nav__details mobile-nav__details--nested">
+                  <summary class="mobile-nav__summary mobile-nav__summary--nested">Discover</summary>
+                  <ul class="mobile-nav__sub">
+                    {% render 'nav-link', handle: 'womens-new-arrivals', label: "New Arrivals", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-linen-edit', label: "The Linen Edit", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'winter-fall', label: "Winter Fall", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-getaway-edit', label: "The Getaway Edit", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'retro-colorful', label: "Retro Colorful", mode: 'mobile' %}
+                    {% render 'nav-link', handle: '2000s-minimalism', label: "2000's Minimalism", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-workwear-edit', label: "The Workwear Edit", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-explorers-club', label: "The Explorers Club", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-archive-reissue-upcycled', label: "Archive Reissue | Upcycled", mode: 'mobile' %}
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <details class="mobile-nav__details mobile-nav__details--nested">
+                  <summary class="mobile-nav__summary mobile-nav__summary--nested">Shoes &amp; Accessories</summary>
+                  <ul class="mobile-nav__sub">
+                    {% render 'nav-link', handle: 'womens-shoes-accessories', label: "Shop All", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-jewellery', label: "Jewellery", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-shoes', label: "Shoes", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-bags-wallets', label: "Bags &amp; Wallets", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-belts', label: "Belts", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-hats-hair-accessories', label: "Hats", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-sunglasses', label: "Sunglasses", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-scarves', label: "Scarves", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-socks', label: "Socks", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-perfumes', label: "Perfumes", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-underwear', label: "Underwear", mode: 'mobile' %}
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <details class="mobile-nav__details mobile-nav__details--nested">
+                  <summary class="mobile-nav__summary mobile-nav__summary--nested">Home &amp; Sale</summary>
+                  <ul class="mobile-nav__sub">
+                    {% render 'nav-link', handle: 'home', label: "Shop All", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'bedding', label: "Bedding", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'towels', label: "Towels", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'pillows-throws', label: "Pillows &amp; Throws", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'magic-wrap', label: "Magic Wrap", mode: 'mobile' %}
+                    {% render 'nav-link', handle: 'womens-sale', label: "Sale", mode: 'mobile', featured: true %}
+                    {% render 'nav-link', handle: 'womens-sale', label: "Women's Sale", mode: 'mobile', sale: true %}
+                    {% render 'nav-link', handle: 'home-sale', label: "Home Sale", mode: 'mobile', sale: true %}
+                  </ul>
+                </details>
+              </li>
             </ul>
           </details>
         </li>
@@ -359,20 +489,31 @@
           <details class="mobile-nav__details">
             <summary class="mobile-nav__summary">Linen</summary>
             <ul class="mobile-nav__sub">
-              <li><a href="/collections/womens-linen">The Women's Linen Shop</a></li>
-              <li><a href="/collections/mens-linen">The Men's Linen Shop</a></li>
-              <li><a href="/collections/home-linen">The Home Linen Shop</a></li>
+              {% render 'nav-link', handle: 'linen', label: "Shop All Linen", mode: 'mobile', featured: true %}
+              {% render 'nav-link', handle: 'womens-linen', label: "The Women's Linen Shop", mode: 'mobile' %}
+              {% render 'nav-link', handle: 'mens-linen', label: "The Men's Linen Shop", mode: 'mobile' %}
+              {% render 'nav-link', handle: 'home-linen', label: "The Home Linen Shop", mode: 'mobile' %}
             </ul>
           </details>
         </li>
         <li><a href="/collections/limited-drops">Limited Drops</a></li>
         <li><a href="/collections/pre-order">Pre Order</a></li>
+        <li class="mobile-nav__group">
+          <details class="mobile-nav__details">
+            <summary class="mobile-nav__summary">Custom Order</summary>
+            <ul class="mobile-nav__sub">
+              <li><a href="/pages/customized-blazer-services">Our Custom Services</a></li>
+              {% render 'nav-link', handle: 'mens-customized-outfit', label: "Men's Customized Outfits", mode: 'mobile' %}
+              {% render 'nav-link', handle: 'womens-customized-outfit', label: "Women's Customized Outfits", mode: 'mobile' %}
+            </ul>
+          </details>
+        </li>
         <li><a href="/collections/sustainability">Sustainability</a></li>
       </ul>
       <div class="mobile-nav-footer">
         {%- comment -%} Sign in, then return to the home page rather than the orders screen. {%- endcomment -%}
         <a href="/customer_authentication/login?return_to={{ '/' | url_encode }}">Sign In</a>
-        <a href="/stores">Find a Store</a>
+        <a href="/pages/stores">Find a Store</a>
       </div>
     </div>
   </div>
@@ -439,11 +580,11 @@
           </h4>
           <ul class="footer-column__links">
             <li><a href="/pages/shipping-returns">Shipping, Return and Exchange</a></li>
-            <li><a href="/track-order">Track Your Order</a></li>
-            <li><a href="/faq">FAQ</a></li>
-            <li><a href="/gift-cards">Gift Cards</a></li>
-            <li><a href="/click-zip">Click &amp; Zip Denim</a></li>
-            <li><a href="/bopis">Buy Online, Pick Up in Store</a></li>
+            <li><a href="/pages/track-order">Track Your Order</a></li>
+            <li><a href="/pages/faq">FAQ</a></li>
+            <li><a href="/pages/gift-cards">Gift Cards</a></li>
+            <li><a href="/pages/size-fit-guides">Size &amp; Fit Guides</a></li>
+            <li><a href="/pages/bopis">Buy Online, Pick Up in Store</a></li>
           </ul>
         </div>
   
@@ -456,8 +597,8 @@
             </button>
           </h4>
           <ul class="footer-column__links">
-            <li><a href="/customized-blazer-services">Customized Blazer Services</a></li>
-            <li><a href="/customized-ethnic-wear-services">Customized Ethnic Wear Services</a></li>
+            <li><a href="/pages/customized-blazer-services">Customized Blazer Services</a></li>
+            <li><a href="/pages/customized-ethnic-wear-services">Customized Ethnic Wear Services</a></li>
           </ul>
         </div>
   
@@ -472,9 +613,9 @@
             </button>
           </h4>
           <ul class="footer-column__links">
-            <li><a href="/careers">Careers</a></li>
-            <li><a href="/our-values">Our Values</a></li>
-            <li><a href="/sustainability">Sustainability Store</a></li>
+            <li><a href="/pages/careers">Careers</a></li>
+            <li><a href="/pages/our-values">Our Values</a></li>
+            <li><a href="/pages/sustainability">Sustainability</a></li>
           </ul>
         </div>
 
@@ -488,27 +629,16 @@
           </h4>
           <ul class="footer-column__links">
             <li><a href="/pages/contact">Contact Us</a></li>
-            <li><a href="/stores">Store Locator</a></li>
+            <li><a href="/pages/stores">Store Locator</a></li>
           </ul>
-          <div class="footer-social">
-            <a href="https://www.instagram.com/thejustadultingclub" target="_blank" rel="noopener" aria-label="Instagram" class="footer-social__icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <circle cx="12" cy="12" r="5"></circle>
-                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
-              </svg>
-            </a>
-            <a href="https://www.facebook.com/share/1Pzfy8SgFS/" target="_blank" rel="noopener" aria-label="Facebook" class="footer-social__icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-              </svg>
-            </a>
-          </div>
         </div>
 
-        <!-- Club Membership -->
+        <!-- Club Membership + social links (Theme settings → Social media) -->
         <div class="footer-column">
-          <p style="color: var(--color-text-muted); font-family: var(--font-body); font-size: 14px; line-height: 1.5; letter-spacing: var(--tracking-utility);">*The Club Membership Program — Coming Soon</p>
+          {%- if settings.club_membership_text != blank -%}
+            <p class="footer-club">{{ settings.club_membership_text }}</p>
+          {%- endif -%}
+          {% render 'social-links' %}
         </div>
   
       </div>
@@ -526,7 +656,7 @@
           <span class="footer-legal__sep">|</span>
           <a href="/pages/terms">Terms of Use</a>
           <span class="footer-legal__sep">|</span>
-          <a href="/sustainability">Sustainability</a>
+          <a href="/pages/sustainability">Sustainability</a>
         </p>
         <p class="footer-legal__secondary">
           In accordance with Credit Plan &sect; 1.2 Terms requirement: Subject to credit approval.

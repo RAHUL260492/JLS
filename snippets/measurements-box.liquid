@@ -1,0 +1,67 @@
+{%- comment -%}
+  measurements-box — "Customized measurements" form on a product page.
+
+  Shows ONLY on products you switch it on for — either:
+    • add the product tag  custom-measurements , or
+    • set the product metafield "Custom measurements" (custom.custom_measurements, true/false) to true.
+  Submissions arrive in the store's email inbox (Shopify contact form) with the
+  product name, so the team can match them to the order.
+
+  Params: product (required)
+{%- endcomment -%}
+{%- liquid
+  assign mb_on = false
+  if product.metafields.custom.custom_measurements.value == true
+    assign mb_on = true
+  endif
+  for t in product.tags
+    assign tl = t | downcase | strip
+    if tl == 'custom-measurements' or tl == 'custom measurements'
+      assign mb_on = true
+    endif
+  endfor
+-%}
+{%- if mb_on -%}
+  <section class="measure-box" id="custom-measurements">
+    <details class="measure-box__details" data-measure-details>
+      <summary class="measure-box__summary">
+        <span class="measure-box__title">Add your customized measurements</span>
+        <span class="measure-box__hint">Optional — or our team will call you to take them</span>
+      </summary>
+      {%- form 'contact', class: 'measure-box__form', id: 'measure-form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="measure-box__success" role="status">Thank you — we've received your measurements for {{ product.title }}. Please place your order (if you haven't already) and we'll match them to it.</p>
+        {%- else -%}
+          {%- if form.errors -%}<p class="measure-box__error">{{ form.errors | default_errors }}</p>{%- endif -%}
+          <input type="hidden" name="contact[subject]" value="Custom measurements — {{ product.title | escape }}">
+          <input type="hidden" name="contact[Product]" value="{{ product.title | escape }} ({{ shop.url }}{{ product.url }})">
+          <input type="hidden" name="contact[tags]" value="custom-measurements">
+          <div class="measure-box__grid">
+            <label>Name<input type="text" name="contact[name]" value="{{ customer.name }}" required autocomplete="name"></label>
+            <label>Email<input type="email" name="contact[email]" value="{{ customer.email }}" required autocomplete="email"></label>
+            <label>Phone<input type="tel" name="contact[phone]" value="{{ customer.phone }}" autocomplete="tel"></label>
+            <label>Order number (if placed)<input type="text" name="contact[Order number]" placeholder="#1001"></label>
+            <label>Height<input type="text" name="contact[Height]" placeholder="e.g. 5 ft 10 in"></label>
+            <label>Chest / Bust (in)<input type="text" inputmode="decimal" name="contact[Chest]"></label>
+            <label>Waist (in)<input type="text" inputmode="decimal" name="contact[Waist]"></label>
+            <label>Hip (in)<input type="text" inputmode="decimal" name="contact[Hip]"></label>
+            <label>Shoulder (in)<input type="text" inputmode="decimal" name="contact[Shoulder]"></label>
+            <label>Sleeve length (in)<input type="text" inputmode="decimal" name="contact[Sleeve]"></label>
+            <label>Garment length (in)<input type="text" inputmode="decimal" name="contact[Length]"></label>
+            <label>Inseam (in)<input type="text" inputmode="decimal" name="contact[Inseam]"></label>
+          </div>
+          <label class="measure-box__notes">Fit notes<textarea name="contact[body]" rows="3" placeholder="Anything else — preferred fit, posture, reference photos you'll send…"></textarea></label>
+          <button type="submit" class="pdp__add-to-cart measure-box__submit">Send measurements</button>
+          <p class="measure-box__fine">Not sure how to measure? See our <a href="/pages/size-fit-guides">Size &amp; Fit Guides</a>.</p>
+        {%- endif -%}
+      {%- endform -%}
+    </details>
+  </section>
+  <script>
+    (function () {
+      if (/contact_posted|form_type=contact/.test(location.search) || location.hash === '#measure-form' || document.querySelector('.measure-box__error')) {
+        var d = document.querySelector('[data-measure-details]'); if (d) d.open = true;
+      }
+    })();
+  </script>
+{%- endif -%}

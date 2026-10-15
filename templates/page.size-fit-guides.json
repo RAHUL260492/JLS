@@ -1,0 +1,106 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-builder",
+      "settings": {
+        "title": "Size & Fit Guides",
+        "intro": "<p>Find your perfect fit. Every Just Adulting piece is cut to a considered silhouette — use the guides below to choose the right size the first time.</p>"
+      },
+      "blocks": {
+        "heading_1": {
+          "type": "heading",
+          "settings": {
+            "title": "How to measure",
+            "align": "left",
+            "subtitle": "Use a soft measuring tape and keep it snug, not tight."
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Chest / Bust",
+            "answer": "<p>Measure around the fullest part of your chest, keeping the tape under your arms and level across your back.</p>",
+            "open": true
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "Waist",
+            "answer": "<p>Measure around your natural waistline — the narrowest part of your torso, usually just above the belly button.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "Hip",
+            "answer": "<p>Stand with your feet together and measure around the fullest part of your hips and seat.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "faq",
+          "settings": {
+            "question": "Inseam",
+            "answer": "<p>Measure from the top of your inner thigh down to the bottom of your ankle — or measure the inseam of a pair of trousers that fits you well.</p>"
+          }
+        },
+        "faq_6": {
+          "type": "faq",
+          "settings": {
+            "question": "Shoulder & sleeve",
+            "answer": "<p>Shoulder: measure across your back from one shoulder point to the other. Sleeve: from the shoulder point down to your wrist bone with your arm relaxed.</p>"
+          }
+        },
+        "heading_7": {
+          "type": "heading",
+          "settings": {
+            "title": "Size charts",
+            "align": "left"
+          }
+        },
+        "image_8": {
+          "type": "image",
+          "settings": {
+            "caption": "Size chart",
+            "size": "full"
+          }
+        },
+        "text_9": {
+          "type": "text",
+          "settings": {
+            "text": "<p>All measurements are in inches and may vary by up to half an inch. If you are between sizes, we recommend sizing up. Each product page also has its own <strong>Size Chart</strong> link beside the size selector.</p>"
+          }
+        },
+        "heading_10": {
+          "type": "heading",
+          "settings": {
+            "title": "Click & Zip Denim",
+            "align": "left"
+          }
+        },
+        "text_11": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Our denim is cut to hold its shape through the day. If you prefer a relaxed fit, size up; for a sharper, close-to-body fit, take your usual size. Still unsure? <a href=\"/pages/contact\">Ask our team</a> — we're happy to help.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5",
+        "faq_6",
+        "heading_7",
+        "image_8",
+        "text_9",
+        "heading_10",
+        "text_11"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

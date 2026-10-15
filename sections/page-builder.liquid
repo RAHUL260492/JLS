@@ -1,0 +1,323 @@
+{%- comment -%}
+  Page builder — one flexible, fully editable content section used by the
+  FAQ, Gift Cards, Size & Fit, BOPIS, Our Services, Careers, Our Values,
+  Sustainability, Store Locator and Track Order pages.
+
+  Edit everything in Online Store → Themes → Customize → (pick the page
+  template) → add / remove / reorder blocks. No code needed.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign width_class = 'pb--' | append: s.width
+-%}
+<section class="pb {{ width_class }}{% if s.background == 'cream' %} pb--cream{% endif %}" id="pb-{{ section.id }}">
+  <div class="pb__inner">
+    {%- if s.show_page_title -%}
+      <header class="pb__header">
+        {%- if s.eyebrow != blank -%}<p class="pb__eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+        <h1 class="pb__title">{{ s.title | default: page.title }}</h1>
+        {%- if s.intro != blank -%}<div class="pb__intro">{{ s.intro }}</div>{%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      {%- assign b = block.settings -%}
+      {%- case block.type -%}
+
+        {%- when 'heading' -%}
+          <div class="pb-heading pb-align--{{ b.align }}" {{ block.shopify_attributes }}>
+            {%- if b.eyebrow != blank -%}<p class="pb__eyebrow">{{ b.eyebrow }}</p>{%- endif -%}
+            <h2 class="pb-heading__title">{{ b.title }}</h2>
+            {%- if b.subtitle != blank -%}<p class="pb-heading__sub">{{ b.subtitle }}</p>{%- endif -%}
+          </div>
+
+        {%- when 'text' -%}
+          <div class="pb-text rte pb-align--{{ b.align }}" {{ block.shopify_attributes }}>{{ b.text }}</div>
+
+        {%- when 'notice' -%}
+          <div class="pb-notice pb-notice--{{ b.style }}" {{ block.shopify_attributes }}>
+            {%- if b.eyebrow != blank -%}<p class="pb-notice__eyebrow">{{ b.eyebrow }}</p>{%- endif -%}
+            {%- if b.title != blank -%}<h2 class="pb-notice__title">{{ b.title }}</h2>{%- endif -%}
+            {%- if b.text != blank -%}<div class="pb-notice__text rte">{{ b.text }}</div>{%- endif -%}
+            {%- if b.button_label != blank and b.button_link != blank -%}
+              <a class="pb-btn" href="{{ b.button_link }}">{{ b.button_label }}</a>
+            {%- endif -%}
+          </div>
+
+        {%- when 'image' -%}
+          {%- if b.image != blank -%}
+            <figure class="pb-image pb-image--{{ b.size }}" {{ block.shopify_attributes }}>
+              {{ b.image | image_url: width: 2000 | image_tag: loading: 'lazy', sizes: '(min-width: 1100px) 1100px, 100vw', widths: '600,900,1400,2000', alt: b.caption }}
+              {%- if b.caption != blank -%}<figcaption>{{ b.caption }}</figcaption>{%- endif -%}
+            </figure>
+          {%- endif -%}
+
+        {%- when 'gallery' -%}
+          <div class="pb-gallery" {{ block.shopify_attributes }}>
+            {%- if b.title != blank -%}<h2 class="pb-heading__title">{{ b.title }}</h2>{%- endif -%}
+            <div class="pb-gallery__grid">
+              {%- for n in (1..6) -%}
+                {%- assign key = 'image_' | append: n -%}
+                {%- if b[key] != blank -%}
+                  <div class="pb-gallery__item">{{ b[key] | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 900px) 33vw, 50vw', widths: '400,600,900' }}</div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+        {%- when 'video' -%}
+          <div class="pb-video" {{ block.shopify_attributes }}>
+            {%- if b.title != blank -%}<h2 class="pb-heading__title">{{ b.title }}</h2>{%- endif -%}
+            <div class="pb-video__frame">
+              {%- if b.video != blank -%}
+                {{ b.video | video_tag: controls: true, playsinline: true, preload: 'metadata', image_size: '1600x' }}
+              {%- elsif b.video_url != blank -%}
+                {%- if b.video_url.type == 'youtube' -%}
+                  <iframe src="https://www.youtube.com/embed/{{ b.video_url.id }}?rel=0" title="{{ b.title | default: 'Video' | escape }}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                {%- elsif b.video_url.type == 'vimeo' -%}
+                  <iframe src="https://player.vimeo.com/video/{{ b.video_url.id }}" title="{{ b.title | default: 'Video' | escape }}" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                {%- endif -%}
+              {%- else -%}
+                <div class="pb-video__placeholder"><span>Video coming soon</span></div>
+              {%- endif -%}
+            </div>
+            {%- if b.caption != blank -%}<p class="pb-video__caption">{{ b.caption }}</p>{%- endif -%}
+          </div>
+
+        {%- when 'image_text' -%}
+          <div class="pb-split{% if b.image_right %} pb-split--reverse{% endif %}" {{ block.shopify_attributes }}>
+            <div class="pb-split__media">
+              {%- if b.image != blank -%}
+                {{ b.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 900px) 50vw, 100vw', widths: '600,900,1200' }}
+              {%- else -%}
+                <span class="pb-split__placeholder"></span>
+              {%- endif -%}
+            </div>
+            <div class="pb-split__body">
+              {%- if b.eyebrow != blank -%}<p class="pb__eyebrow">{{ b.eyebrow }}</p>{%- endif -%}
+              {%- if b.title != blank -%}<h2 class="pb-heading__title">{{ b.title }}</h2>{%- endif -%}
+              <div class="rte">{{ b.text }}</div>
+              {%- if b.button_label != blank and b.button_link != blank -%}<a class="pb-btn" href="{{ b.button_link }}">{{ b.button_label }}</a>{%- endif -%}
+            </div>
+          </div>
+
+        {%- when 'faq' -%}
+          <details class="pb-faq" {{ block.shopify_attributes }}{% if b.open %} open{% endif %}>
+            <summary class="pb-faq__q">{{ b.question }}</summary>
+            <div class="pb-faq__a rte">{{ b.answer }}</div>
+          </details>
+
+        {%- when 'job' -%}
+          <article class="pb-job" {{ block.shopify_attributes }}>
+            <details>
+              <summary class="pb-job__head">
+                <span class="pb-job__title">{{ b.title }}</span>
+                <span class="pb-job__meta">{{ b.location }}{% if b.location != blank and b.job_type != blank %} · {% endif %}{{ b.job_type }}</span>
+              </summary>
+              <div class="pb-job__body rte">{{ b.description }}</div>
+              {%- assign apply_href = b.apply_link -%}
+              {%- if apply_href == blank and b.apply_email != blank -%}
+                {%- assign apply_href = 'mailto:' | append: b.apply_email | append: '?subject=' | append: 'Application - ' | append: b.title -%}
+              {%- endif -%}
+              {%- if apply_href != blank -%}<a class="pb-btn" href="{{ apply_href }}">Apply now</a>{%- endif -%}
+            </details>
+          </article>
+
+        {%- when 'timeline' -%}
+          <div class="pb-step" {{ block.shopify_attributes }}>
+            <span class="pb-step__dot" aria-hidden="true"></span>
+            {%- if b.date != blank -%}<p class="pb-step__date">{{ b.date }}</p>{%- endif -%}
+            <h3 class="pb-step__title">{{ b.title }}</h3>
+            {%- if b.text != blank -%}<div class="pb-step__text rte">{{ b.text }}</div>{%- endif -%}
+          </div>
+
+        {%- when 'contact' -%}
+          <div class="pb-contact" {{ block.shopify_attributes }}>
+            {%- if b.title != blank -%}<h2 class="pb-heading__title">{{ b.title }}</h2>{%- endif -%}
+            <ul class="pb-contact__list">
+              {%- if b.website_label != blank -%}<li><span>Website</span><a href="{{ b.website_link | default: '/pages/contact' }}">{{ b.website_label }}</a></li>{%- endif -%}
+              {%- if b.instagram != blank -%}<li><span>Instagram</span><a href="{{ b.instagram }}" target="_blank" rel="noopener">{{ b.instagram_label | default: 'Message us on Instagram' }}</a></li>{%- endif -%}
+              {%- if b.whatsapp != blank -%}
+                {%- assign wa = b.whatsapp | remove: ' ' | remove: '+' | remove: '-' -%}
+                <li><span>WhatsApp</span><a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener">{{ b.whatsapp }}</a></li>
+              {%- endif -%}
+              {%- if b.email != blank -%}<li><span>Email</span><a href="mailto:{{ b.email }}">{{ b.email }}</a></li>{%- endif -%}
+              {%- if b.phone != blank -%}<li><span>Phone</span><a href="tel:{{ b.phone | remove: ' ' }}">{{ b.phone }}</a></li>{%- endif -%}
+            </ul>
+          </div>
+
+        {%- when 'store' -%}
+          <div class="pb-store" {{ block.shopify_attributes }}>
+            <div class="pb-store__media">
+              {%- if b.image != blank -%}{{ b.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 900px) 50vw, 100vw', widths: '600,900,1200' }}{%- else -%}<span class="pb-split__placeholder"></span>{%- endif -%}
+            </div>
+            <div class="pb-store__body">
+              <h3 class="pb-store__name">{{ b.name }}</h3>
+              {%- if b.address != blank -%}<div class="pb-store__address rte">{{ b.address }}</div>{%- endif -%}
+              {%- if b.hours != blank -%}<div class="pb-store__hours rte">{{ b.hours }}</div>{%- endif -%}
+              {%- if b.phone != blank -%}<p><a href="tel:{{ b.phone | remove: ' ' }}">{{ b.phone }}</a></p>{%- endif -%}
+              {%- if b.map_link != blank -%}<a class="pb-btn" href="{{ b.map_link }}" target="_blank" rel="noopener">Get directions</a>{%- endif -%}
+            </div>
+          </div>
+
+        {%- when 'button' -%}
+          <div class="pb-button pb-align--{{ b.align }}" {{ block.shopify_attributes }}>
+            <a class="pb-btn{% if b.style == 'outline' %} pb-btn--outline{% endif %}" href="{{ b.link }}">{{ b.label }}</a>
+          </div>
+
+        {%- when 'track' -%}
+          {%- comment -%} Courier-agnostic tracking: the URL pattern is set in the block. {%- endcomment -%}
+          <div class="pb-track" {{ block.shopify_attributes }}>
+            <div class="pb-track__card">
+              <h2 class="pb-heading__title">{{ b.account_title }}</h2>
+              <div class="rte">{{ b.account_text }}</div>
+              <a class="pb-btn" href="{% if customer %}/account{% else %}/customer_authentication/login?return_to=%2Faccount{% endif %}">{% if customer %}View my orders{% else %}Sign in to view orders{% endif %}</a>
+            </div>
+            <div class="pb-track__card">
+              <h2 class="pb-heading__title">{{ b.awb_title }}</h2>
+              <div class="rte">{{ b.awb_text }}</div>
+              <form class="pb-track__form" data-track-form data-pattern="{{ b.tracking_pattern | escape }}">
+                <label class="visually-hidden" for="awb-{{ block.id }}">Tracking number</label>
+                <input id="awb-{{ block.id }}" class="pb-input" type="text" name="awb" placeholder="Enter tracking / AWB number" required autocomplete="off">
+                <button type="submit" class="pb-btn">Track</button>
+              </form>
+            </div>
+          </div>
+          <script>
+            (function () {
+              document.querySelectorAll('[data-track-form]').forEach(function (f) {
+                if (f.dataset.bound) return; f.dataset.bound = '1';
+                f.addEventListener('submit', function (e) {
+                  e.preventDefault();
+                  var n = f.querySelector('input[name="awb"]').value.trim();
+                  if (!n) return;
+                  var url = (f.dataset.pattern || 'https://track.aftership.com/{number}').replace('{number}', encodeURIComponent(n));
+                  window.open(url, '_blank', 'noopener');
+                });
+              });
+            })();
+          </script>
+
+        {%- when 'divider' -%}
+          <hr class="pb-divider" {{ block.shopify_attributes }}>
+
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page builder",
+  "tag": "div",
+  "class": "pb-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_page_title", "label": "Show page title", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow (small line above title)" },
+    { "type": "text", "id": "title", "label": "Title", "info": "Leave empty to use the page's own title." },
+    { "type": "richtext", "id": "intro", "label": "Intro" },
+    { "type": "select", "id": "width", "label": "Content width", "default": "narrow", "options": [ { "value": "narrow", "label": "Narrow (reading)" }, { "value": "wide", "label": "Wide" } ] },
+    { "type": "select", "id": "background", "label": "Background", "default": "white", "options": [ { "value": "white", "label": "White" }, { "value": "cream", "label": "Cream" } ] }
+  ],
+  "blocks": [
+    { "type": "heading", "name": "Heading", "settings": [
+      { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+      { "type": "text", "id": "title", "label": "Heading", "default": "Heading" },
+      { "type": "text", "id": "subtitle", "label": "Subheading" },
+      { "type": "select", "id": "align", "label": "Alignment", "default": "left", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ] }
+    ] },
+    { "type": "text", "name": "Text", "settings": [
+      { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Write your text here.</p>" },
+      { "type": "select", "id": "align", "label": "Alignment", "default": "left", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ] }
+    ] },
+    { "type": "notice", "name": "Banner / Coming soon", "settings": [
+      { "type": "select", "id": "style", "label": "Style", "default": "soft", "options": [ { "value": "soft", "label": "Soft (cream)" }, { "value": "dark", "label": "Dark" }, { "value": "outline", "label": "Outline" } ] },
+      { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Coming soon" },
+      { "type": "text", "id": "title", "label": "Title" },
+      { "type": "richtext", "id": "text", "label": "Text" },
+      { "type": "text", "id": "button_label", "label": "Button label" },
+      { "type": "url", "id": "button_link", "label": "Button link" }
+    ] },
+    { "type": "image", "name": "Image", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "caption", "label": "Caption / alt text" },
+      { "type": "select", "id": "size", "label": "Size", "default": "full", "options": [ { "value": "full", "label": "Full width" }, { "value": "medium", "label": "Medium" } ] }
+    ] },
+    { "type": "gallery", "name": "Image gallery", "settings": [
+      { "type": "text", "id": "title", "label": "Title" },
+      { "type": "image_picker", "id": "image_1", "label": "Image 1" },
+      { "type": "image_picker", "id": "image_2", "label": "Image 2" },
+      { "type": "image_picker", "id": "image_3", "label": "Image 3" },
+      { "type": "image_picker", "id": "image_4", "label": "Image 4" },
+      { "type": "image_picker", "id": "image_5", "label": "Image 5" },
+      { "type": "image_picker", "id": "image_6", "label": "Image 6" }
+    ] },
+    { "type": "video", "name": "Video", "settings": [
+      { "type": "text", "id": "title", "label": "Title" },
+      { "type": "video", "id": "video", "label": "Upload video", "info": "Upload directly to Shopify. Takes priority over the link below." },
+      { "type": "video_url", "id": "video_url", "label": "…or YouTube / Vimeo link", "accept": ["youtube", "vimeo"] },
+      { "type": "text", "id": "caption", "label": "Caption" }
+    ] },
+    { "type": "image_text", "name": "Image with text", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "checkbox", "id": "image_right", "label": "Image on the right", "default": false },
+      { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+      { "type": "text", "id": "title", "label": "Heading" },
+      { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Tell your story here.</p>" },
+      { "type": "text", "id": "button_label", "label": "Button label" },
+      { "type": "url", "id": "button_link", "label": "Button link" }
+    ] },
+    { "type": "faq", "name": "FAQ question", "settings": [
+      { "type": "text", "id": "question", "label": "Question", "default": "Your question" },
+      { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Your answer.</p>" },
+      { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
+    ] },
+    { "type": "job", "name": "Job opening", "settings": [
+      { "type": "text", "id": "title", "label": "Role", "default": "Role title" },
+      { "type": "text", "id": "location", "label": "Location", "default": "Bengaluru" },
+      { "type": "text", "id": "job_type", "label": "Type", "default": "Full-time" },
+      { "type": "richtext", "id": "description", "label": "Job description", "default": "<p><strong>About the role</strong></p><p>Describe the role.</p><p><strong>What you'll do</strong></p><ul><li>Responsibility</li></ul><p><strong>What we're looking for</strong></p><ul><li>Requirement</li></ul>" },
+      { "type": "text", "id": "apply_email", "label": "Apply by email", "default": "thejustadultingclub@gmail.com" },
+      { "type": "url", "id": "apply_link", "label": "…or apply link (form / LinkedIn)", "info": "Overrides the email." }
+    ] },
+    { "type": "timeline", "name": "Timeline step", "settings": [
+      { "type": "text", "id": "date", "label": "Date / label", "default": "Step" },
+      { "type": "text", "id": "title", "label": "Title", "default": "Milestone" },
+      { "type": "richtext", "id": "text", "label": "Text" }
+    ] },
+    { "type": "contact", "name": "Contact channels", "settings": [
+      { "type": "text", "id": "title", "label": "Title", "default": "Reach out to us" },
+      { "type": "text", "id": "website_label", "label": "Website label", "default": "Send us a message" },
+      { "type": "url", "id": "website_link", "label": "Website link" },
+      { "type": "url", "id": "instagram", "label": "Instagram URL", "default": "https://www.instagram.com/thejustadultingclub" },
+      { "type": "text", "id": "instagram_label", "label": "Instagram label", "default": "@thejustadultingclub" },
+      { "type": "text", "id": "whatsapp", "label": "WhatsApp number (with country code)", "info": "e.g. +91 98765 43210" },
+      { "type": "text", "id": "email", "label": "Email", "default": "thejustadultingclub@gmail.com" },
+      { "type": "text", "id": "phone", "label": "Phone" }
+    ] },
+    { "type": "store", "name": "Store / studio", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Studio photo" },
+      { "type": "text", "id": "name", "label": "Name", "default": "Just Adulting Studio — Bengaluru" },
+      { "type": "richtext", "id": "address", "label": "Address", "default": "<p>#16, 1st Main Road, RMV Stage 2,<br>Bengaluru 560094</p>" },
+      { "type": "richtext", "id": "hours", "label": "Hours", "default": "<p>Mon – Fri, 10am to 6pm</p>" },
+      { "type": "text", "id": "phone", "label": "Phone" },
+      { "type": "url", "id": "map_link", "label": "Google Maps link" }
+    ] },
+    { "type": "button", "name": "Button", "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Shop now" },
+      { "type": "url", "id": "link", "label": "Link" },
+      { "type": "select", "id": "style", "label": "Style", "default": "solid", "options": [ { "value": "solid", "label": "Solid" }, { "value": "outline", "label": "Outline" } ] },
+      { "type": "select", "id": "align", "label": "Alignment", "default": "left", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ] }
+    ] },
+    { "type": "track", "name": "Order tracking", "limit": 1, "settings": [
+      { "type": "text", "id": "account_title", "label": "Account card title", "default": "Track with your account" },
+      { "type": "richtext", "id": "account_text", "label": "Account card text", "default": "<p>Sign in with the email or phone number you ordered with to see every order, its status and its tracking link.</p>" },
+      { "type": "text", "id": "awb_title", "label": "Tracking card title", "default": "Track with a tracking number" },
+      { "type": "richtext", "id": "awb_text", "label": "Tracking card text", "default": "<p>Paste the tracking (AWB) number from your shipping email or SMS. Works for every courier we ship with.</p>" },
+      { "type": "text", "id": "tracking_pattern", "label": "Tracking URL", "default": "https://track.aftership.com/{number}", "info": "{number} is replaced with what the customer types. The default auto-detects the courier. If you ship only with one partner, use its link, e.g. https://shiprocket.co/tracking/{number}" }
+    ] },
+    { "type": "divider", "name": "Divider", "settings": [] }
+  ],
+  "presets": [ { "name": "Page builder" } ]
+}
+{% endschema %}

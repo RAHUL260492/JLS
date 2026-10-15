@@ -32,6 +32,7 @@
       <input type="search" name="q" value="{{ search.terms | escape }}"
              class="search-page__input" placeholder="Search for products…"
              aria-label="Search" autocomplete="off" autofocus>
+      {% render 'search-fields' %}
       <button type="submit" class="search-page__submit" aria-label="Search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="11" cy="11" r="8"></circle>
@@ -57,6 +58,7 @@
       </section>
 
     {%- else -%}
+      {%- assign exclusive_handles = settings.exclusive_collection_handles | default: '' | remove: ' ' | split: ',' -%}
       {%- paginate search.results by 24 -%}
 
         {%- comment -%} Count products on this page so the grid only renders when there are some. {%- endcomment -%}
@@ -69,9 +71,15 @@
           <div class="product-grid">
             {%- for item in search.results -%}
               {%- if item.object_type == 'product' -%}
+                {%- assign skip_item = false -%}
+                {%- for pc in item.collections -%}
+                  {%- if exclusive_handles contains pc.handle -%}{%- assign skip_item = true -%}{%- break -%}{%- endif -%}
+                {%- endfor -%}
+                {%- if skip_item -%}{%- continue -%}{%- endif -%}
                 <article class="product-card">
                   <a href="{{ item.url }}" class="product-card__image-link">
                     <div class="product-card__image-wrapper">
+                      {% render 'product-badges', product: item, class_name: 'product-badges--card' %}
                       {%- if item.featured_image -%}
                         <img src="{{ item.featured_image | image_url: width: 800 }}"
                              srcset="{{ item.featured_image | image_url: width: 400 }} 400w, {{ item.featured_image | image_url: width: 800 }} 800w, {{ item.featured_image | image_url: width: 1200 }} 1200w"
@@ -90,7 +98,7 @@
                   {%- if color_option -%}
                     <div class="product-card__swatches">
                       {%- for value in color_option.values limit: 5 -%}
-                        <a href="{{ value.variant.url | default: item.url }}" class="swatch" title="{{ value.name | escape }}" aria-label="{{ value.name | escape }}" style="{% if value.swatch.image %}background-image:url('{{ value.swatch.image | image_url: width: 48 }}');{% elsif value.swatch.color %}background-color:{{ value.swatch.color }};{% elsif value.variant.image %}background-image:url('{{ value.variant.image | image_url: width: 48 }}');{% else %}background-color:{{ value.name | downcase | replace: ' ', '' }};{% endif %}"></a>
+                        <a href="{{ value.variant.url | default: item.url }}" class="swatch{% unless value.available %} swatch--soldout{% endunless %}" title="{{ value.name | escape }}" aria-label="{{ value.name | escape }}" style="{% if value.swatch.image %}background-image:url('{{ value.swatch.image | image_url: width: 48 }}');{% elsif value.swatch.color %}background-color:{{ value.swatch.color }};{% elsif value.variant.image %}background-image:url('{{ value.variant.image | image_url: width: 48 }}');{% else %}background-color:{{ value.name | downcase | replace: ' ', '' }};{% endif %}"></a>
                       {%- endfor -%}
                       {%- if color_option.values.size > 5 -%}<span class="swatch-more">+{{ color_option.values.size | minus: 5 }}</span>{%- endif -%}
                     </div>

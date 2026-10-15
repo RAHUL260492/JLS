@@ -1,0 +1,67 @@
+{%- comment -%}
+  Pre-order: main video + story (Kickstarter-style).
+  Per product: set the product metafields "Pre-order video URL"
+  (custom.preorder_video_url — YouTube/Vimeo/MP4 link) and "Pre-order story"
+  (custom.preorder_story — rich text). They override the defaults below, so each
+  pre-order product can tell its own story. Hidden when there is no video and no story.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign po_story = s.story
+  if product.metafields.custom.preorder_story != blank
+    assign po_story = product.metafields.custom.preorder_story | metafield_tag
+  endif
+  assign po_video_url = product.metafields.custom.preorder_video_url.value | default: s.video_link
+  assign po_video_url = po_video_url | append: ''
+-%}
+{%- if s.video != blank or po_video_url != blank or po_story != blank -%}
+<section class="po-story">
+  <div class="po-story__inner">
+    <div class="po-story__media">
+      {%- if po_video_url != blank -%}
+        {%- if po_video_url contains 'youtube.com' or po_video_url contains 'youtu.be' -%}
+          {%- assign yt = po_video_url | split: 'v=' | last | split: '&' | first | split: 'youtu.be/' | last | split: '?' | first -%}
+          <iframe src="https://www.youtube.com/embed/{{ yt }}?rel=0" title="{{ s.title | escape }}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+        {%- elsif po_video_url contains 'vimeo.com' -%}
+          {%- assign vm = po_video_url | split: '/' | last | split: '?' | first -%}
+          <iframe src="https://player.vimeo.com/video/{{ vm }}" title="{{ s.title | escape }}" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        {%- else -%}
+          <video src="{{ po_video_url }}" controls playsinline preload="metadata"></video>
+        {%- endif -%}
+      {%- elsif s.video != blank -%}
+        {{ s.video | video_tag: controls: true, playsinline: true, preload: 'metadata', image_size: '1600x' }}
+      {%- endif -%}
+    </div>
+    <div class="po-story__body">
+      {%- if s.eyebrow != blank -%}<p class="po-story__eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+      {%- if s.title != blank -%}<h2 class="po-story__title">{{ s.title }}</h2>{%- endif -%}
+      <div class="po-story__text rte">{{ po_story }}</div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% stylesheet %}
+.po-story { padding: 72px 24px; background: #faf8f3; }
+.po-story__inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: center; }
+.po-story__media iframe, .po-story__media video { width: 100%; aspect-ratio: 16 / 9; border: 0; display: block; background: #000; }
+.po-story__eyebrow { font-family: var(--font-body, 'Jost', sans-serif); font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: #8a7d6b; margin: 0 0 10px; }
+.po-story__title { font-family: var(--font-heading, 'Cormorant Garamond', serif); font-weight: 400; font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin: 0 0 16px; }
+.po-story__text { font-family: var(--font-body, 'Jost', sans-serif); font-size: 15px; line-height: 1.75; color: #3a3a3a; }
+@media (max-width: 860px) { .po-story__inner { grid-template-columns: 1fr; gap: 28px; } .po-story { padding: 48px 16px; } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pre-order: Video & story",
+  "tag": "div",
+  "settings": [
+    { "type": "paragraph", "content": "Per product, the metafields 'Pre-order video URL' (custom.preorder_video_url) and 'Pre-order story' (custom.preorder_story) override these defaults." },
+    { "type": "video", "id": "video", "label": "Default video (upload)" },
+    { "type": "text", "id": "video_link", "label": "…or default video link (YouTube / Vimeo / MP4)" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The story" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Why we're making this" },
+    { "type": "richtext", "id": "story", "label": "Default story" }
+  ]
+}
+{% endschema %}

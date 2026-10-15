@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-builder",
+      "settings": {
+        "title": "Sustainability"
+      },
+      "blocks": {
+        "notice_1": {
+          "type": "notice",
+          "settings": {
+            "style": "soft",
+            "eyebrow": "Coming soon",
+            "title": "Our sustainability story",
+            "text": "<p>We're putting together the full story of how we source, make and reuse — with photos and videos from our studio. Check back soon.</p>",
+            "button_label": "Explore Archive Reissue | Upcycled",
+            "button_link": "/collections/mens-archive-reissue-upcycled"
+          }
+        }
+      },
+      "block_order": [
+        "notice_1"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

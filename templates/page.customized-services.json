@@ -1,0 +1,92 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-builder",
+      "settings": {
+        "eyebrow": "Our Services",
+        "title": "",
+        "intro": "<p>Customized blazers and ethnic wear, designed with you and crafted by hand.</p>",
+        "width": "wide"
+      },
+      "blocks": {
+        "image_text_1": {
+          "type": "image_text",
+          "settings": {
+            "eyebrow": "Three decades of craft",
+            "title": "Made for you, by hand",
+            "text": "<p>For over three decades, our master tailors have been cutting, stitching and finishing garments by hand. Every customized blazer and ethnic outfit we make carries that experience — the right fabric, a precise fit and details you choose yourself.</p>"
+          }
+        },
+        "heading_2": {
+          "type": "heading",
+          "settings": {
+            "title": "How to design yours",
+            "align": "left"
+          }
+        },
+        "timeline_3": {
+          "type": "timeline",
+          "settings": {
+            "date": "01",
+            "title": "Reach out",
+            "text": "<p>Message us on the website, Instagram, WhatsApp or email with what you have in mind — an occasion, a reference photo, or just an idea.</p>"
+          }
+        },
+        "timeline_4": {
+          "type": "timeline",
+          "settings": {
+            "date": "02",
+            "title": "Choose fabric & style",
+            "text": "<p>We'll walk you through fabrics, cuts, linings, buttons and finishing details, and help you design a piece that's entirely yours.</p>"
+          }
+        },
+        "timeline_5": {
+          "type": "timeline",
+          "settings": {
+            "date": "03",
+            "title": "Measurements",
+            "text": "<p>Our team takes your measurements — at our Bengaluru studio, or guided over a call.</p>"
+          }
+        },
+        "timeline_6": {
+          "type": "timeline",
+          "settings": {
+            "date": "04",
+            "title": "Fittings & delivery",
+            "text": "<p>We craft your piece, fine-tune it at a fitting, and deliver it ready to wear. Customized orders include one free alteration.</p>"
+          }
+        },
+        "gallery_7": {
+          "type": "gallery",
+          "settings": {
+            "title": "From the archive"
+          }
+        },
+        "contact_8": {
+          "type": "contact",
+          "settings": {
+            "title": "Start your design",
+            "website_label": "Send us a message",
+            "website_link": "/pages/contact",
+            "instagram": "https://www.instagram.com/thejustadultingclub",
+            "instagram_label": "@thejustadultingclub",
+            "email": "thejustadultingclub@gmail.com"
+          }
+        }
+      },
+      "block_order": [
+        "image_text_1",
+        "heading_2",
+        "timeline_3",
+        "timeline_4",
+        "timeline_5",
+        "timeline_6",
+        "gallery_7",
+        "contact_8"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

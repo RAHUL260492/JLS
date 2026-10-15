@@ -1,5 +1,13 @@
 [
   {
+    "name": "theme_info",
+    "theme_name": "Just Adulting Club",
+    "theme_version": "2.0.0",
+    "theme_author": "HyberX",
+    "theme_documentation_url": "https://hyberx.com",
+    "theme_support_url": "https://hyberx.com"
+  },
+  {
     "name": "Product page",
     "settings": [
       {
@@ -53,6 +61,170 @@
         "label": "Popup note",
         "default": "<p>All measurements are in inches and may vary by up to half an inch. If you are between sizes, we recommend sizing up.</p>",
         "info": "Optional text shown under the chart image."
+      }
+    ]
+  },
+  {
+    "name": "SEO & search appearance",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Controls how the home page appears on Google. Google can take a few days to a few weeks to pick up changes — you can speed it up with Google Search Console → URL inspection → Request indexing."
+      },
+      {
+        "type": "text",
+        "id": "seo_site_name",
+        "label": "Site name (first line on Google)",
+        "default": "The Just Adulting Club"
+      },
+      {
+        "type": "text",
+        "id": "seo_home_title",
+        "label": "Home page title",
+        "default": "The Just Adulting Club | Timeless styles for Women's & Men's Clothing"
+      },
+      {
+        "type": "textarea",
+        "id": "seo_home_description",
+        "label": "Home page description",
+        "default": "Discover a spirit of modern exploration at Just Adulting. Shop European linen, BANARA polos, and our proprietary no-smell tech socks, crafted for a sophisticated wardrobe and refined everyday style.",
+        "info": "Keep it under ~155 characters so Google doesn't cut it off."
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon / Google logo",
+        "info": "Square image, at least 96 × 96 px. Leave empty to use the crest logo built into the theme."
+      }
+    ]
+  },
+  {
+    "name": "Navigation & collections",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Menu categories now go live automatically: a category shows 'Coming soon' only while its collection has no products. Add a product to the collection and the menu link switches to live on its own."
+      },
+      {
+        "type": "textarea",
+        "id": "coming_soon_handles",
+        "label": "Always show as Coming soon",
+        "info": "Collection handles, separated by commas (e.g. winter-fall, womens-skirts). Use this to keep a category as Coming soon even after you've added products to it.",
+        "default": "sustainability"
+      },
+      {
+        "type": "textarea",
+        "id": "nav_hidden_handles",
+        "label": "Hide from menus",
+        "default": "mens-just-adulting-x-lemax",
+        "info": "Collection handles, separated by commas. These links are removed from the header menus."
+      },
+      {
+        "type": "textarea",
+        "id": "exclusive_collection_handles",
+        "label": "Exclusive collections (custom order)",
+        "default": "mens-customized-outfit,womens-customized-outfit",
+        "info": "Products in these collections appear ONLY in that collection — never in other collection pages or search. To show one elsewhere, create a separate listing."
+      }
+    ]
+  },
+  {
+    "name": "Product badges",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Add a badge to any product by giving it a tag that starts with 'badge:' in Admin → Products → Tags. Examples: badge:Sale, badge:Designers Choice, badge:Limited Edition, badge:No Restocks, badge:Pre Order, badge:Website Exclusive, badge:Custom Made. A product with no badge: tag shows no badge."
+      },
+      {
+        "type": "paragraph",
+        "content": "Collections: set the collection metafield 'Badge' (custom.badge, single line text) to show a badge on the collection page heading."
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_auto_sale",
+        "label": "Automatically show 'Sale' badge on discounted products",
+        "default": false,
+        "info": "Shows a Sale badge whenever compare-at price is higher than price, even without a badge:Sale tag."
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "club_membership_text",
+        "label": "Club membership line",
+        "default": "*The Club Membership Program — Coming Soon"
+      },
+      {
+        "type": "text",
+        "id": "social_heading",
+        "label": "Social heading",
+        "default": "Follow the Club"
+      },
+      {
+        "type": "paragraph",
+        "content": "Paste a full URL to show that icon in the footer. Clear a field to hide it."
+      },
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram",
+        "default": "https://www.instagram.com/thejustadultingclub"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook",
+        "default": "https://www.facebook.com/share/1Pzfy8SgFS/"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest",
+        "label": "Pinterest"
+      },
+      {
+        "type": "url",
+        "id": "social_linkedin",
+        "label": "LinkedIn"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube",
+        "label": "YouTube"
+      },
+      {
+        "type": "url",
+        "id": "social_x",
+        "label": "X (Twitter)"
+      },
+      {
+        "type": "url",
+        "id": "social_whatsapp",
+        "label": "WhatsApp (wa.me link)"
+      }
+    ]
+  },
+  {
+    "name": "Search",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "To make a product show up for a word (e.g. 'socks'), add that word as a product TAG. For synonyms (e.g. 'sock' = 'socks'), install Shopify's free Search & Discovery app → Synonyms."
+      },
+      {
+        "type": "text",
+        "id": "search_fields",
+        "label": "Fields searched",
+        "default": "title,product_type,tag,vendor,variants.title",
+        "info": "Comma-separated. Options: title, product_type, tag, vendor, variants.title, variants.sku, body (description). Leave 'body' out to stop description words causing wrong results."
+      },
+      {
+        "type": "checkbox",
+        "id": "search_products_only",
+        "label": "Search products only (hide pages & articles)",
+        "default": true
       }
     ]
   }

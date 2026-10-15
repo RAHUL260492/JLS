@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-builder",
+      "settings": {
+        "title": "Gift Cards"
+      },
+      "blocks": {
+        "notice_1": {
+          "type": "notice",
+          "settings": {
+            "style": "soft",
+            "eyebrow": "Coming soon",
+            "title": "Physical gift cards are in the making",
+            "text": "<p>Our physical gift cards are in the making. To arrange an eGift Card, kindly call us or email <a href=\"mailto:thejustadultingclub@gmail.com\">thejustadultingclub@gmail.com</a>.</p>",
+            "button_label": "Contact us",
+            "button_link": "/pages/contact"
+          }
+        }
+      },
+      "block_order": [
+        "notice_1"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

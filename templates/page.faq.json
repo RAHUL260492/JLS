@@ -1,0 +1,106 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-builder",
+      "settings": {
+        "title": "Frequently Asked Questions",
+        "intro": "<p>Can't find what you're looking for? <a href=\"/pages/contact\">Contact us</a> and we'll help.</p>"
+      },
+      "blocks": {
+        "heading_1": {
+          "type": "heading",
+          "settings": {
+            "title": "Orders & Shipping",
+            "align": "left"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you charge for shipping?",
+            "answer": "<p>Shipping is free on all orders. A ₹100 Cash on Delivery charge applies to COD orders below ₹3,000.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "When will my order ship and arrive?",
+            "answer": "<p>Orders are shipped from our warehouse within 4 working days and delivered within 10 working days. You'll receive a tracking number as soon as your order ships.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I track my order?",
+            "answer": "<p>Visit <a href=\"/pages/track-order\">Track Your Order</a> — sign in to see all your orders, or paste the tracking number from your shipping email or SMS.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "<p>Yes. For international orders, customs duties may be levied at the time of delivery in some countries. International orders are not eligible for return.</p>"
+          }
+        },
+        "heading_6": {
+          "type": "heading",
+          "settings": {
+            "title": "Returns & Exchanges",
+            "align": "left"
+          }
+        },
+        "faq_7": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 7-day return policy on returnable products. Items must be unused, unworn and have their original tags intact. Jewellery, socks, scarves, innerwear, masks, and items discounted 50% or more are non-returnable. See <a href=\"/pages/shipping-returns\">Shipping, Return and Exchange</a> for full details.</p>"
+          }
+        },
+        "faq_8": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I exchange for a different size?",
+            "answer": "<p>Yes — size exchange is subject to availability and only a one-time exchange is allowed. There is no additional charge for exchange orders. Exchange isn't available for masks, boxers, socks, and products at or below ₹899.</p>"
+          }
+        },
+        "faq_9": {
+          "type": "faq",
+          "settings": {
+            "question": "How are COD orders refunded?",
+            "answer": "<p>All COD orders are refunded via gift cards, as payouts are currently on hold in compliance with RBI guidelines.</p>"
+          }
+        },
+        "heading_10": {
+          "type": "heading",
+          "settings": {
+            "title": "Custom Orders",
+            "align": "left"
+          }
+        },
+        "faq_11": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you make customized blazers and ethnic wear?",
+            "answer": "<p>Yes. Explore our <a href=\"/pages/customized-blazer-services\">custom services</a> — our team will reach out to take your measurements. Customized orders include one free alteration.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5",
+        "heading_6",
+        "faq_7",
+        "faq_8",
+        "faq_9",
+        "heading_10",
+        "faq_11"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

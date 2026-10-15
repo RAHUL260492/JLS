@@ -1,0 +1,89 @@
+{%- comment -%}
+  Pre-order: timeline chart — e.g. Pre-order opens → Pre-order closes →
+  Production → Ships. Add/edit steps as blocks in the Theme Customizer.
+  If the product has a "Pre-order ends" date (custom.preorder_ends_at) the
+  closing step is filled in automatically, and steps are marked done / current.
+{%- endcomment -%}
+{%- liquid
+  assign now_ts = 'now' | date: '%s' | times: 1
+  assign po_end = product.metafields.custom.preorder_ends_at.value
+-%}
+{%- if section.blocks.size > 0 -%}
+<section class="po-timeline">
+  <div class="po-timeline__inner">
+    {%- if section.settings.title != blank -%}<h2 class="po-timeline__heading">{{ section.settings.title }}</h2>{%- endif -%}
+    <ol class="po-timeline__list" style="--steps: {{ section.blocks.size }}">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign b = block.settings
+          assign step_date = b.date
+          assign step_ts = nil
+          if b.use_preorder_end and po_end != blank
+            assign step_date = po_end | date: '%d %b %Y'
+            assign step_ts = po_end | date: '%s' | times: 1
+          elsif b.done_date != blank
+            assign step_ts = b.done_date | date: '%s' | times: 1
+          endif
+          assign state = ''
+          if step_ts and step_ts <= now_ts
+            assign state = 'is-done'
+          endif
+        -%}
+        <li class="po-timeline__step {{ state }}" {{ block.shopify_attributes }}>
+          <span class="po-timeline__dot" aria-hidden="true"></span>
+          {%- if step_date != blank -%}<p class="po-timeline__date">{{ step_date }}</p>{%- endif -%}
+          <h3 class="po-timeline__title">{{ b.title }}</h3>
+          {%- if b.text != blank -%}<p class="po-timeline__text">{{ b.text }}</p>{%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</section>
+{%- endif -%}
+
+{% stylesheet %}
+.po-timeline { padding: 64px 24px; }
+.po-timeline__inner { max-width: 1200px; margin: 0 auto; }
+.po-timeline__heading { font-family: var(--font-heading, 'Cormorant Garamond', serif); font-weight: 400; font-size: clamp(26px, 3.5vw, 38px); text-align: center; margin: 0 0 40px; }
+.po-timeline__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--steps), minmax(0, 1fr)); position: relative; }
+.po-timeline__list::before { content: ''; position: absolute; top: 7px; left: 0; right: 0; height: 1px; background: #d9d3c7; }
+.po-timeline__step { position: relative; padding: 28px 12px 0 0; }
+.po-timeline__dot { position: absolute; top: 0; left: 0; width: 15px; height: 15px; border-radius: 50%; background: #fff; border: 1px solid #4A2C2A; }
+.po-timeline__step.is-done .po-timeline__dot { background: #4A2C2A; }
+.po-timeline__date { font-family: var(--font-body, 'Jost', sans-serif); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8a7d6b; margin: 0 0 6px; }
+.po-timeline__title { font-family: var(--font-body, 'Jost', sans-serif); font-size: 15px; font-weight: 500; margin: 0 0 6px; color: #1a1a1a; }
+.po-timeline__text { font-family: var(--font-body, 'Jost', sans-serif); font-size: 13px; line-height: 1.6; color: #555; margin: 0; }
+@media (max-width: 760px) {
+  .po-timeline__list { grid-template-columns: 1fr; gap: 24px; padding-left: 28px; }
+  .po-timeline__list::before { top: 0; bottom: 0; left: 7px; right: auto; width: 1px; height: auto; }
+  .po-timeline__step { padding: 0; }
+  .po-timeline__dot { left: -28px; top: 2px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pre-order: Timeline",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Heading", "default": "From pre-order to your door" }
+  ],
+  "blocks": [
+    { "type": "step", "name": "Step", "settings": [
+      { "type": "text", "id": "date", "label": "Date / label", "default": "Week 1" },
+      { "type": "text", "id": "title", "label": "Title", "default": "Milestone" },
+      { "type": "textarea", "id": "text", "label": "Text" },
+      { "type": "checkbox", "id": "use_preorder_end", "label": "Use the product's 'Pre-order ends' date", "default": false },
+      { "type": "text", "id": "done_date", "label": "Mark as done after (YYYY-MM-DD)", "info": "Optional. The dot fills in once this date has passed." }
+    ] }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "step", "settings": { "date": "Now", "title": "Pre-order opens", "text": "Reserve your piece at the pre-order price." } },
+      { "type": "step", "settings": { "date": "", "title": "Pre-order closes", "text": "Last day to reserve from this batch.", "use_preorder_end": true } },
+      { "type": "step", "settings": { "date": "2–3 weeks", "title": "Crafted for you", "text": "Your piece is cut and finished in our workshop." } },
+      { "type": "step", "settings": { "date": "Dispatch", "title": "On its way", "text": "We ship with tracking — follow it on Track Your Order." } }
+    ]
+  }
+}
+{% endschema %}

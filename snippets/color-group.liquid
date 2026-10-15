@@ -1,0 +1,50 @@
+{%- comment -%}
+  color-group — cross-product colour swatches on the product page.
+  Each colour is its own product, linked through the "Color group"
+  metafield (custom.color_group).
+
+  • Colour NAME is shown: "Colour: Navy" above the swatches, updating on hover.
+    The name comes from the product's "Color name" metafield (custom.color_name,
+    single line text) when set — so you can type any name you like — otherwise
+    from the product's Colour option, otherwise from the product title.
+  • SOLD OUT colours get a diagonal strike automatically as soon as every size
+    of that colour reaches 0 stock (they stay clickable so shoppers can still
+    see the product).
+
+  Params: product (required)
+{%- endcomment -%}
+{%- assign color_siblings = product.metafields.custom.color_group.value -%}
+{%- if color_siblings and color_siblings.size > 1 -%}
+  {%- assign generic_colors = 'multicolor,multicolour,multi color,multi colour,multi,assorted,printed,print,various,mixed' | split: ',' -%}
+  {%- assign active_color = '' -%}
+  {%- capture swatches -%}
+    {%- for sib in color_siblings -%}
+      {%- assign sib_hex = sib.metafields.custom.swatch.value | default: '#cccccc' -%}
+      {%- assign sib_color = sib.title -%}
+      {%- for o in sib.options_with_values -%}
+        {%- assign on2 = o.name | downcase -%}
+        {%- if on2 contains 'color' or on2 contains 'colour' -%}
+          {%- assign cand = o.values.first.name -%}
+          {%- assign cand_key = cand | downcase | strip | replace: '-', ' ' -%}
+          {%- unless generic_colors contains cand_key -%}{%- assign sib_color = cand -%}{%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if sib.metafields.custom.color_name != blank -%}
+        {%- assign sib_color = sib.metafields.custom.color_name.value | default: sib.metafields.custom.color_name -%}
+      {%- endif -%}
+      {%- if sib.id == product.id -%}{%- assign active_color = sib_color -%}{%- endif -%}
+      <a href="{{ sib.url }}"
+         class="pdp__color-group-swatch{% if sib.id == product.id %} is-active{% endif %}{% unless sib.available %} is-soldout{% endunless %}"
+         style="--sw:{{ sib_hex }}"
+         title="{{ sib_color | escape }}{% unless sib.available %} — Sold out{% endunless %}"
+         aria-label="{{ sib_color | escape }}{% unless sib.available %} (sold out){% endunless %}"
+         data-color-name="{{ sib_color | escape }}{% unless sib.available %} — Sold out{% endunless %}"></a>
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- assign active_suffix = '' -%}
+  {%- unless product.available -%}{%- assign active_suffix = ' — Sold out' -%}{%- endunless -%}
+  <div class="pdp__color-group" data-color-group>
+    <p class="pdp__color-group-label">Colour: <span class="pdp__color-group-name" data-color-name-label data-default="{{ active_color | append: active_suffix | escape }}">{{ active_color | append: active_suffix | escape }}</span></p>
+    <div class="pdp__color-group-swatches">{{ swatches }}</div>
+  </div>
+{%- endif -%}

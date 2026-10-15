@@ -1,0 +1,55 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-builder",
+      "settings": {
+        "title": "Track Your Order",
+        "width": "wide"
+      },
+      "blocks": {
+        "track_1": {
+          "type": "track",
+          "settings": {}
+        },
+        "heading_2": {
+          "type": "heading",
+          "settings": {
+            "title": "Questions about delivery?",
+            "align": "left"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "When will I get my tracking number?",
+            "answer": "<p>As soon as your order ships — usually within 4 working days — we'll email / SMS your tracking number.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "Picked up from our studio?",
+            "answer": "<p>Store pickup orders show in <a href=\"/account\">your account</a> as well. You'll get a message when your order is ready to collect.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "faq",
+          "settings": {
+            "question": "Something wrong with your delivery?",
+            "answer": "<p><a href=\"/pages/contact\">Contact us</a> with your order number and we'll sort it out.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "track_1",
+        "heading_2",
+        "faq_3",
+        "faq_4",
+        "faq_5"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

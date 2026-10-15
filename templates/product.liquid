@@ -342,6 +342,7 @@
     <aside class="pdp__info">
       <div class="pdp__info-inner">
 
+        {% render 'product-badges', product: product, class_name: 'product-badges--pdp' %}
         <h1 class="pdp__title"><shopify-data query="product.title"></shopify-data></h1>
         {%- assign pdp_variant = product.selected_or_first_available_variant -%}
         <div class="pdp__price">
@@ -357,33 +358,7 @@
         {% render 'preorder-countdown', product: product %}
 
         {%- comment -%} Cross-product colour swatches: link to the sibling colour products. {%- endcomment -%}
-        {%- assign color_siblings = product.metafields.custom.color_group.value -%}
-        {%- if color_siblings and color_siblings.size > 1 -%}
-          <div class="pdp__color-group">
-            <p class="pdp__color-group-label">Colour</p>
-            <div class="pdp__color-group-swatches">
-              {%- for sib in color_siblings -%}
-                {%- assign sib_hex = sib.metafields.custom.swatch.value | default: '#cccccc' -%}
-                {%- comment -%}
-                  Swatch label: prefer the product's own Colour option value, but fall back to the
-                  product title when that value is a generic catch-all. Two striped shirts both
-                  labelled "Multicolor" tell a shopper nothing about which dot is which.
-                {%- endcomment -%}
-                {%- assign sib_color = sib.title -%}
-                {%- assign generic_colors = 'multicolor,multicolour,multi color,multi colour,multi,assorted,printed,print,various,mixed' | split: ',' -%}
-                {%- for o in sib.options_with_values -%}
-                  {%- assign on2 = o.name | downcase -%}
-                  {%- if on2 contains 'color' or on2 contains 'colour' -%}
-                    {%- assign cand = o.values.first.name -%}
-                    {%- assign cand_key = cand | downcase | strip | replace: '-', ' ' -%}
-                    {%- unless generic_colors contains cand_key -%}{%- assign sib_color = cand -%}{%- endunless -%}
-                  {%- endif -%}
-                {%- endfor -%}
-                <a href="{{ sib.url }}" class="pdp__color-group-swatch{% if sib.id == product.id %} is-active{% endif %}" style="--sw:{{ sib_hex }}" title="{{ sib_color | escape }}" aria-label="{{ sib_color | escape }}"></a>
-              {%- endfor -%}
-            </div>
-          </div>
-        {%- endif -%}
+        {% render 'color-group', product: product %}
 
         {%- comment -%} If colour has a single value it's redundant (the swatch row handles colour) — show only the size option to avoid an inconsistent colour control. {%- endcomment -%}
         {%- assign size_option_name = '' -%}
@@ -467,6 +442,9 @@
   </div>
   </template>
   </shopify-context>
+
+  {%- comment -%} Customized measurements form — only on products tagged custom-measurements. {%- endcomment -%}
+  {% render 'measurements-box', product: product %}
 
   {%- comment -%} Size chart popup — outside the context template so it is always in the real DOM. {%- endcomment -%}
   {% render 'size-chart', product: product, part: 'modal' %}

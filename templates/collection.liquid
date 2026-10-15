@@ -24,10 +24,13 @@
         assign tabs = "womens-linen|Women's Linen,mens-linen|Men's Linen,home-linen|Home Linen"
       endif
 
-      assign coming_soon_handles = ',bags-wallets,bedding,hats-hair-accessories,jewellery,mens-blazers-suits,mens-chinos-joggers-pants,mens-coats-jackets,mens-dress-pants,mens-jeans,mens-shorts,mens-sweaters,mens-sweatshirts-hoodies,mens-swimwear,mens-tshirts,pillows-throws,shoes,sunglasses,sustainability,underwear,winter-fall,womens-blazers-suits,womens-coats-jackets,womens-dresses-jumpsuits-tops-shirts,womens-skirts,womens-sweaters,womens-swimwear,womens-tshirts-tanks,'
+      # Coming soon is automatic: shown only while the collection has no products.
+      # Add a product and it goes live on its own. To keep one as Coming soon anyway,
+      # list its handle in Theme settings > Navigation & collections.
       assign h_key = ',' | append: h | append: ','
+      assign forced_soon = settings.coming_soon_handles | default: '' | remove: ' ' | prepend: ',' | append: ','
       assign coming_soon = false
-      if coming_soon_handles contains h_key
+      if forced_soon contains h_key or collection.all_products_count == 0
         assign coming_soon = true
       endif
       assign back_url = '/'
@@ -38,6 +41,7 @@
       endif
     -%}
     <header class="category-header">
+      {%- if collection.metafields.custom.badge != blank -%}<span class="product-badge collection-badge">{{ collection.metafields.custom.badge }}</span>{%- endif -%}
       <h1 class="category-title">{{ collection.title | default: 'SHOP ALL APPAREL' | upcase }}</h1>
       {%- if show_tabs -%}
         <div class="subcategory-tabs">
@@ -74,24 +78,19 @@
     {%- else -%}
 
     {%- comment -%}
-      Shop All exclusions.
-
-      On the "Shop All" collections only, hide made-to-order and pre-order products:
-      they are browsed through their own dedicated pages, not the general grid.
-      Membership is checked by collection rather than by tag because these products
-      carry no consistent tag (only some pre-order items are tagged "pre order").
-
-      shopall_handles  — the collections the exclusion applies to
-      hidden_handles   — the collections whose products get hidden from those grids
-
-      Every other collection page, including /collections/pre-order and the
-      customized-outfit pages themselves, is left completely untouched.
+      exclusive_handles — custom-order collections (Theme settings → Navigation &
+      collections). Their products are hidden from EVERY other collection page.
+      preorder_handles — hidden only from the Men / Women Shop All grids.
     {%- endcomment -%}
     {%- assign shopall_handles = 'men,women' | split: ',' -%}
-    {%- assign hidden_handles = 'mens-customized-outfit,womens-customized-outfit,pre-order' | split: ',' -%}
-    {%- assign apply_hide = false -%}
+    {%- assign exclusive_handles = settings.exclusive_collection_handles | default: '' | remove: ' ' | split: ',' -%}
+    {%- assign hidden_handles = exclusive_handles -%}
     {%- if shopall_handles contains collection.handle -%}
-      {%- assign apply_hide = true -%}
+      {%- assign hidden_handles = settings.exclusive_collection_handles | default: '' | remove: ' ' | append: ',pre-order' | split: ',' -%}
+    {%- endif -%}
+    {%- assign apply_hide = true -%}
+    {%- if exclusive_handles contains collection.handle -%}
+      {%- assign apply_hide = false -%}
     {%- endif -%}
 
     {%- comment -%} Count what will be hidden here so the results total stays honest. {%- endcomment -%}
@@ -205,6 +204,7 @@
           <article class="product-card">
             <a href="{{ product.url }}" class="product-card__image-link">
               <div class="product-card__image-wrapper">
+                {% render 'product-badges', product: product, class_name: 'product-badges--card' %}
                 {%- if product.featured_image -%}
                   <img src="{{ product.featured_image | image_url: width: 800 }}"
                        srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 800 }} 800w, {{ product.featured_image | image_url: width: 1200 }} 1200w"
@@ -221,7 +221,7 @@
             {%- if color_option -%}
               <div class="product-card__swatches">
                 {%- for value in color_option.values limit: 5 -%}
-                  <a href="{{ value.variant.url | default: product.url }}" class="swatch" title="{{ value.name | escape }}" aria-label="{{ value.name | escape }}" style="{% if value.swatch.image %}background-image:url('{{ value.swatch.image | image_url: width: 48 }}');{% elsif value.swatch.color %}background-color:{{ value.swatch.color }};{% elsif value.variant.image %}background-image:url('{{ value.variant.image | image_url: width: 48 }}');{% else %}background-color:{{ value.name | downcase | replace: ' ', '' }};{% endif %}"></a>
+                  <a href="{{ value.variant.url | default: product.url }}" class="swatch{% unless value.available %} swatch--soldout{% endunless %}" title="{{ value.name | escape }}" aria-label="{{ value.name | escape }}" style="{% if value.swatch.image %}background-image:url('{{ value.swatch.image | image_url: width: 48 }}');{% elsif value.swatch.color %}background-color:{{ value.swatch.color }};{% elsif value.variant.image %}background-image:url('{{ value.variant.image | image_url: width: 48 }}');{% else %}background-color:{{ value.name | downcase | replace: ' ', '' }};{% endif %}"></a>
                 {%- endfor -%}
                 {%- if color_option.values.size > 5 -%}<span class="swatch-more">+{{ color_option.values.size | minus: 5 }}</span>{%- endif -%}
               </div>

@@ -1,0 +1,44 @@
+{%- comment -%}
+  nav-link — one collection link in the header menus (desktop + mobile).
+
+  "Coming soon" is no longer hard-coded. A link shows as Coming soon when:
+    1. its collection has no products yet (it goes live automatically the
+       moment you add the first product to that collection), or
+    2. its handle is listed in Theme settings → Navigation & collections →
+       "Always show as Coming soon".
+  Handles listed in "Hide from menus" are not rendered at all.
+
+  Params:
+    handle   — collection handle (required)
+    label    — link text (HTML allowed)
+    mode     — 'desktop' (default) or 'mobile'
+    featured — true for bold "Shop All" style links
+    sale     — true for sale-coloured links
+{%- endcomment -%}
+{%- liquid
+  assign key = ',' | append: handle | append: ','
+  assign hidden_list = settings.nav_hidden_handles | default: '' | remove: ' ' | prepend: ',' | append: ','
+  assign hide = false
+  if hidden_list contains key
+    assign hide = true
+  endif
+
+  assign forced_list = settings.coming_soon_handles | default: '' | remove: ' ' | prepend: ',' | append: ','
+  assign soon = false
+  if forced_list contains key
+    assign soon = true
+  else
+    assign nav_collection = collections[handle]
+    assign nav_count = nav_collection.all_products_count | default: 0
+    if nav_count == 0
+      assign soon = true
+    endif
+  endif
+-%}
+{%- unless hide -%}
+{%- if mode == 'mobile' -%}
+  <li><a href="/collections/{{ handle }}"{% if soon %} class="mobile-nav__soon"{% elsif sale %} class="mobile-nav__sale"{% endif %}>{{ label }}{% if soon %} — Coming soon{% endif %}</a></li>
+{%- else -%}
+  <li role="none"><a role="menuitem" href="/collections/{{ handle }}" class="nav-dropdown__link{% if featured %} nav-dropdown__link--featured{% endif %}{% if sale %} nav-dropdown__link--sale{% endif %}{% if soon %} nav-dropdown__link--soon{% endif %}"{% if soon %} aria-disabled="true"{% endif %}>{{ label }}{% if soon %} <span class="nav-dropdown__tag">Coming soon</span>{% endif %}</a></li>
+{%- endif -%}
+{%- endunless -%}

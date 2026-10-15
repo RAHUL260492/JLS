@@ -1,0 +1,139 @@
+{%- comment -%}
+  Contact page — fully editable in Online Store → Themes → Customize →
+  Pages → Contact. The heading, intro, form fields, success message and every
+  detail panel on the right (email, phone, address, notes…) are blocks/settings:
+  add, edit, reorder or delete them freely. Nothing is hard-coded.
+  The form uses Shopify's native contact form (emails the store's sender address).
+{%- endcomment -%}
+<div class="contact-page">
+  <header class="contact-page__header">
+    <h1 class="contact-page__title">{{ section.settings.title | default: page.title | default: 'Contact Us' }}</h1>
+    {%- if section.settings.intro != blank -%}
+      <div class="contact-page__intro">{{ section.settings.intro }}</div>
+    {%- endif -%}
+  </header>
+
+  <div class="contact-page__layout">
+    {%- if section.settings.show_form -%}
+    <div class="contact-form-wrap">
+      {%- form 'contact', class: 'contact-form' -%}
+
+        {%- if form.posted_successfully? -%}
+          <p class="contact-form__success" role="status">
+            {{ section.settings.success_message }}
+          </p>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <div class="contact-form__errors" role="alert">
+            <p>Please check the following:</p>
+            <ul>
+              {%- for field in form.errors -%}
+                <li>
+                  {%- if field == 'form' -%}
+                    {{ form.errors.messages[field] }}
+                  {%- else -%}
+                    {{ form.errors.translated_fields[field] }} — {{ form.errors.messages[field] }}
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="contact-name">Name</label>
+          <input
+            class="contact-form__input"
+            type="text"
+            id="contact-name"
+            name="contact[name]"
+            value="{{ form.name | default: customer.name }}"
+            autocomplete="name"
+            required>
+        </div>
+
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="contact-email">Email</label>
+          <input
+            class="contact-form__input"
+            type="email"
+            id="contact-email"
+            name="contact[email]"
+            value="{{ form.email | default: customer.email }}"
+            autocomplete="email"
+            spellcheck="false"
+            autocapitalize="off"
+            required>
+        </div>
+
+        {%- if section.settings.show_phone -%}
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="contact-phone">Phone Number</label>
+          <input
+            class="contact-form__input"
+            type="tel"
+            id="contact-phone"
+            name="contact[phone]"
+            value="{{ form.phone | default: customer.phone }}"
+            autocomplete="tel"
+            pattern="[0-9\-\+\s\(\)]{7,20}">
+        </div>
+        {%- endif -%}
+
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="contact-body">Query</label>
+          <textarea
+            class="contact-form__input contact-form__textarea"
+            id="contact-body"
+            name="contact[body]"
+            rows="7"
+            required>{{ form.body }}</textarea>
+        </div>
+
+        <button type="submit" class="contact-form__submit">{{ section.settings.button_label }}</button>
+      {%- endform -%}
+    </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+    <aside class="contact-details">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'details' -%}
+            <div {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}<h2 class="contact-details__heading">{{ block.settings.heading }}</h2>{%- endif -%}
+              <div class="contact-details__address rte">{{ block.settings.text }}</div>
+            </div>
+          {%- when 'note' -%}
+            <div class="contact-details__note rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </aside>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact page",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Heading", "info": "Leave empty to use the page title." },
+    { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>Questions about an order, a product, or a return? Send us a note and our customer care team will get back to you.</p>" },
+    { "type": "header", "content": "Form" },
+    { "type": "checkbox", "id": "show_form", "label": "Show contact form", "default": true },
+    { "type": "checkbox", "id": "show_phone", "label": "Show phone number field", "default": true },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Send Message" },
+    { "type": "text", "id": "success_message", "label": "Success message", "default": "Thanks for getting in touch. We've received your message and will reply by email shortly." }
+  ],
+  "blocks": [
+    { "type": "details", "name": "Detail panel", "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Customer Care" },
+      { "type": "richtext", "id": "text", "label": "Content", "default": "<p>Email: <a href=\"mailto:thejustadultingclub@gmail.com\">thejustadultingclub@gmail.com</a></p>" }
+    ] },
+    { "type": "note", "name": "Small note", "settings": [
+      { "type": "richtext", "id": "text", "label": "Text" }
+    ] }
+  ]
+}
+{% endschema %}

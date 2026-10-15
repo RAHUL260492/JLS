@@ -1,0 +1,92 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-builder",
+      "settings": {
+        "title": "Buy Online, Pick Up in Store",
+        "intro": "<p>Shop online and collect from our Bengaluru studio — no waiting for delivery.</p>"
+      },
+      "blocks": {
+        "timeline_1": {
+          "type": "timeline",
+          "settings": {
+            "date": "Step 1",
+            "title": "Shop online",
+            "text": "<p>Add your pieces to the bag and go to checkout.</p>"
+          }
+        },
+        "timeline_2": {
+          "type": "timeline",
+          "settings": {
+            "date": "Step 2",
+            "title": "Choose Pick up",
+            "text": "<p>Enter a Bengaluru pincode. Under delivery method, choose <strong>Pick up</strong> at our studio.</p>"
+          }
+        },
+        "timeline_3": {
+          "type": "timeline",
+          "settings": {
+            "date": "Step 3",
+            "title": "Wait for our email",
+            "text": "<p>We'll email / SMS you as soon as your order is ready for pickup. Please wait for this message before visiting.</p>"
+          }
+        },
+        "timeline_4": {
+          "type": "timeline",
+          "settings": {
+            "date": "Step 4",
+            "title": "Collect your order",
+            "text": "<p>Show your order number and the name on the order at the studio, and your pieces are yours.</p>"
+          }
+        },
+        "divider_5": {
+          "type": "divider",
+          "settings": {}
+        },
+        "store_6": {
+          "type": "store",
+          "settings": {
+            "name": "Just Adulting Studio — Bengaluru",
+            "address": "<p>#16, 1st Main Road, RMV Stage 2,<br>Bengaluru 560094</p>",
+            "hours": "<p>Mon – Fri, 10am to 6pm</p>"
+          }
+        },
+        "heading_7": {
+          "type": "heading",
+          "settings": {
+            "title": "Good to know",
+            "align": "left"
+          }
+        },
+        "faq_8": {
+          "type": "faq",
+          "settings": {
+            "question": "Who can use in-store pickup?",
+            "answer": "<p>In-store pickup is available for orders with a Bengaluru delivery address.</p>"
+          }
+        },
+        "faq_9": {
+          "type": "faq",
+          "settings": {
+            "question": "Can someone else collect my order?",
+            "answer": "<p>Yes — they just need your order number and the name on the order.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "timeline_1",
+        "timeline_2",
+        "timeline_3",
+        "timeline_4",
+        "divider_5",
+        "store_6",
+        "heading_7",
+        "faq_8",
+        "faq_9"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

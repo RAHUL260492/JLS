@@ -541,3 +541,27 @@ if (floatingPromoClose && floatingPromo) {
   var iv = setInterval(function () { if (init() || ++tries > 60) clearInterval(iv); }, 150);
   document.addEventListener('DOMContentLoaded', init);
 })();
+
+/* ---------- PDP colour swatches: show the colour name on hover/focus ---------- */
+(function () {
+  function labelFor(sw) {
+    var g = sw.closest('[data-color-group]');
+    return g ? g.querySelector('[data-color-name-label]') : null;
+  }
+  function show(e) {
+    var sw = e.target.closest && e.target.closest('[data-color-name]');
+    if (!sw) return;
+    var l = labelFor(sw);
+    if (l) l.textContent = sw.getAttribute('data-color-name');
+  }
+  function reset(e) {
+    var sw = e.target.closest && e.target.closest('[data-color-name]');
+    if (!sw) return;
+    var l = labelFor(sw);
+    if (l) l.textContent = l.getAttribute('data-default');
+  }
+  document.addEventListener('mouseover', show);
+  document.addEventListener('focusin', show);
+  document.addEventListener('mouseout', reset);
+  document.addEventListener('focusout', reset);
+})();

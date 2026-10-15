@@ -1,0 +1,35 @@
+{%- comment -%}
+  product-badges — manual badges from product tags.
+  Tag a product "badge:Limited Edition", "badge:No Restocks", "badge:Sale",
+  "badge:Designers Choice", "badge:Pre Order", "badge:Website Exclusive",
+  "badge:Custom Made" (any text after "badge:" works). No badge: tag = no badge.
+
+  Params: product (required), class_name (optional extra wrapper class)
+{%- endcomment -%}
+{%- liquid
+  assign badge_list = ''
+  for tag in product.tags
+    assign tag_l = tag | downcase | strip
+    if tag_l contains 'badge:'
+      assign label = tag | split: ':' | last | strip
+      if label != blank
+        assign badge_list = badge_list | append: '~' | append: label
+      endif
+    endif
+  endfor
+  if settings.badge_auto_sale and product.compare_at_price > product.price
+    assign bl = badge_list | downcase
+    unless bl contains '~sale'
+      assign badge_list = badge_list | append: '~Sale'
+    endunless
+  endif
+  assign badges = badge_list | remove_first: '~' | split: '~'
+-%}
+{%- if badges.size > 0 -%}
+  <div class="product-badges {{ class_name }}">
+    {%- for b in badges -%}
+      {%- assign b_key = b | handleize -%}
+      <span class="product-badge product-badge--{{ b_key }}">{{ b | escape }}</span>
+    {%- endfor -%}
+  </div>
+{%- endif -%}

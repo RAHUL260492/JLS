@@ -1,0 +1,46 @@
+{
+  "sections": {
+    "main": {
+      "type": "contact-page",
+      "settings": {},
+      "blocks": {
+        "details_1": {
+          "type": "details",
+          "settings": {
+            "heading": "Customer Care",
+            "text": "<p>Email: <a href=\"mailto:beyond9official@gmail.com\">beyond9official@gmail.com</a></p><p>Phone: <a href=\"tel:+9108431751394\">+91-08431751394</a></p><p>Hours: Mon – Fri, 10am to 6pm</p>"
+          }
+        },
+        "details_2": {
+          "type": "details",
+          "settings": {
+            "heading": "Company Address",
+            "text": "<p>Beyond 9<br>#16, 1st Main Road,<br>RMV Stage 2,<br>Bengaluru 560094</p>"
+          }
+        },
+        "details_3": {
+          "type": "details",
+          "settings": {
+            "heading": "Marketed By",
+            "text": "<p>Beyond 9<br>#16, 1st Main Road,<br>RMV Stage 2,<br>Bengaluru 560094</p>"
+          }
+        },
+        "note_4": {
+          "type": "note",
+          "settings": {
+            "text": "<p>For trade inquiries, write to <a href=\"mailto:beyond9official@gmail.com\">beyond9official@gmail.com</a>.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "details_1",
+        "details_2",
+        "details_3",
+        "note_4"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

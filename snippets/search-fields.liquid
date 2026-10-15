@@ -1,0 +1,11 @@
+{%- comment -%}
+  search-fields — hidden inputs that make search match only the fields you
+  control (Theme settings → Search). By default it no longer matches words
+  inside product descriptions, which is why "socks" used to return shirts
+  whose description mentioned socks. Add keywords to a product as TAGS
+  (e.g. "socks, no-smell") to make it findable by those words.
+{%- endcomment -%}
+{%- assign search_fields = settings.search_fields | default: 'title,product_type,tag,vendor,variants.title' | remove: ' ' -%}
+<input type="hidden" name="options[fields]" value="{{ search_fields }}">
+<input type="hidden" name="options[prefix]" value="last">
+{%- if settings.search_products_only -%}<input type="hidden" name="type" value="product">{%- endif -%}

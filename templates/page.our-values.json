@@ -1,0 +1,46 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-builder",
+      "settings": {
+        "title": "Our Values",
+        "eyebrow": "The Just Adulting story",
+        "width": "wide"
+      },
+      "blocks": {
+        "video_1": {
+          "type": "video",
+          "settings": {
+            "title": "",
+            "caption": ""
+          }
+        },
+        "image_text_2": {
+          "type": "image_text",
+          "settings": {
+            "eyebrow": "Our story",
+            "title": "A spirit of modern exploration",
+            "text": "<p>Just Adulting began with a simple idea: grown-up clothes don't have to be boring. We make timeless pieces for women and men — European linen, BANARA polos and our no-smell tech socks — built for a sophisticated wardrobe and refined everyday style.</p>"
+          }
+        },
+        "image_text_3": {
+          "type": "image_text",
+          "settings": {
+            "image_right": true,
+            "eyebrow": "What we stand for",
+            "title": "Fewer, better things",
+            "text": "<p><strong>Craft.</strong> Considered fabrics and careful finishing.</p><p><strong>Longevity.</strong> Pieces designed to be worn for years, not seasons — and our Archive Reissue line gives past designs a second life.</p><p><strong>Service.</strong> From custom tailoring to studio pickup, we're here for you.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "video_1",
+        "image_text_2",
+        "image_text_3"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

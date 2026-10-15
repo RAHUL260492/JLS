@@ -1,0 +1,42 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-builder",
+      "settings": {
+        "title": "Store Locator",
+        "intro": "<p>Visit our studio in Bengaluru to see the collection, get styled, or be measured for a custom piece.</p>",
+        "width": "wide"
+      },
+      "blocks": {
+        "store_1": {
+          "type": "store",
+          "settings": {
+            "name": "Just Adulting Studio — Bengaluru",
+            "address": "<p>#16, 1st Main Road, RMV Stage 2,<br>Bengaluru 560094</p>",
+            "hours": "<p>Mon – Fri, 10am to 6pm</p>"
+          }
+        },
+        "gallery_2": {
+          "type": "gallery",
+          "settings": {
+            "title": "Inside the studio"
+          }
+        },
+        "video_3": {
+          "type": "video",
+          "settings": {
+            "title": "The brand film"
+          }
+        }
+      },
+      "block_order": [
+        "store_1",
+        "gallery_2",
+        "video_3"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
